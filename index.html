@@ -1,7 +1,57 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Hello Again</title>
+        <title>Idle Spiral Info Repo</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+        <script>
+            var dto;
+            var save;
+            var saver;
+
+            $(document).ready(function(){
+              
+            });
+
+            function printAll ( ) {
+              console.log(dto);
+              console.log(save);
+              console.log(saver);
+            }
+
+            function loadSaveFile ( ) {
+              val = $.trim($("#savefiletextarea").val());
+              if ( val == "" ) {
+                alert("No save file specified!");
+                return;
+              }
+              val = val.split("#");
+              if ( val.length != 3 ) {
+                alert("Invalid save file!");
+                return;
+              }
+
+              dto = JSON.parse(decrypt(val[0]));
+              save = JSON.parse(decrypt(val[1]));
+              saver = JSON.parse(decrypt(val[2]));
+
+              printAll();
+            }
+
+            function decrypt ( text ) {
+              kdf = CryptoJS.PBKDF2("kkyyhka", "stkttnsstkttns", {
+                keySize: 8,
+                hasher: CryptoJS.algo.SHA1,
+                iterations: 1000
+              });
+              
+              key = CryptoJS.enc.Hex.parse(kdf.toString().substring(0, 32));
+              iv = CryptoJS.enc.Hex.parse(kdf.toString().substring(32, 64));
+
+              return CryptoJS.AES.decrypt({ciphertext: CryptoJS.enc.Base64.parse(text)}, key, { iv: iv }).toString(CryptoJS.enc.Utf8);
+            }
+
+        </script>
     </head>
     <body>
       <nav>
@@ -10,6 +60,7 @@
           <li class="nav-item"><a href="changelog.html">Changelog</a></li>
           <li class="nav-item"><a href="metachangelog.html">Meta Changelog</a></li>
         </ul>
-        Home sweet home
+        <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
+        <button onclick="loadSaveFile()">Load</button>
     </body>
 </html>
