@@ -5,51 +5,72 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
         <script>
-            var dto;
-            var save;
-            var saver;
+          var saver;
+          var save;
+          var dto;
 
-            $(document).ready(function(){
-              
+          function updateTable ( ) {
+            $("#datadisplay").html("");
+
+            [
+              "AccumulatedHour",
+              "AccumulatedMaxP",
+              "battle_rewards",
+              "battle_upgrade_levels",
+              "challengeLevels",
+              "enemy_defeated",
+              "exp_consumed",
+              "reactor_exp",
+              "reactor_levels",
+              "reactor_upgrade_levels",
+              "reactor_values",
+              "softResetNum",
+              "spiralEquipment_currentProgress",
+              "spiralEquipment_level",
+              "timeSinceOmegaPrestige",
+              "timeSinceTornadoPrestige",
+              "tornadoPrestigeTier",
+              "totalTime",
+              "totalUpgradeLevels"
+            ].forEach(element => {
+              $("#datadisplay").append("<tr><td>" + element + "</td><td>" + dto[element] + "</td></tr>");
             });
+            console.log(dto);
+            console.log(save);
+            console.log(saver);
+          }
 
-            function printAll ( ) {
-              console.log(dto);
-              console.log(save);
-              console.log(saver);
+          function loadSaveFile ( ) {
+            val = $.trim($("#savefiletextarea").val());
+            if ( val == "" ) {
+              alert("No save file specified!");
+              return;
+            }
+            val = val.split("#");
+            if ( val.length != 3 ) {
+              alert("Invalid save file!");
+              return;
             }
 
-            function loadSaveFile ( ) {
-              val = $.trim($("#savefiletextarea").val());
-              if ( val == "" ) {
-                alert("No save file specified!");
-                return;
-              }
-              val = val.split("#");
-              if ( val.length != 3 ) {
-                alert("Invalid save file!");
-                return;
-              }
+            saver = JSON.parse(decrypt(val[0]));
+            save = JSON.parse(decrypt(val[1]));
+            dto = JSON.parse(decrypt(val[2]));
 
-              dto = JSON.parse(decrypt(val[0]));
-              save = JSON.parse(decrypt(val[1]));
-              saver = JSON.parse(decrypt(val[2]));
+            updateTable();
+          }
 
-              printAll();
-            }
+          function decrypt ( text ) {
+            kdf = CryptoJS.PBKDF2("kkyyhka", "stkttnsstkttns", {
+              keySize: 8,
+              hasher: CryptoJS.algo.SHA1,
+              iterations: 1000
+            });
+            
+            key = CryptoJS.enc.Hex.parse(kdf.toString().substring(0, 32));
+            iv = CryptoJS.enc.Hex.parse(kdf.toString().substring(32, 64));
 
-            function decrypt ( text ) {
-              kdf = CryptoJS.PBKDF2("kkyyhka", "stkttnsstkttns", {
-                keySize: 8,
-                hasher: CryptoJS.algo.SHA1,
-                iterations: 1000
-              });
-              
-              key = CryptoJS.enc.Hex.parse(kdf.toString().substring(0, 32));
-              iv = CryptoJS.enc.Hex.parse(kdf.toString().substring(32, 64));
-
-              return CryptoJS.AES.decrypt({ciphertext: CryptoJS.enc.Base64.parse(text)}, key, { iv: iv }).toString(CryptoJS.enc.Utf8);
-            }
+            return CryptoJS.AES.decrypt({ciphertext: CryptoJS.enc.Base64.parse(text)}, key, { iv: iv }).toString(CryptoJS.enc.Utf8);
+          }
 
         </script>
     </head>
@@ -62,5 +83,7 @@
         </ul>
         <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
         <button onclick="loadSaveFile()">Load</button>
+
+        <table id="datadisplay"></table>
     </body>
 </html>
