@@ -529,6 +529,21 @@
             $("#B_Omega_mul_value").text(battleRewardContainer.Omega_mul);
             $("#B_exp_value").text(battleRewardContainer.exp);
           }
+          function updateTab_E ( ) {
+            for (var i = 0; i < dto.spiralEquipment_isUnlocked.length; i++) {
+              var spiral_equation = $("#spiral_equation_" + i);
+              if (dto.spiralEquipment_isUnlocked[i]) {
+                spiral_equation.addClass("unlocked");
+              } else {
+                spiral_equation.addClass("locked");
+              }
+              if (dto.spiralEquipment_isSelected[i]) {
+                spiral_equation.addClass("selected");
+              }
+              spiral_equation.find(".spiral_level").text(dto.spiralEquipment_level[i]);
+              spiral_equation.find(".spiral_progress").text(dto.spiralEquipment_currentProgress[i]);
+            }
+          }
 
           function updateTable ( ) {
             $("#datadisplay").html("");
@@ -568,6 +583,7 @@
             updateTab_z();
             updateTab_T();
             updateTab_B();
+            updateTab_E();
           }
 
           function decrypt ( text ) {
@@ -740,7 +756,78 @@
       </section>
       <section id="tab-E" class="tab hidden">
         <div>
-          equations
+          Spiral Equations:<br/>
+          <div id="spiral_equations">
+            <div class="spiral_equation" id="spiral_equation_0">
+              <span class="spiral_name">Thales</span>
+              <span class="spiral_level" id="S_0_level">0</span>
+              <span class="spiral_progress" id="S_0_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_1">
+              <span class="spiral_name">Hypatia</span>
+              <span class="spiral_level" id="S_1_level">0</span>
+              <span class="spiral_progress" id="S_1_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_2">
+              <span class="spiral_name">Archimedes</span>
+              <span class="spiral_level" id="S_2_level">0</span>
+              <span class="spiral_progress" id="S_2_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_3">
+              <span class="spiral_name">Pythagoras</span>
+              <span class="spiral_level" id="S_3_level">0</span>
+              <span class="spiral_progress" id="S_3_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_4">
+              <span class="spiral_name">Euclides</span>
+              <span class="spiral_level" id="S_4_level">0</span>
+              <span class="spiral_progress" id="S_4_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_5">
+              <span class="spiral_name">Eratos</span>
+              <span class="spiral_level" id="S_5_level">0</span>
+              <span class="spiral_progress" id="S_5_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_6">
+              <span class="spiral_name">Aryabhata</span>
+              <span class="spiral_level" id="S_6_level">0</span>
+              <span class="spiral_progress" id="S_6_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_7">
+              <span class="spiral_name">Brahmagupta</span>
+              <span class="spiral_level" id="S_7_level">0</span>
+              <span class="spiral_progress" id="S_7_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_8">
+              <span class="spiral_name">Khuwarizmi</span>
+              <span class="spiral_level" id="S_8_level">0</span>
+              <span class="spiral_progress" id="S_8_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_9">
+              <span class="spiral_name">Omar</span>
+              <span class="spiral_level" id="S_9_level">0</span>
+              <span class="spiral_progress" id="S_9_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_10">
+              <span class="spiral_name">Bhaskara</span>
+              <span class="spiral_level" id="S_10_level">0</span>
+              <span class="spiral_progress" id="S_10_progress">0</span>
+            </div>
+            <div class="spiral_equation" id="spiral_equation_11">
+              <span class="spiral_name">Madhava</span>
+              <span class="spiral_level" id="S_11_level">0</span>
+              <span class="spiral_progress" id="S_11_progress">0</span>
+            </div>
+            <div class="spiral_equation unavailable" id="spiral_equation_12">
+              <span class="spiral_name">Bartolomeo</span>
+              <span class="spiral_level" id="S_12_level">0</span>
+              <span class="spiral_progress" id="S_12_progress">0</span>
+            </div>
+            <div class="spiral_equation unavailable" id="spiral_equation_13">
+              <span class="spiral_name">Cardano</span>
+              <span class="spiral_level" id="S_13_level">0</span>
+              <span class="spiral_progress" id="S_13_progress">0</span>
+            </div>
         </div>
       </section>
       <section id="tab-C" class="tab hidden">
@@ -786,6 +873,8 @@
               - Loading T tab info
             v0.2206151710
               - Loading B tab battle rewards
+            v0.2206151904
+              - Loading E tab info
         </div>
       </section>
 
