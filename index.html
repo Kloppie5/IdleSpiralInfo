@@ -550,6 +550,15 @@
               challenge.find(".challenge_level").text(dto.challengeLevels[i]);
             }
           }
+          function updateTab_Z ( ) {
+            for (var i = 0; i < dto.reactor_values.length; i++) {
+              var reactor = $("#zreactor_" + i);
+              reactor.find(".zreactor_value").text(dto.reactor_values[i]);
+              reactor.find(".zreactor_upgrade_level").text(dto.reactor_upgrade_levels[i]);
+              reactor.find(".zreactor_level").text(dto.reactor_levels[i]);
+              reactor.find(".zreactor_exp").text(dto.reactor_exp[i]); 
+            }
+          }
 
           function updateTable ( ) {
             $("#datadisplay").html("");
@@ -591,6 +600,7 @@
             updateTab_B();
             updateTab_E();
             updateTab_C();
+            updateTab_Z();
           }
 
           function decrypt ( text ) {
@@ -915,7 +925,56 @@
       </section>
       <section id="tab-Z" class="tab hidden">
         <div>
-          reactors
+          Z Reactors:<br/>
+          <div id="zreactors">
+            <div class="zreactor" id="zreactor_0">
+              <span class="zreactor_symbol">R</span>
+              <span class="zreactor_name">Delta r</span>
+              <span class="zreactor_value" id="Z_0_value">0</span>
+              <span class="zreactor_upgrade_level" id="Z_0_upgrade_level">0</span>
+              <span class="zreactor_level" id="Z_0_level">0</span>
+              <span class="zreactor_exp" id="Z_0_exp">0</span>
+            </div>
+            <div class="zreactor" id="zreactor_1">
+              <span class="zreactor_symbol">L</span>
+              <span class="zreactor_name">Line Number Multiplier</span>
+              <span class="zreactor_value" id="Z_1_value">0</span>
+              <span class="zreactor_upgrade_level" id="Z_1_upgrade_level">0</span>
+              <span class="zreactor_level" id="Z_1_level">0</span>
+              <span class="zreactor_exp" id="Z_1_exp">0</span>
+            </div>
+            <div class="zreactor" id="zreactor_2">
+              <span class="zreactor_symbol">E</span>
+              <span class="zreactor_name">Spiral Equation Speed</span>
+              <span class="zreactor_value" id="Z_2_value">0</span>
+              <span class="zreactor_upgrade_level" id="Z_2_upgrade_level">0</span>
+              <span class="zreactor_level" id="Z_2_level">0</span>
+              <span class="zreactor_exp" id="Z_2_exp">0</span>
+            </div>
+            <div class="zreactor" id="zreactor_3">
+              <span class="zreactor_symbol">S</span>
+              <span class="zreactor_name">Battle Stats</span>
+              <span class="zreactor_value" id="Z_3_value">0</span>
+              <span class="zreactor_upgrade_level" id="Z_3_upgrade_level">0</span>
+              <span class="zreactor_level" id="Z_3_level">0</span>
+              <span class="zreactor_exp" id="Z_3_exp">0</span>
+            </div>
+            <div class="zreactor" id="zreactor_4">
+              <span class="zreactor_symbol">CR</span>
+              <span class="zreactor_name">Critical Rate</span>
+              <span class="zreactor_value" id="Z_4_value">0</span>
+              <span class="zreactor_upgrade_level" id="Z_4_upgrade_level">0</span>
+              <span class="zreactor_level" id="Z_4_level">0</span>
+              <span class="zreactor_exp" id="Z_4_exp">0</span>
+            </div>
+            <div class="zreactor" id="zreactor_5">
+              <span class="zreactor_symbol">CRX</span>
+              <span class="zreactor_name">S-Critical Rate</span>
+              <span class="zreactor_value" id="Z_5_value">0</span>
+              <span class="zreactor_upgrade_level" id="Z_5_upgrade_level">0</span>
+              <span class="zreactor_level" id="Z_5_level">0</span>
+              <span class="zreactor_exp" id="Z_5_exp">0</span>
+            </div>
         </div>
       </section>
       <section id="tab-c" class="tab hidden">
@@ -950,6 +1009,8 @@
               - Loading E tab info
             v0.2206152000
               - Loading C tab info
+            v0.2206152045
+              - Loading Z tab info
         </div>
       </section>
 
