@@ -544,6 +544,12 @@
               spiral_equation.find(".spiral_progress").text(dto.spiralEquipment_currentProgress[i]);
             }
           }
+          function updateTab_C ( ) {
+            for (var i = 0; i < dto.challengeLevels.length; i++) {
+              var challenge = $("#challenge_" + i);
+              challenge.find(".challenge_level").text(dto.challengeLevels[i]);
+            }
+          }
 
           function updateTable ( ) {
             $("#datadisplay").html("");
@@ -584,6 +590,7 @@
             updateTab_T();
             updateTab_B();
             updateTab_E();
+            updateTab_C();
           }
 
           function decrypt ( text ) {
@@ -832,7 +839,73 @@
       </section>
       <section id="tab-C" class="tab hidden">
         <div>
-          challenges
+          Challenges:<br/>
+          <div id="challenges">
+            <div class="challenge hidden" id="challenge_0">
+              <span class="challenge_symbol">-</span>
+              <span class="challenge_name">Null Challenge</span>
+              <span class="challenge_level" id="C_0_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_1">
+              <span class="challenge_symbol">I</span>
+              <span class="challenge_name">Basic Challenge</span>
+              <span class="challenge_level" id="C_1_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_8">
+              <span class="challenge_symbol">II</span>
+              <span class="challenge_name">Drunk Challenge</span>
+              <span class="challenge_level" id="C_8_level">0</span>
+            </div>
+            <div class="challenge unavailable" id="challenge_5">
+              <span class="challenge_symbol">-</span>
+              <span class="challenge_name">Drain Challenge</span>
+              <span class="challenge_level" id="C_5_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_3">
+              <span class="challenge_symbol">III</span>
+              <span class="challenge_name">Flower Challenge</span>
+              <span class="challenge_level" id="C_3_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_2">
+              <span class="challenge_symbol">IV</span>
+              <span class="challenge_name">Slow Spiral Challenge</span>
+              <span class="challenge_level" id="C_2_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_9">
+              <span class="challenge_symbol">V</span>
+              <span class="challenge_name">Gluttony Challenge</span>
+              <span class="challenge_level" id="C_9_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_4">
+              <span class="challenge_symbol">VI</span>
+              <span class="challenge_name">Straight Line Challenge</span>
+              <span class="challenge_level" id="C_4_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_6">
+              <span class="challenge_symbol">VII</span>
+              <span class="challenge_name">Poor Math Challenge</span>
+              <span class="challenge_level" id="C_6_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_7">
+              <span class="challenge_symbol">VIII</span>
+              <span class="challenge_name">No Rebirth Challenge</span>
+              <span class="challenge_level" id="C_7_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_10">
+              <span class="challenge_symbol">IX</span>
+              <span class="challenge_name">Sinkhole Challenge</span>
+              <span class="challenge_level" id="C_10_level">0</span>
+            </div>            
+            <div class="challenge" id="challenge_11">
+              <span class="challenge_symbol">X</span>
+              <span class="challenge_name">Sphere Challenge</span>
+              <span class="challenge_level" id="C_11_level">0</span>
+            </div>
+            <div class="challenge" id="challenge_12">
+              <span class="challenge_symbol">XI</span>
+              <span class="challenge_name">Fury Challenge</span>
+              <span class="challenge_level" id="C_12_level">0</span>
+            </div>
         </div>
       </section>
       <section id="tab-D" class="tab hidden">
@@ -875,6 +948,8 @@
               - Loading B tab battle rewards
             v0.2206151904
               - Loading E tab info
+            v0.2206152000
+              - Loading C tab info
         </div>
       </section>
 
