@@ -9,35 +9,233 @@
           var save;
           var dto;
 
+          var upgradeContainer = {
+            r : {
+              k : 0,
+              a : 0,
+              b : 0,
+              c : 0,
+              d : 0,
+              e : 0,
+              ae11 : 0,
+              logk : 0,
+              f : 0,
+              g : 0,
+              beMul : 0,
+              rAll : 0
+            },
+            p : {
+              n : 0,
+              v : 0,
+              u : 0,
+              parmA : 0,
+              parmK : 0,
+              parmB : 0,
+              parmC : 0,
+              parmD : 0,
+              parmE : 0,
+              parmF : 0,
+              parmG : 0,
+              exponentK : 0,
+              alpha : 0,
+              beta : 0,
+              prestigepoint_denominator : 0
+            },
+            z : {
+              z_multiplier : 0,
+              Omega : 0,
+              gamma : 0,
+              delta : 0,
+              a_mul : 0,
+              b_mul : 0,
+              c_mul : 0,
+              d_mul : 0,
+              e_mul : 0,
+              f_mul : 0,
+              g_mul : 0,
+              m : 0
+            }
+          };
+          function updateUpgradeContainer ( ) {
+            // Upgrade 0 ; r.a 1e1*(1.3^0.1)^level
+            // - Effect a add ; level * 0.1
+            upgradeContainer.r.a = dto.upgradeLevels[0]
+
+            // Upgrade 1 ; r.b 1e2*(1.5^0.1)^level
+            // - Effect b add ; level * 0.01
+            upgradeContainer.r.b = dto.upgradeLevels[1]
+            
+            // Upgrade 2 ; r.c 1e3*(2.0^0.1)^level
+            // - Effect c add ; level * 0.01
+            upgradeContainer.r.c = dto.upgradeLevels[2]
+            
+            // Upgrade 3 ; r.d 1e4*(2.5^0.1)^level
+            // - Effect d add ; level * 0.01
+            upgradeContainer.r.d = dto.upgradeLevels[3]
+
+            // Upgrade 4 ; r.e 1e5*(3.0^0.1)^level
+            // - Effect e add ; level * 0.01
+            upgradeContainer.r.e = dto.upgradeLevels[4]
+
+            // Upgrade 5 ; r.f 1e6*(4^0.1)^level
+            // - Effect f add ; level * 0.01
+            upgradeContainer.r.f = dto.upgradeLevels[5]
+
+            // Upgrade 6 ; r.g 1e6*(4.5^0.1)^level
+            // - Effect g add ; level * 0.01
+            upgradeContainer.r.g = dto.upgradeLevels[6]
+
+            // Upgrade 7 ; r.ae11 1e4*10^level
+            // - Effect ae11 mul ;  1 + 0.01 * level
+            // - Effect a mul ; ae11
+            // - Effect b mul ; ae11
+            // - Effect c mul ; ae11
+            // - Effect d mul ; ae11
+            // - Effect e mul ; ae11
+            upgradeContainer.r.ae11 = dto.upgradeLevels[7]
+
+            // Upgrade 8 ; r.logk 1e4*10^level
+            // - Effect a mul ; 1 + 0.1 * level * log10(k + 1)
+            upgradeContainer.r.logk = dto.upgradeLevels[8]
+
+            // Upgrade 9 ; r.beMul 1e12*10^level
+            // - Effect a mul ; (b + c + d + e + f + g) / 6 * (1 + 0.1 * level)
+            upgradeContainer.r.beMul = dto.upgradeLevels[9]
+
+            // Upgrade 35 ; r.rAll 1e18*10^level
+            // - Effect deltar mul ; (rlevels / 10000 + 1) * (1 + 0.1 * level)
+            upgradeContainer.r.rAll = dto.upgradeLevels[35]
+
+            // Upgrade 10 ; r.k 1*1.1^level
+            // - Effect k add ; level
+            upgradeContainer.r.k = dto.upgradeLevels[10]
+
+            // Upgrade 21 ; p.u 1e1*10^level
+            // - Effect u add ; level
+            upgradeContainer.p.u = dto.upgradeLevels[21]
+
+            // Upgrade 22 ; p.v 1*2^level
+            // - Effect v add ; level * 10
+            upgradeContainer.p.v = dto.upgradeLevels[22]
+
+            // Upgrade 23 ; p.n 1*5^level
+            // - Effect n add ; level
+            upgradeContainer.p.n = dto.upgradeLevels[23]
+
+            // Upgrade 11 ; p.parmA 1e1*1.5^level
+            // - Effect a add ; level
+            upgradeContainer.p.parmA = dto.upgradeLevels[11]
+
+            // Upgrade 12 ; p.parmB 1e2*1.5^level
+            // - Effect b add ; level * 0.1
+            upgradeContainer.p.parmB = dto.upgradeLevels[12]
+
+            // Upgrade 13 ; p.parmC 1e3*1.5^level
+            // - Effect c add ; level * 0.1
+            upgradeContainer.p.parmC = dto.upgradeLevels[13]
+
+            // Upgrade 14 ; p.parmD 1e4*1.5^level
+            // - Effect d add ; level * 0.1
+            upgradeContainer.p.parmD = dto.upgradeLevels[14]
+
+            // Upgrade 15 ; p.parmE 1e5*1.5^level
+            // - Effect e add ; level * 0.1
+            upgradeContainer.p.parmE = dto.upgradeLevels[15]
+
+            // Upgrade 16 ; p.parmF 1e6*1.5^level
+            // - Effect f add ; level * 0.1
+            upgradeContainer.p.parmF = dto.upgradeLevels[16]
+
+            // Upgrade 17 ; p.parmG 1e6*1.5^level
+            // - Effect g add ; level * 0.1
+            upgradeContainer.p.parmG = dto.upgradeLevels[17]
+
+            // Upgrade 18 ; p.parmK 1e1*10^level
+            // - Effect k add ; level * 10
+            upgradeContainer.p.parmK = dto.upgradeLevels[18]
+
+            // Upgrade 20 ; p.exponentK 1e7*10^level
+            // - Effect k exp add ; level * 0.1
+            upgradeContainer.p.exponentK = dto.upgradeLevels[20]
+
+            // Upgrade 19 ; p.prestigepoint_denominator 5*2^level
+            // - Effect prestigePoint_denominator mul ; 0.95^level
+            upgradeContainer.p.prestigepoint_denominator = dto.upgradeLevels[19]
+
+            // Upgrade 37 ; p.alpha 1e21*1.25^level
+            // - Effect alpha add ; level * 0.01
+            upgradeContainer.p.alpha = dto.upgradeLevels[37]
+
+            // Upgrade 38 ; p.beta 1e24*1.4^level
+            // - Effect beta add ; level * 0.01
+            upgradeContainer.p.beta = dto.upgradeLevels[38]
+
+            // Upgrade 27 ; z.z_multiplier 1+5*level
+            // - Effect deltar mul ; 1.2 + 0.02 * level * log10(z + 1.0)
+            upgradeContainer.z.z_multiplier = dto.upgradeLevels[27]
+
+            // Upgrade 25 ; z.gamma 1e2*2^level
+            // - Effect gamma add ; level * 0.1
+            upgradeContainer.z.gamma = dto.upgradeLevels[25]
+
+            // Upgrade 26 ; z.delta 1e2*2^level
+            // - Effect delta add ; level * 0.1
+            upgradeContainer.z.delta = dto.upgradeLevels[26]
+
+            // Upgrade 24 ; z.Omega 1e2*2^level
+            // - Effect Omega add ; level * 0.1
+            upgradeContainer.z.Omega = dto.upgradeLevels[24]
+
+            // Upgrade 28 ; z.a_mul 1e3*10^level
+            // - Effect a mul ; 1 + 0.1 * level
+            upgradeContainer.z.a_mul = dto.upgradeLevels[28]
+
+            // Upgrade 29 ; z.b_mul 1e4*10^level
+            // - Effect b mul ; 1 + 0.1 * level
+            upgradeContainer.z.b_mul = dto.upgradeLevels[29]
+
+            // Upgrade 30 ; z.c_mul 1e5*10^level
+            // - Effect c mul ; 1 + 0.1 * level
+            upgradeContainer.z.c_mul = dto.upgradeLevels[30]
+
+            // Upgrade 31 ; z.d_mul 1e6*10^level
+            // - Effect d mul ; 1 + 0.1 * level
+            upgradeContainer.z.d_mul = dto.upgradeLevels[31]
+
+            // Upgrade 32 ; z.e_mul 1e7*10^level
+            // - Effect e mul ; 1 + 0.1 * level
+            upgradeContainer.z.e_mul = dto.upgradeLevels[32]
+
+            // Upgrade 33 ; z.f_mul 1e8*10^level
+            // - Effect f mul ; 1 + 0.1 * level
+            upgradeContainer.z.f_mul = dto.upgradeLevels[33]
+
+            // Upgrade 34 ; z.g_mul 1e9*10^level
+            // - Effect g mul ; 1 + 0.1 * level
+            upgradeContainer.z.g_mul = dto.upgradeLevels[34]
+
+            // Upgrade 36 ; z.m 1e12*1e3^level
+            // - Effect m add ; level
+            upgradeContainer.z.m = dto.upgradeLevels[36]
+
+            renderUpgradeContainer();
+          }
+          function renderUpgradeContainer ( ) {
+            console.log(upgradeContainer);
+          }
+
           function updateTable ( ) {
             $("#datadisplay").html("");
 
-            [
-              "AccumulatedHour",
-              "AccumulatedMaxP",
-              "battle_rewards",
-              "battle_upgrade_levels",
-              "challengeLevels",
-              "enemy_defeated",
-              "exp_consumed",
-              "reactor_exp",
-              "reactor_levels",
-              "reactor_upgrade_levels",
-              "reactor_values",
-              "softResetNum",
-              "spiralEquipment_currentProgress",
-              "spiralEquipment_level",
-              "timeSinceOmegaPrestige",
-              "timeSinceTornadoPrestige",
-              "tornadoPrestigeTier",
-              "totalTime",
-              "totalUpgradeLevels"
-            ].forEach(element => {
-              $("#datadisplay").append("<tr><td>" + element + "</td><td>" + dto[element] + "</td></tr>");
-            });
-            console.log(dto);
-            console.log(save);
-            console.log(saver);
+            for ( var propt in dto ) {
+              $("#datadisplay").append("<tr><td>" + propt + "</td><td>" + dto[propt] + "</td></tr>");
+            }
+            for ( var propt in save ) {
+              $("#datadisplay").append("<tr><td>" + propt + "</td><td>" + save[propt] + "</td></tr>");
+            }
+            for ( var propt in saver ) {
+              $("#datadisplay").append("<tr><td>" + propt + "</td><td>" + saver[propt] + "</td></tr>");
+            }
           }
 
           function loadSaveFile ( ) {
@@ -56,6 +254,7 @@
             save = JSON.parse(decrypt(val[1]));
             dto = JSON.parse(decrypt(val[2]));
 
+            updateUpgradeContainer();
             updateTable();
           }
 
