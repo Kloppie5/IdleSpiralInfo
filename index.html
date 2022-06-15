@@ -443,6 +443,51 @@
             return 1 - (0.9 - 1 / 1.000018326 ** battleRewardContainer.math_skill);
           }
 
+          function updateTab_r ( ) {
+            $("#r_k_level").text(upgradeContainer.r.k);
+            $("#r_a_level").text(upgradeContainer.r.a);
+            $("#r_b_level").text(upgradeContainer.r.b);
+            $("#r_c_level").text(upgradeContainer.r.c);
+            $("#r_d_level").text(upgradeContainer.r.d);
+            $("#r_e_level").text(upgradeContainer.r.e);
+            $("#r_ae11_level").text(upgradeContainer.r.ae11);
+            $("#r_logk_level").text(upgradeContainer.r.logk);
+            $("#r_f_level").text(upgradeContainer.r.f);
+            $("#r_g_level").text(upgradeContainer.r.g);
+            $("#r_beMul_level").text(upgradeContainer.r.beMul);
+            $("#r_rAll_level").text(upgradeContainer.r.rAll);
+          }
+          function updateTab_p ( ) {
+            $("#p_n_level").text(upgradeContainer.p.n);
+            $("#p_v_level").text(upgradeContainer.p.v);
+            $("#p_u_level").text(upgradeContainer.p.u);
+            $("#p_parmA_level").text(upgradeContainer.p.parmA);
+            $("#p_parmK_level").text(upgradeContainer.p.parmK);
+            $("#p_parmB_level").text(upgradeContainer.p.parmB);
+            $("#p_parmC_level").text(upgradeContainer.p.parmC);
+            $("#p_parmD_level").text(upgradeContainer.p.parmD);
+            $("#p_parmE_level").text(upgradeContainer.p.parmE);
+            $("#p_parmF_level").text(upgradeContainer.p.parmF);
+            $("#p_parmG_level").text(upgradeContainer.p.parmG);
+            $("#p_exponentK_level").text(upgradeContainer.p.exponentK);
+            $("#p_alpha_level").text(upgradeContainer.p.alpha);
+            $("#p_beta_level").text(upgradeContainer.p.beta);
+          }
+          function updateTab_z ( ) {
+            $("#z_z_multiplier_level").text(upgradeContainer.z.z_multiplier);
+            $("#z_Omega_level").text(upgradeContainer.z.Omega);
+            $("#z_gamma_level").text(upgradeContainer.z.gamma);
+            $("#z_delta_level").text(upgradeContainer.z.delta);
+            $("#z_a_mul_level").text(upgradeContainer.z.a_mul);
+            $("#z_b_mul_level").text(upgradeContainer.z.b_mul);
+            $("#z_c_mul_level").text(upgradeContainer.z.c_mul);
+            $("#z_d_mul_level").text(upgradeContainer.z.d_mul);
+            $("#z_e_mul_level").text(upgradeContainer.z.e_mul);
+            $("#z_f_mul_level").text(upgradeContainer.z.f_mul);
+            $("#z_g_mul_level").text(upgradeContainer.z.g_mul);
+            $("#z_m_level").text(upgradeContainer.z.m);
+          }
+
           function updateTable ( ) {
             $("#datadisplay").html("");
 
@@ -476,6 +521,9 @@
             updateTable();
             updateUpgradeContainer();
             updateBattleRewardContainer();
+            updateTab_r();
+            updateTab_p();
+            updateTab_z();
           }
 
           function decrypt ( text ) {
@@ -518,17 +566,61 @@
 
       <section id="tab-r" class="tab hidden">
         <div>
-          r upgrades
+          r upgrades:<br/>
+          <div id="r_upgrades">
+            <div class="r_upgrade"> <span class="upgrade_name">k</span> <span class="upgrade_level" id="r_k_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">a</span> <span class="upgrade_level" id="r_a_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">b</span> <span class="upgrade_level" id="r_b_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">c</span> <span class="upgrade_level" id="r_c_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">d</span> <span class="upgrade_level" id="r_d_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">e</span> <span class="upgrade_level" id="r_e_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">ae11</span> <span class="upgrade_level" id="r_ae11_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">logk</span> <span class="upgrade_level" id="r_logk_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">f</span> <span class="upgrade_level" id="r_f_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">g</span> <span class="upgrade_level" id="r_g_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">beMul</span> <span class="upgrade_level" id="r_beMul_level">0</span> </div>
+            <div class="r_upgrade"> <span class="upgrade_name">rAll</span> <span class="upgrade_level" id="r_rAll_level">0</span> </div>
+          </div>
         </div>
       </section>
       <section id="tab-p" class="tab hidden">
         <div>
-          p upgrades
+          p upgrades:<br/>
+          <div id="p_upgrades">
+            <div class="p_upgrade"> <span class="upgrade_name">n</span> <span class="upgrade_level" id="p_n_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">v</span> <span class="upgrade_level" id="p_v_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">u</span> <span class="upgrade_level" id="p_u_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">parmA</span> <span class="upgrade_level" id="p_parmA_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">parmK</span> <span class="upgrade_level" id="p_parmK_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">parmB</span> <span class="upgrade_level" id="p_parmB_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">parmC</span> <span class="upgrade_level" id="p_parmC_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">parmD</span> <span class="upgrade_level" id="p_parmD_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">parmE</span> <span class="upgrade_level" id="p_parmE_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">parmF</span> <span class="upgrade_level" id="p_parmF_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">parmG</span> <span class="upgrade_level" id="p_parmG_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">exponentK</span> <span class="upgrade_level" id="p_exponentK_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">alpha</span> <span class="upgrade_level" id="p_alpha_level">0</span> </div>
+            <div class="p_upgrade"> <span class="upgrade_name">beta</span> <span class="upgrade_level" id="p_beta_level">0</span> </div>
+          </div>
         </div>
       </section>
       <section id="tab-z" class="tab hidden">
         <div>
-          z upgrades
+          z upgrades:<br/>
+          <div id="z_upgrades">
+            <div class="z_upgrade"> <span class="upgrade_name">z_multiplier</span> <span class="upgrade_level" id="z_z_multiplier_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">Omega</span> <span class="upgrade_level" id="z_Omega_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">gamma</span> <span class="upgrade_level" id="z_gamma_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">delta</span> <span class="upgrade_level" id="z_delta_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">a_mul</span> <span class="upgrade_level" id="z_a_mul_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">b_mul</span> <span class="upgrade_level" id="z_b_mul_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">c_mul</span> <span class="upgrade_level" id="z_c_mul_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">d_mul</span> <span class="upgrade_level" id="z_d_mul_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">e_mul</span> <span class="upgrade_level" id="z_e_mul_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">f_mul</span> <span class="upgrade_level" id="z_f_mul_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">g_mul</span> <span class="upgrade_level" id="z_g_mul_level">0</span> </div>
+            <div class="z_upgrade"> <span class="upgrade_name">m</span> <span class="upgrade_level" id="z_m_level">0</span> </div>
+          </div>
         </div>
       </section>
       <section id="tab-T" class="tab hidden">
@@ -593,6 +685,8 @@
               - Reconstructing BattleRewardContainer
             v0.2206151449
               - Added tab selection
+            v0.2206151609
+              - Loading r, p, and z tab upgrades
         </div>
       </section>
 
