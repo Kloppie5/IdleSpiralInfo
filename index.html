@@ -492,6 +492,43 @@
             $("#T_AccumulatedHour").text(dto.AccumulatedHour);
             $("#T_AccumulatedMaxP").text(dto.AccumulatedMaxP);
           }
+          function updateTab_B ( ) {
+            $("#B_atk_value").text(battleRewardContainer.atk);
+            $("#B_atk_mul_value").text(battleRewardContainer.atk_mul);
+            $("#B_hp_value").text(battleRewardContainer.hp);
+            $("#B_hp_mul_value").text(battleRewardContainer.hp_mul);
+            $("#B_def_value").text(battleRewardContainer.def);
+            $("#B_def_mul_value").text(battleRewardContainer.def_mul);
+            $("#B_critical_value").text(battleRewardContainer.critical);
+            $("#B_criticalDamage_value").text(battleRewardContainer.criticalDamage);
+            $("#B_regene_value").text(battleRewardContainer.regene);
+            $("#B_pure_attack_speed_value").text(battleRewardContainer.pure_attack_speed);
+            $("#B_super_critical_value").text(battleRewardContainer.super_critical);
+            $("#B_super_critical_damage_value").text(battleRewardContainer.super_critical_damage);
+            $("#B_pure_rare_chance_value").text(battleRewardContainer.pure_rare_chance);
+            $("#B_math_skill_value").text(battleRewardContainer.math_skill);
+            $("#B_k_value").text(battleRewardContainer.k);
+            $("#B_k_mul_value").text(battleRewardContainer.k_mul);
+            $("#B_a_value").text(battleRewardContainer.a);
+            $("#B_a_mul_value").text(battleRewardContainer.a_mul);
+            $("#B_b_value").text(battleRewardContainer.b);
+            $("#B_b_mul_value").text(battleRewardContainer.b_mul);
+            $("#B_c_value").text(battleRewardContainer.c);
+            $("#B_c_mul_value").text(battleRewardContainer.c_mul);
+            $("#B_d_value").text(battleRewardContainer.d);
+            $("#B_d_mul_value").text(battleRewardContainer.d_mul);
+            $("#B_e_value").text(battleRewardContainer.e);
+            $("#B_e_mul_value").text(battleRewardContainer.e_mul);
+            $("#B_n_value").text(battleRewardContainer.n);
+            $("#B_v_value").text(battleRewardContainer.v);
+            $("#B_gamma_value").text(battleRewardContainer.gamma);
+            $("#B_gamma_mul_value").text(battleRewardContainer.gamma_mul);
+            $("#B_delta_value").text(battleRewardContainer.delta);
+            $("#B_delta_mul_value").text(battleRewardContainer.delta_mul);
+            $("#B_Omega_value").text(battleRewardContainer.Omega);
+            $("#B_Omega_mul_value").text(battleRewardContainer.Omega_mul);
+            $("#B_exp_value").text(battleRewardContainer.exp);
+          }
 
           function updateTable ( ) {
             $("#datadisplay").html("");
@@ -530,6 +567,7 @@
             updateTab_p();
             updateTab_z();
             updateTab_T();
+            updateTab_B();
           }
 
           function decrypt ( text ) {
@@ -654,7 +692,50 @@
       </section>
       <section id="tab-B" class="tab hidden">
         <div>
-          battle spiral
+          Battle Spiral rewards:<br/>
+          <div id="battle_rewards">
+            Effect Gain:<br/>
+            <div id="B_effect_gain">
+              <div class="battle_reward"> <span class="reward_name">ATK</span> <span class="reward_value" id="B_atk_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">ATK%</span> <span class="reward_value" id="B_atk_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">HP</span> <span class="reward_value" id="B_hp_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">HP%</span> <span class="reward_value" id="B_hp_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">DEF</span> <span class="reward_value" id="B_def_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">DEF%</span> <span class="reward_value" id="B_def_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Critical Rate</span> <span class="reward_value" id="B_critical_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Critical Damage</span> <span class="reward_value" id="B_criticalDamage_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Regenerate</span> <span class="reward_value" id="B_regene_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Pure Attack Speed</span> <span class="reward_value" id="B_pure_attack_speed_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">S-Critical Rate</span> <span class="reward_value" id="B_super_critical_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">S-Critical Damage</span> <span class="reward_value" id="B_super_critical_damage_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Pure Rare Chance</span> <span class="reward_value" id="B_pure_rare_chance_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Math Skill</span> <span class="reward_value" id="B_math_skill_value">0</span> </div>
+            </div>
+            Parameter Gain:<br/>
+            <div id="B_parameter_gain">
+              <div class="battle_reward"> <span class="reward_name">k</span> <span class="reward_value" id="B_k_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">k%</span> <span class="reward_value" id="B_k_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">a</span> <span class="reward_value" id="B_a_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">a%</span> <span class="reward_value" id="B_a_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">b</span> <span class="reward_value" id="B_b_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">b%</span> <span class="reward_value" id="B_b_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">c</span> <span class="reward_value" id="B_c_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">c%</span> <span class="reward_value" id="B_c_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">d</span> <span class="reward_value" id="B_d_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">d%</span> <span class="reward_value" id="B_d_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">e</span> <span class="reward_value" id="B_e_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">e%</span> <span class="reward_value" id="B_e_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">n</span> <span class="reward_value" id="B_n_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">v</span> <span class="reward_value" id="B_v_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">gamma</span> <span class="reward_value" id="B_gamma_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">gamma%</span> <span class="reward_value" id="B_gamma_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">delta</span> <span class="reward_value" id="B_delta_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">delta%</span> <span class="reward_value" id="B_delta_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Omega</span> <span class="reward_value" id="B_Omega_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Omega%</span> <span class="reward_value" id="B_Omega_mul_value">0</span> </div>
+              <div class="battle_reward"> <span class="reward_name">Exp</span> <span class="reward_value" id="B_exp_value">0</span> </div>
+            </div>
+          </div>
         </div>
       </section>
       <section id="tab-E" class="tab hidden">
@@ -703,6 +784,8 @@
               - Loading r, p, and z tab upgrades
             v0.2206151649
               - Loading T tab info
+            v0.2206151710
+              - Loading B tab battle rewards
         </div>
       </section>
 
