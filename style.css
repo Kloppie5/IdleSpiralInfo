@@ -1,0 +1,23 @@
+* {
+  border: 1px solid #000;
+}
+
+.tab-selector {
+  padding: 10px 12px;
+  line-height: 20px;
+  text-decoration: none;
+}
+.tab-selector:hover, .tab-selector:focus {
+  background-color: #eee;
+}
+.active, .active:hover, .active:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+
+.tab.hidden {
+  display: none;
+}
+.tab.visible {
+  display: block;
+}

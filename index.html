@@ -2,9 +2,30 @@
 <html>
     <head>
         <title>Idle Spiral Info Repo</title>
+        <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
         <script>
+          $(document).ready(function() {
+            $(".tab-selector").click(function(event) {
+              event.preventDefault();
+
+              // Activate clicked tab
+              var target = $(this).attr("href");
+              $(this).addClass("active");
+              $(target).removeClass("hidden");
+              $(target).addClass("visible");
+
+              // Deactivate all other tabs
+              $(".tab-selector").not(this).each(function() {
+                $(this).removeClass("active");
+                var target = $(this).attr("href");
+                $(target).removeClass("visible");
+                $(target).addClass("hidden");
+              });
+            });
+          });
+
           var saver;
           var save;
           var dto;
@@ -473,15 +494,108 @@
         </script>
     </head>
     <body>
-      <nav>
-        <ul>
-          <li class="nav-item"><a href="index.html">Home</a></li>
-          <li class="nav-item"><a href="changelog.html">Changelog</a></li>
-          <li class="nav-item"><a href="metachangelog.html">Meta Changelog</a></li>
-        </ul>
-        <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
-        <button onclick="loadSaveFile()">Load</button>
 
-        <table id="datadisplay"></table>
+      <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
+      <button onclick="loadSaveFile()">Load</button>
+
+      <nav style="margin-top: 10px;">
+        <a class="tab-selector" href="#tab-r">r</a>
+        <a class="tab-selector" href="#tab-p">p</a>
+        <a class="tab-selector" href="#tab-z">z</a>
+        <a class="tab-selector" href="#tab-T">T</a>
+        <a class="tab-selector" href="#tab-A">A</a>
+        <a class="tab-selector" href="#tab-S">S</a>
+        <a class="tab-selector" href="#tab-B">B</a>
+        <a class="tab-selector" href="#tab-E">E</a>
+        <a class="tab-selector" href="#tab-C">C</a>
+        <a class="tab-selector" href="#tab-D">D</a>
+        <a class="tab-selector" href="#tab-Z">Z</a>
+        <a class="tab-selector" href="#tab-c">c</a>
+        <a class="tab-selector" href="#tab-m">m</a>
+      </nav>
+
+      <br/><br/><br/>
+
+      <section id="tab-r" class="tab hidden">
+        <div>
+          r upgrades
+        </div>
+      </section>
+      <section id="tab-p" class="tab hidden">
+        <div>
+          p upgrades
+        </div>
+      </section>
+      <section id="tab-z" class="tab hidden">
+        <div>
+          z upgrades
+        </div>
+      </section>
+      <section id="tab-T" class="tab hidden">
+        <div>
+          Tornado
+        </div>
+      </section>
+      <section id="tab-A" class="tab hidden">
+        <div>
+          achievements
+        </div>
+      </section>
+      <section id="tab-S" class="tab hidden">
+        <div>
+          store
+        </div>
+      </section>
+      <section id="tab-B" class="tab hidden">
+        <div>
+          battle spiral
+        </div>
+      </section>
+      <section id="tab-E" class="tab hidden">
+        <div>
+          equations
+        </div>
+      </section>
+      <section id="tab-C" class="tab hidden">
+        <div>
+          challenges
+        </div>
+      </section>
+      <section id="tab-D" class="tab hidden">
+        <div>
+          designs
+        </div>
+      </section>
+      <section id="tab-Z" class="tab hidden">
+        <div>
+          reactors
+        </div>
+      </section>
+      <section id="tab-c" class="tab hidden">
+        <div>
+          Changelog:
+            v1.5.0:
+              - Initial version to be tracked; might work backwards at some point
+        </div>
+      </section>
+      <section id="tab-m" class="tab hidden">
+        <div>
+          Meta Changelog:
+            v0.2206142003
+              - Bare bones framework
+            v0.2206150111
+              - Added save decryption
+            v0.2206150140
+              - Added initial table dump
+            v0.2206151154
+              - Reconstructing UpgradeContainer
+            v0.2206151238
+              - Reconstructing BattleRewardContainer
+            v0.2206151449
+              - Added tab selection
+        </div>
+      </section>
+
+      <table id="datadisplay"></table>
     </body>
 </html>
