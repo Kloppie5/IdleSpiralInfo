@@ -224,6 +224,204 @@
             console.log(upgradeContainer);
           }
 
+          var battleRewardContainer = {
+            hp : 0,
+            atk : 0,
+            def : 0,
+            a : 0,
+            b : 0,
+            c : 0,
+            d : 0,
+            e : 0,
+            k : 0,
+            regene : 0,
+            critical : 0,
+            criticalDamage : 0,
+            a_mul : 0,
+            b_mul : 0,
+            c_mul : 0,
+            d_mul : 0,
+            e_mul : 0,
+            k_mul : 0,
+            hp_mul : 0,
+            atk_mul : 0,
+            def_mul : 0,
+            n : 0,
+            v : 0,
+            gamma : 0,
+            delta : 0,
+            Omega : 0,
+            pure_attack_speed : 0,
+            gamma_mul : 0,
+            delta_mul : 0,
+            Omega_mul : 0,
+            exp : 0,
+            pure_rare_chance : 0,
+            super_critical : 0,
+            super_critical_damage : 0,
+            math_skill : 0,
+          }
+          function updateBattleRewardContainer ( ) {
+            // Reward 3 ; a
+            // - Effect a add ; value
+            battleRewardContainer.a = dto.battle_rewards[3]
+            
+            // Reward 4 ; b
+            // - Effect b add ; value
+            battleRewardContainer.b = dto.battle_rewards[4]
+            
+            // Reward 5 ; c
+            // - Effect c add ; value
+            battleRewardContainer.c = dto.battle_rewards[5]
+
+            // Reward 6 ; d
+            // - Effect d add ; value
+            battleRewardContainer.d = dto.battle_rewards[6]
+
+            // Reward 7 ; e
+            // - Effect e add ; value
+            battleRewardContainer.e = dto.battle_rewards[7]
+
+            // Reward 8 ; k
+            // - Effect k add ; value
+            battleRewardContainer.k = dto.battle_rewards[8]
+
+            // Reward 1 ; atk
+            // - Effect atk add ; value
+            battleRewardContainer.atk = dto.battle_rewards[1]
+
+            // Reward 2 ; def
+            // - Effect def add ; value
+            battleRewardContainer.def = dto.battle_rewards[2]
+
+            // Reward 0 ; hp
+            // - Effect hp add ; value
+            battleRewardContainer.hp = dto.battle_rewards[0]
+
+            // Reward 9 ; regene
+            // - Effect regene add ; value
+            battleRewardContainer.regene = dto.battle_rewards[9]
+
+            // Reward 10 ; critical
+            // - Effect critical add ; value
+            battleRewardContainer.critical = dto.battle_rewards[10]
+
+            // Reward 11 ; criticalDamage
+            // - Effect criticalDamage mul ; value + 1
+            battleRewardContainer.criticalDamage = dto.battle_rewards[11]
+
+            // Reward 23 ; gamma
+            // - Effect gamma add ; value
+            battleRewardContainer.gamma = dto.battle_rewards[23]
+
+            // Reward 24 ; delta
+            // - Effect delta add ; value
+            battleRewardContainer.delta = dto.battle_rewards[24]
+
+            // Reward 25 ; Omega
+            // - Effect Omega add ; value
+            battleRewardContainer.Omega = dto.battle_rewards[25]
+
+            // Reward 32 ; super_critical
+            // - Effect super_critical add ; value
+            battleRewardContainer.super_critical = dto.battle_rewards[32]
+
+            // Reward 33 ; super_critical_damage
+            // - Effect super_critical_damage mul ; value + 1
+            battleRewardContainer.super_critical_damage = dto.battle_rewards[33]
+
+            // Reward 12 ; a_mul
+            // - Effect a mul ; 1 + value
+            battleRewardContainer.a_mul = dto.battle_rewards[12]
+
+            // Reward 13 ; b_mul
+            // - Effect b mul ; 1 + value
+            battleRewardContainer.b_mul = dto.battle_rewards[13]
+
+            // Reward 14 ; c_mul
+            // - Effect c mul ; 1 + value
+            battleRewardContainer.c_mul = dto.battle_rewards[14]
+
+            // Reward 15 ; d_mul
+            // - Effect d mul ; 1 + value
+            battleRewardContainer.d_mul = dto.battle_rewards[15]
+
+            // Reward 16 ; e_mul
+            // - Effect e mul ; 1 + value
+            battleRewardContainer.e_mul = dto.battle_rewards[16]
+
+            // Reward 17 ; k_mul
+            // - Effect k mul ; 1 + value
+            battleRewardContainer.k_mul = dto.battle_rewards[17]
+
+            // Reward 18 ; hp_mul
+            // - Effect hp mul ; 1 + value
+            battleRewardContainer.hp_mul = dto.battle_rewards[18]
+
+            // Reward 19 ; atk_mul
+            // - Effect atk mul ; 1 + value
+            battleRewardContainer.atk_mul = dto.battle_rewards[19]
+
+            // Reward 20 ; def_mul
+            // - Effect def mul ; 1 + value
+            battleRewardContainer.def_mul = dto.battle_rewards[20]
+
+            // Reward 27 ; gamma_mul
+            // - Effect gamma mul ; 1 + value
+            battleRewardContainer.gamma_mul = dto.battle_rewards[27]
+
+            // Reward 28 ; delta_mul
+            // - Effect delta mul ; 1 + value
+            battleRewardContainer.delta_mul = dto.battle_rewards[28]
+
+            // Reward 29 ; Omega_mul
+            // - Effect Omega mul ; 1 + value
+            battleRewardContainer.Omega_mul = dto.battle_rewards[29]
+
+            // Reward 26 ; pure_attack_speed
+            // - Effect pure_attack_speed add ; value
+            battleRewardContainer.pure_attack_speed = dto.battle_rewards[26]
+
+            // Reward 31 ; pure_rare_chance
+            // - Effect pure_rare_chance add ; value
+            battleRewardContainer.pure_rare_chance = dto.battle_rewards[31]
+
+            // Reward 34 ; math_skill
+            // - Effect math_skill add ; value
+            battleRewardContainer.math_skill = dto.battle_rewards[34]
+
+            renderBattleRewardContainer();
+          }
+          function renderBattleRewardContainer ( ) {
+            console.log(battleRewardContainer);
+            console.log("diminishedAttackSpeed: " + diminishedAttackSpeed());
+            console.log("bonusMultiAttack: " + bonusMultiAttack());
+            console.log("diminishedRareChance: " + diminishedRareChance());
+            console.log("decay: " + decay());
+          }
+          function diminishedAttackSpeed ( ) {
+            if ( battleRewardContainer.pure_attack_speed < 4 )
+              return 1 + battleRewardContainer.pure_attack_speed;
+            if ( battleRewardContainer.pure_attack_speed < 54 )
+              return 5 + ( battleRewardContainer.pure_attack_speed - 4 ) * 0.1;
+            return 10 + ( battleRewardContainer.pure_attack_speed - 54 ) * 0.01;
+          }
+          function bonusMultiAttack ( ) {
+            return (diminishedAttackSpeed() - 1) / 4;
+          }
+          function diminishedRareChance ( ) {
+            if ( battleRewardContainer.pure_rare_chance < 0.5 )
+              return 1 + battleRewardContainer.pure_rare_chance;
+            if ( battleRewardContainer.pure_rare_chance < 5.5 )
+              return 1.5 + ( battleRewardContainer.pure_rare_chance - 0.5 ) * 0.05;
+            return 1.75 + ( battleRewardContainer.pure_rare_chance - 0.75 ) * 0.001;
+          }
+          function decay ( ) {
+            if ( battleRewardContainer.math_skill < 50000 )
+              return 1 - 0.5 * battleRewardContainer.math_skill / 50000;
+            return 1 - (0.9 - 1 / 1.000018326 ** battleRewardContainer.math_skill);
+          }
+
           function updateTable ( ) {
             $("#datadisplay").html("");
 
@@ -254,8 +452,9 @@
             save = JSON.parse(decrypt(val[1]));
             dto = JSON.parse(decrypt(val[2]));
 
-            updateUpgradeContainer();
             updateTable();
+            updateUpgradeContainer();
+            updateBattleRewardContainer();
           }
 
           function decrypt ( text ) {
