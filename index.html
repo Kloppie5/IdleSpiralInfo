@@ -487,6 +487,11 @@
             $("#z_g_mul_level").text(upgradeContainer.z.g_mul);
             $("#z_m_level").text(upgradeContainer.z.m);
           }
+          function updateTab_T ( ) {
+            $("#T_tornadoPrestigeTier").text(dto.tornadoPrestigeTier);
+            $("#T_AccumulatedHour").text(dto.AccumulatedHour);
+            $("#T_AccumulatedMaxP").text(dto.AccumulatedMaxP);
+          }
 
           function updateTable ( ) {
             $("#datadisplay").html("");
@@ -524,6 +529,7 @@
             updateTab_r();
             updateTab_p();
             updateTab_z();
+            updateTab_T();
           }
 
           function decrypt ( text ) {
@@ -542,6 +548,9 @@
         </script>
     </head>
     <body>
+
+      <!-- visitor counter -->
+      <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
       <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
       <button onclick="loadSaveFile()">Load</button>
@@ -625,7 +634,12 @@
       </section>
       <section id="tab-T" class="tab hidden">
         <div>
-          Tornado
+          Tornado:<br/>
+          <div>
+            <div> <span>tornadoPrestigeTier</span> <span id="T_tornadoPrestigeTier">0</span> </div>
+            <div> <span>AccumulatedHour</span> <span id="T_AccumulatedHour">0</span> </div>
+            <div> <span>AccumulatedMaxP</span> <span id="T_AccumulatedMaxP">0</span> </div>
+          </div>
         </div>
       </section>
       <section id="tab-A" class="tab hidden">
@@ -687,6 +701,8 @@
               - Added tab selection
             v0.2206151609
               - Loading r, p, and z tab upgrades
+            v0.2206151649
+              - Loading T tab info
         </div>
       </section>
 
