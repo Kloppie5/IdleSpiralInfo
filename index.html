@@ -621,55 +621,78 @@
 
       <section id="tab-r" class="tab hidden">
         <div>
-          r upgrades:<br/>
           <div id="r_upgrades">
             <div class="r_upgrade">
-              <span class="upgrade_name">k</span>
-              <span class="upgrade_level" id="r_k_level">0</span>
+              <div class="upgrade_name">k</div>
+              <div class="upgrade_effect">k += level</div>
+              <div class="upgrade_cost">1 * 1.1 ^ level</div>
+              <div class="upgrade_level" id="r_k_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">a</span>
-              <span class="upgrade_level" id="r_a_level">0</span>
+              <div class="upgrade_name">a</div>
+              <div class="upgrade_effect">a += 0.1 * level</div>
+              <div class="upgrade_cost">1e1 * (1.3 ^ 0.1) ^ level</div>
+              <div class="upgrade_level" id="r_a_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">b</span>
-              <span class="upgrade_level" id="r_b_level">0</span>
+              <div class="upgrade_name">b</div>
+              <div class="upgrade_effect">b += 0.01 * level</div>
+              <div class="upgrade_cost">1e2 * (1.5 ^ 0.1) ^ level</div>
+              <div class="upgrade_level" id="r_b_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">c</span>
-              <span class="upgrade_level" id="r_c_level">0</span>
+              <div class="upgrade_name">c</div>
+              <div class="upgrade_effect">c += 0.01 * level</div>
+              <div class="upgrade_cost">1e3 * (2 ^ 0.1) ^ level</div>
+              <div class="upgrade_level" id="r_c_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">d</span>
-              <span class="upgrade_level" id="r_d_level">0</span>
+              <div class="upgrade_name">d</div>
+              <div class="upgrade_effect">d += 0.01 * level</div>
+              <div class="upgrade_cost">1e4 * (2.5 ^ 0.1) ^ level</div>
+              <div class="upgrade_level" id="r_d_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">e</span>
-              <span class="upgrade_level" id="r_e_level">0</span>
+              <div class="upgrade_name">e</div>
+              <div class="upgrade_effect">e += 0.01 * level</div>
+              <div class="upgrade_cost">1e5 * (3 ^ 0.1) ^ level</div>
+              <div class="upgrade_level" id="r_e_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">ae11</span>
-              <span class="upgrade_level" id="r_ae11_level">0</span>
+              <div class="upgrade_name">ae11</div>
+              <div class="upgrade_effect">ae11 = 1 + 0.01 * level</div>
+              <div class="upgrade_cost">1e4 * 1e1 ^ level</div>
+              <div class="upgrade_level" id="r_ae11_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">logk</span>
-              <span class="upgrade_level" id="r_logk_level">0</span>
+              <div class="upgrade_name">logk</div>
+              <div class="upgrade_effect">a *= 1 + 0.1 * level * log10(k + 1)</div>
+              <div class="upgrade_cost">1e4 * 1e1 ^ level</div>
+              <div class="upgrade_level" id="r_logk_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">f</span>
-              <span class="upgrade_level" id="r_f_level">0</span>
+              <div class="upgrade_name">f</div>
+              <div class="upgrade_effect">f += 0.01 * level</div>
+              <div class="upgrade_cost">1e6 * (4 ^ 0.1) ^ level</div>
+              <div class="upgrade_level" id="r_f_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">g</span>
-              <span class="upgrade_level" id="r_g_level">0</span>
+              <div class="upgrade_name">g</div>
+              <div class="upgrade_effect">g += 0.01 * level</div>
+              <div class="upgrade_cost">1e6 * (4.5 ^ 0.1) ^ level</div>
+              <div class="upgrade_level" id="r_g_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">beMul</span>
-              <span class="upgrade_level" id="r_beMul_level">0</span>
+              <div class="upgrade_name">beMul</div>
+              <div class="upgrade_effect">a *= (b + c + d + e + f + g) / 6<br/>a *= (1 + 0.1 * level)</div>
+              <div class="upgrade_cost">1e12 * 1e1 ^ level</div>
+              <div class="upgrade_level" id="r_beMul_level">0</div>
             </div>
             <div class="r_upgrade">
-              <span class="upgrade_name">rAll</span>
-              <span class="upgrade_level" id="r_rAll_level">0</span>
+              <div class="upgrade_name">rAll</div>
+              <div class="upgrade_effect">&Delta;r *= (sum of levels / 10000 + 1)<br/>&Delta;r *= (1 + 0.1 * level)</div>
+              <div class="upgrade_cost">1e18 * 1e1 ^ level</div>
+              <div class="upgrade_level" id="r_rAll_level">0</div>
             </div>
           </div>
         </div>
@@ -679,60 +702,60 @@
           p upgrades:<br/>
           <div id="p_upgrades">
             <div class="p_upgrade">
-              <span class="upgrade_name">n</span>
-              <span class="upgrade_level" id="p_n_level">0</span>
+              <div class="upgrade_name">n</div>
+              <div class="upgrade_level" id="p_n_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">v</span>
-              <span class="upgrade_level" id="p_v_level">0</span>
+              <div class="upgrade_name">v</div>
+              <div class="upgrade_level" id="p_v_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">u</span>
-              <span class="upgrade_level" id="p_u_level">0</span>
+              <div class="upgrade_name">u</div>
+              <div class="upgrade_level" id="p_u_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">parmA</span>
-              <span class="upgrade_level" id="p_parmA_level">0</span>
+              <div class="upgrade_name">parmA</div>
+              <div class="upgrade_level" id="p_parmA_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">parmK</span>
-              <span class="upgrade_level" id="p_parmK_level">0</span>
+              <div class="upgrade_name">parmK</div>
+              <div class="upgrade_level" id="p_parmK_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">parmB</span>
-              <span class="upgrade_level" id="p_parmB_level">0</span>
+              <div class="upgrade_name">parmB</div>
+              <div class="upgrade_level" id="p_parmB_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">parmC</span>
-              <span class="upgrade_level" id="p_parmC_level">0</span>
+              <div class="upgrade_name">parmC</div>
+              <div class="upgrade_level" id="p_parmC_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">parmD</span>
-              <span class="upgrade_level" id="p_parmD_level">0</span>
+              <div class="upgrade_name">parmD</div>
+              <div class="upgrade_level" id="p_parmD_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">parmE</span>
-              <span class="upgrade_level" id="p_parmE_level">0</span>
+              <div class="upgrade_name">parmE</div>
+              <div class="upgrade_level" id="p_parmE_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">parmF</span>
-              <span class="upgrade_level" id="p_parmF_level">0</span>
+              <div class="upgrade_name">parmF</div>
+              <div class="upgrade_level" id="p_parmF_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">parmG</span>
-              <span class="upgrade_level" id="p_parmG_level">0</span>
+              <div class="upgrade_name">parmG</div>
+              <div class="upgrade_level" id="p_parmG_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">exponentK</span>
-              <span class="upgrade_level" id="p_exponentK_level">0</span>
+              <div class="upgrade_name">exponentK</div>
+              <div class="upgrade_level" id="p_exponentK_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">alpha</span>
-              <span class="upgrade_level" id="p_alpha_level">0</span>
+              <div class="upgrade_name">alpha</div>
+              <div class="upgrade_level" id="p_alpha_level">0</div>
             </div>
             <div class="p_upgrade">
-              <span class="upgrade_name">beta</span>
-              <span class="upgrade_level" id="p_beta_level">0</span>
+              <div class="upgrade_name">beta</div>
+              <div class="upgrade_level" id="p_beta_level">0</div>
             </div>
           </div>
         </div>
@@ -742,52 +765,52 @@
           z upgrades:<br/>
           <div id="z_upgrades">
             <div class="z_upgrade">
-              <span class="upgrade_name">z_multiplier</span>
-              <span class="upgrade_level" id="z_z_multiplier_level">0</span>
+              <div class="upgrade_name">z_multiplier</div>
+              <div class="upgrade_level" id="z_z_multiplier_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">Omega</span>
-              <span class="upgrade_level" id="z_Omega_level">0</span>
+              <div class="upgrade_name">Omega</div>
+              <div class="upgrade_level" id="z_Omega_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">gamma</span>
-              <span class="upgrade_level" id="z_gamma_level">0</span>
+              <div class="upgrade_name">gamma</div>
+              <div class="upgrade_level" id="z_gamma_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">delta</span>
-              <span class="upgrade_level" id="z_delta_level">0</span>
+              <div class="upgrade_name">delta</div>
+              <div class="upgrade_level" id="z_delta_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">a_mul</span>
-              <span class="upgrade_level" id="z_a_mul_level">0</span>
+              <div class="upgrade_name">a_mul</div>
+              <div class="upgrade_level" id="z_a_mul_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">b_mul</span>
-              <span class="upgrade_level" id="z_b_mul_level">0</span>
+              <div class="upgrade_name">b_mul</div>
+              <div class="upgrade_level" id="z_b_mul_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">c_mul</span>
-              <span class="upgrade_level" id="z_c_mul_level">0</span>
+              <div class="upgrade_name">c_mul</div>
+              <div class="upgrade_level" id="z_c_mul_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">d_mul</span>
-              <span class="upgrade_level" id="z_d_mul_level">0</span>
+              <div class="upgrade_name">d_mul</div>
+              <div class="upgrade_level" id="z_d_mul_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">e_mul</span>
-              <span class="upgrade_level" id="z_e_mul_level">0</span>
+              <div class="upgrade_name">e_mul</div>
+              <div class="upgrade_level" id="z_e_mul_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">f_mul</span>
-              <span class="upgrade_level" id="z_f_mul_level">0</span>
+              <div class="upgrade_name">f_mul</div>
+              <div class="upgrade_level" id="z_f_mul_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">g_mul</span>
-              <span class="upgrade_level" id="z_g_mul_level">0</span>
+              <div class="upgrade_name">g_mul</div>
+              <div class="upgrade_level" id="z_g_mul_level">0</div>
             </div>
             <div class="z_upgrade">
-              <span class="upgrade_name">m</span>
-              <span class="upgrade_level" id="z_m_level">0</span>
+              <div class="upgrade_name">m</div>
+              <div class="upgrade_level" id="z_m_level">0</div>
             </div>
           </div>
         </div>
@@ -796,9 +819,18 @@
         <div>
           Tornado:<br/>
           <div>
-            <div> <span>tornadoPrestigeTier</span> <span id="T_tornadoPrestigeTier">0</span> </div>
-            <div> <span>AccumulatedHour</span> <span id="T_AccumulatedHour">0</span> </div>
-            <div> <span>AccumulatedMaxP</span> <span id="T_AccumulatedMaxP">0</span> </div>
+            <div>
+              <div>tornadoPrestigeTier</div>
+              <div id="T_tornadoPrestigeTier">0</div>
+            </div>
+            <div>
+              <div>AccumulatedHour</div>
+              <div id="T_AccumulatedHour">0</div>
+            </div>
+            <div>
+              <div>AccumulatedMaxP</div>
+              <div id="T_AccumulatedMaxP">0</div>
+            </div>
           </div>
         </div>
       </section>
@@ -819,147 +851,147 @@
             Effect Gain:<br/>
             <div id="B_effect_gain">
               <div class="battle_reward">
-                <span class="reward_name">ATK</span>
-                <span class="reward_value" id="B_atk_value">0</span>
+                <div class="reward_name">ATK</div>
+                <div class="reward_value" id="B_atk_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">ATK%</span>
-                <span class="reward_value" id="B_atk_mul_value">0</span>
+                <div class="reward_name">ATK%</div>
+                <div class="reward_value" id="B_atk_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">HP</span>
-                <span class="reward_value" id="B_hp_value">0</span>
+                <div class="reward_name">HP</div>
+                <div class="reward_value" id="B_hp_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">HP%</span>
-                <span class="reward_value" id="B_hp_mul_value">0</span>
+                <div class="reward_name">HP%</div>
+                <div class="reward_value" id="B_hp_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">DEF</span>
-                <span class="reward_value" id="B_def_value">0</span>
+                <div class="reward_name">DEF</div>
+                <div class="reward_value" id="B_def_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">DEF%</span>
-                <span class="reward_value" id="B_def_mul_value">0</span>
+                <div class="reward_name">DEF%</div>
+                <div class="reward_value" id="B_def_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">Critical Rate</span
-                   <span class="reward_value" id="B_critical_value">0</span>
+                <div class="reward_name">Critical Rate</div
+                   <div class="reward_value" id="B_critical_value">0</div>
                   </div>
               <div class="battle_reward">
-                <span class="reward_name">Critical Damage</span
-                   <span class="reward_value" id="B_criticalDamage_value">0</span>
+                <div class="reward_name">Critical Damage</div
+                   <div class="reward_value" id="B_criticalDamage_value">0</div>
                   </div>
               <div class="battle_reward">
-                <span class="reward_name">Regenerate</span>
-                <span class="reward_value" id="B_regene_value">0</span>
+                <div class="reward_name">Regenerate</div>
+                <div class="reward_value" id="B_regene_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">Pure Attack Speed</
-                  pan> <span class="reward_value" id="B_pure_attack_speed_value">0</span
+                <div class="reward_name">Pure Attack Speed</div>
+                <div class="reward_value" id="B_pure_attack_speed_value">0</div>
+              </div>
+              <div class="battle_reward">
+                <div class="reward_name">S-Critical Rate</div>
+                <div class="reward_value" id="B_super_critical_value">0</div>
+              </div>
+              <div class="battle_reward">
+                <div class="reward_name">S-Critical Damage</div>
+                <div class="reward_value" id="B_super_critical_damage_value">0</div>
                    </div>
               <div class="battle_reward">
-                <span class="reward_name">S-Critical Rate</
-                  pan> <span class="reward_value" id="B_super_critical_value">0</span
-                   </div>
+                <div class="reward_name">Pure Rare Chance</div>
+                <div class="reward_value" id="B_pure_rare_chance_value">0</div>
+              </div>
               <div class="battle_reward">
-                <span class="reward_name">S-Critical Damage</
-                  pan> <span class="reward_value" id="B_super_critical_damage_value">0</span
-                   </div>
-              <div class="battle_reward">
-                <span class="reward_name">Pure Rare Chance</
-                  pan> <span class="reward_value" id="B_pure_rare_chance_value">0</span
-                   </div>
-              <div class="battle_reward">
-                <span class="reward_name">Math Skill</span
-                   <span class="reward_value" id="B_math_skill_value">0</span>
-                  </div>
+                <div class="reward_name">Math Skill</div>
+                <div class="reward_value" id="B_math_skill_value">0</div>
+              </div>
             </div>
             Parameter Gain:<br/>
             <div id="B_parameter_gain">
               <div class="battle_reward">
-                <span class="reward_name">k</span>
-                <span class="reward_value" id="B_k_value">0</span>
+                <div class="reward_name">k</div>
+                <div class="reward_value" id="B_k_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">k%</span>
-                <span class="reward_value" id="B_k_mul_value">0</span>
+                <div class="reward_name">k%</div>
+                <div class="reward_value" id="B_k_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">a</span>
-                <span class="reward_value" id="B_a_value">0</span>
+                <div class="reward_name">a</div>
+                <div class="reward_value" id="B_a_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">a%</span>
-                <span class="reward_value" id="B_a_mul_value">0</span>
+                <div class="reward_name">a%</div>
+                <div class="reward_value" id="B_a_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">b</span>
-                <span class="reward_value" id="B_b_value">0</span>
+                <div class="reward_name">b</div>
+                <div class="reward_value" id="B_b_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">b%</span>
-                <span class="reward_value" id="B_b_mul_value">0</span>
+                <div class="reward_name">b%</div>
+                <div class="reward_value" id="B_b_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">c</span>
-                <span class="reward_value" id="B_c_value">0</span>
+                <div class="reward_name">c</div>
+                <div class="reward_value" id="B_c_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">c%</span>
-                <span class="reward_value" id="B_c_mul_value">0</span>
+                <div class="reward_name">c%</div>
+                <div class="reward_value" id="B_c_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">d</span>
-                <span class="reward_value" id="B_d_value">0</span>
+                <div class="reward_name">d</div>
+                <div class="reward_value" id="B_d_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">d%</span>
-                <span class="reward_value" id="B_d_mul_value">0</span>
+                <div class="reward_name">d%</div>
+                <div class="reward_value" id="B_d_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">e</span>
-                <span class="reward_value" id="B_e_value">0</span>
+                <div class="reward_name">e</div>
+                <div class="reward_value" id="B_e_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">e%</span>
-                <span class="reward_value" id="B_e_mul_value">0</span>
+                <div class="reward_name">e%</div>
+                <div class="reward_value" id="B_e_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">n</span>
-                <span class="reward_value" id="B_n_value">0</span>
+                <div class="reward_name">n</div>
+                <div class="reward_value" id="B_n_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">v</span>
-                <span class="reward_value" id="B_v_value">0</span>
+                <div class="reward_name">v</div>
+                <div class="reward_value" id="B_v_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">gamma</span>
-                <span class="reward_value" id="B_gamma_value">0</span>
+                <div class="reward_name">gamma</div>
+                <div class="reward_value" id="B_gamma_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">gamma%</span>
-                <span class="reward_value" id="B_gamma_mul_value">0</span>
+                <div class="reward_name">gamma%</div>
+                <div class="reward_value" id="B_gamma_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">delta</span>
-                <span class="reward_value" id="B_delta_value">0</span>
+                <div class="reward_name">delta</div>
+                <div class="reward_value" id="B_delta_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">delta%</span>
-                <span class="reward_value" id="B_delta_mul_value">0</span>
+                <div class="reward_name">delta%</div>
+                <div class="reward_value" id="B_delta_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">Omega</span>
-                <span class="reward_value" id="B_Omega_value">0</span>
+                <div class="reward_name">Omega</div>
+                <div class="reward_value" id="B_Omega_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">Omega%</span>
-                <span class="reward_value" id="B_Omega_mul_value">0</span>
+                <div class="reward_name">Omega%</div>
+                <div class="reward_value" id="B_Omega_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <span class="reward_name">Exp</span>
-                <span class="reward_value" id="B_exp_value">0</span>
+                <div class="reward_name">Exp</div>
+                <div class="reward_value" id="B_exp_value">0</div>
               </div>
             </div>
           </div>
@@ -970,74 +1002,74 @@
           Spiral Equations:<br/>
           <div id="spiral_equations">
             <div class="spiral_equation" id="spiral_equation_0">
-              <span class="spiral_name">Thales</span>
-              <span class="spiral_level" id="S_0_level">0</span>
-              <span class="spiral_progress" id="S_0_progress">0</span>
+              <div class="spiral_name">Thales</div>
+              <div class="spiral_level" id="S_0_level">0</div>
+              <div class="spiral_progress" id="S_0_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_1">
-              <span class="spiral_name">Hypatia</span>
-              <span class="spiral_level" id="S_1_level">0</span>
-              <span class="spiral_progress" id="S_1_progress">0</span>
+              <div class="spiral_name">Hypatia</div>
+              <div class="spiral_level" id="S_1_level">0</div>
+              <div class="spiral_progress" id="S_1_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_2">
-              <span class="spiral_name">Archimedes</span>
-              <span class="spiral_level" id="S_2_level">0</span>
-              <span class="spiral_progress" id="S_2_progress">0</span>
+              <div class="spiral_name">Archimedes</div>
+              <div class="spiral_level" id="S_2_level">0</div>
+              <div class="spiral_progress" id="S_2_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_3">
-              <span class="spiral_name">Pythagoras</span>
-              <span class="spiral_level" id="S_3_level">0</span>
-              <span class="spiral_progress" id="S_3_progress">0</span>
+              <div class="spiral_name">Pythagoras</div>
+              <div class="spiral_level" id="S_3_level">0</div>
+              <div class="spiral_progress" id="S_3_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_4">
-              <span class="spiral_name">Euclides</span>
-              <span class="spiral_level" id="S_4_level">0</span>
-              <span class="spiral_progress" id="S_4_progress">0</span>
+              <div class="spiral_name">Euclides</div>
+              <div class="spiral_level" id="S_4_level">0</div>
+              <div class="spiral_progress" id="S_4_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_5">
-              <span class="spiral_name">Eratos</span>
-              <span class="spiral_level" id="S_5_level">0</span>
-              <span class="spiral_progress" id="S_5_progress">0</span>
+              <div class="spiral_name">Eratos</div>
+              <div class="spiral_level" id="S_5_level">0</div>
+              <div class="spiral_progress" id="S_5_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_6">
-              <span class="spiral_name">Aryabhata</span>
-              <span class="spiral_level" id="S_6_level">0</span>
-              <span class="spiral_progress" id="S_6_progress">0</span>
+              <div class="spiral_name">Aryabhata</div>
+              <div class="spiral_level" id="S_6_level">0</div>
+              <div class="spiral_progress" id="S_6_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_7">
-              <span class="spiral_name">Brahmagupta</span>
-              <span class="spiral_level" id="S_7_level">0</span>
-              <span class="spiral_progress" id="S_7_progress">0</span>
+              <div class="spiral_name">Brahmagupta</div>
+              <div class="spiral_level" id="S_7_level">0</div>
+              <div class="spiral_progress" id="S_7_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_8">
-              <span class="spiral_name">Khuwarizmi</span>
-              <span class="spiral_level" id="S_8_level">0</span>
-              <span class="spiral_progress" id="S_8_progress">0</span>
+              <div class="spiral_name">Khuwarizmi</div>
+              <div class="spiral_level" id="S_8_level">0</div>
+              <div class="spiral_progress" id="S_8_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_9">
-              <span class="spiral_name">Omar</span>
-              <span class="spiral_level" id="S_9_level">0</span>
-              <span class="spiral_progress" id="S_9_progress">0</span>
+              <div class="spiral_name">Omar</div>
+              <div class="spiral_level" id="S_9_level">0</div>
+              <div class="spiral_progress" id="S_9_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_10">
-              <span class="spiral_name">Bhaskara</span>
-              <span class="spiral_level" id="S_10_level">0</span>
-              <span class="spiral_progress" id="S_10_progress">0</span>
+              <div class="spiral_name">Bhaskara</div>
+              <div class="spiral_level" id="S_10_level">0</div>
+              <div class="spiral_progress" id="S_10_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_11">
-              <span class="spiral_name">Madhava</span>
-              <span class="spiral_level" id="S_11_level">0</span>
-              <span class="spiral_progress" id="S_11_progress">0</span>
+              <div class="spiral_name">Madhava</div>
+              <div class="spiral_level" id="S_11_level">0</div>
+              <div class="spiral_progress" id="S_11_progress">0</div>
             </div>
             <div class="spiral_equation unavailable" id="spiral_equation_12">
-              <span class="spiral_name">Bartolomeo</span>
-              <span class="spiral_level" id="S_12_level">0</span>
-              <span class="spiral_progress" id="S_12_progress">0</span>
+              <div class="spiral_name">Bartolomeo</div>
+              <div class="spiral_level" id="S_12_level">0</div>
+              <div class="spiral_progress" id="S_12_progress">0</div>
             </div>
             <div class="spiral_equation unavailable" id="spiral_equation_13">
-              <span class="spiral_name">Cardano</span>
-              <span class="spiral_level" id="S_13_level">0</span>
-              <span class="spiral_progress" id="S_13_progress">0</span>
+              <div class="spiral_name">Cardano</div>
+              <div class="spiral_level" id="S_13_level">0</div>
+              <div class="spiral_progress" id="S_13_progress">0</div>
             </div>
         </div>
       </section>
@@ -1046,69 +1078,69 @@
           Challenges:<br/>
           <div id="challenges">
             <div class="challenge hidden" id="challenge_0">
-              <span class="challenge_symbol">-</span>
-              <span class="challenge_name">Null Challenge</span>
-              <span class="challenge_level" id="C_0_level">0</span>
+              <div class="challenge_symbol">-</div>
+              <div class="challenge_name">Null Challenge</div>
+              <div class="challenge_level" id="C_0_level">0</div>
             </div>
             <div class="challenge" id="challenge_1">
-              <span class="challenge_symbol">I</span>
-              <span class="challenge_name">Basic Challenge</span>
-              <span class="challenge_level" id="C_1_level">0</span>
+              <div class="challenge_symbol">I</div>
+              <div class="challenge_name">Basic Challenge</div>
+              <div class="challenge_level" id="C_1_level">0</div>
             </div>
             <div class="challenge" id="challenge_8">
-              <span class="challenge_symbol">II</span>
-              <span class="challenge_name">Drunk Challenge</span>
-              <span class="challenge_level" id="C_8_level">0</span>
+              <div class="challenge_symbol">II</div>
+              <div class="challenge_name">Drunk Challenge</div>
+              <div class="challenge_level" id="C_8_level">0</div>
             </div>
             <div class="challenge unavailable" id="challenge_5">
-              <span class="challenge_symbol">-</span>
-              <span class="challenge_name">Drain Challenge</span>
-              <span class="challenge_level" id="C_5_level">0</span>
+              <div class="challenge_symbol">-</div>
+              <div class="challenge_name">Drain Challenge</div>
+              <div class="challenge_level" id="C_5_level">0</div>
             </div>
             <div class="challenge" id="challenge_3">
-              <span class="challenge_symbol">III</span>
-              <span class="challenge_name">Flower Challenge</span>
-              <span class="challenge_level" id="C_3_level">0</span>
+              <div class="challenge_symbol">III</div>
+              <div class="challenge_name">Flower Challenge</div>
+              <div class="challenge_level" id="C_3_level">0</div>
             </div>
             <div class="challenge" id="challenge_2">
-              <span class="challenge_symbol">IV</span>
-              <span class="challenge_name">Slow Spiral Challenge</span>
-              <span class="challenge_level" id="C_2_level">0</span>
+              <div class="challenge_symbol">IV</div>
+              <div class="challenge_name">Slow Spiral Challenge</div>
+              <div class="challenge_level" id="C_2_level">0</div>
             </div>
             <div class="challenge" id="challenge_9">
-              <span class="challenge_symbol">V</span>
-              <span class="challenge_name">Gluttony Challenge</span>
-              <span class="challenge_level" id="C_9_level">0</span>
+              <div class="challenge_symbol">V</div>
+              <div class="challenge_name">Gluttony Challenge</div>
+              <div class="challenge_level" id="C_9_level">0</div>
             </div>
             <div class="challenge" id="challenge_4">
-              <span class="challenge_symbol">VI</span>
-              <span class="challenge_name">Straight Line Challenge</span>
-              <span class="challenge_level" id="C_4_level">0</span>
+              <div class="challenge_symbol">VI</div>
+              <div class="challenge_name">Straight Line Challenge</div>
+              <div class="challenge_level" id="C_4_level">0</div>
             </div>
             <div class="challenge" id="challenge_6">
-              <span class="challenge_symbol">VII</span>
-              <span class="challenge_name">Poor Math Challenge</span>
-              <span class="challenge_level" id="C_6_level">0</span>
+              <div class="challenge_symbol">VII</div>
+              <div class="challenge_name">Poor Math Challenge</div>
+              <div class="challenge_level" id="C_6_level">0</div>
             </div>
             <div class="challenge" id="challenge_7">
-              <span class="challenge_symbol">VIII</span>
-              <span class="challenge_name">No Rebirth Challenge</span>
-              <span class="challenge_level" id="C_7_level">0</span>
+              <div class="challenge_symbol">VIII</div>
+              <div class="challenge_name">No Rebirth Challenge</div>
+              <div class="challenge_level" id="C_7_level">0</div>
             </div>
             <div class="challenge" id="challenge_10">
-              <span class="challenge_symbol">IX</span>
-              <span class="challenge_name">Sinkhole Challenge</span>
-              <span class="challenge_level" id="C_10_level">0</span>
+              <div class="challenge_symbol">IX</div>
+              <div class="challenge_name">Sinkhole Challenge</div>
+              <div class="challenge_level" id="C_10_level">0</div>
             </div>            
             <div class="challenge" id="challenge_11">
-              <span class="challenge_symbol">X</span>
-              <span class="challenge_name">Sphere Challenge</span>
-              <span class="challenge_level" id="C_11_level">0</span>
+              <div class="challenge_symbol">X</div>
+              <div class="challenge_name">Sphere Challenge</div>
+              <div class="challenge_level" id="C_11_level">0</div>
             </div>
             <div class="challenge" id="challenge_12">
-              <span class="challenge_symbol">XI</span>
-              <span class="challenge_name">Fury Challenge</span>
-              <span class="challenge_level" id="C_12_level">0</span>
+              <div class="challenge_symbol">XI</div>
+              <div class="challenge_name">Fury Challenge</div>
+              <div class="challenge_level" id="C_12_level">0</div>
             </div>
         </div>
       </section>
@@ -1122,52 +1154,52 @@
           Z Reactors:<br/>
           <div id="zreactors">
             <div class="zreactor" id="zreactor_0">
-              <span class="zreactor_symbol">R</span>
-              <span class="zreactor_name">Delta r</span>
-              <span class="zreactor_value" id="Z_0_value">0</span>
-              <span class="zreactor_upgrade_level" id="Z_0_upgrade_level">0</span>
-              <span class="zreactor_level" id="Z_0_level">0</span>
-              <span class="zreactor_exp" id="Z_0_exp">0</span>
+              <div class="zreactor_symbol">R</div>
+              <div class="zreactor_name">Delta r</div>
+              <div class="zreactor_value" id="Z_0_value">0</div>
+              <div class="zreactor_upgrade_level" id="Z_0_upgrade_level">0</div>
+              <div class="zreactor_level" id="Z_0_level">0</div>
+              <div class="zreactor_exp" id="Z_0_exp">0</div>
             </div>
             <div class="zreactor" id="zreactor_1">
-              <span class="zreactor_symbol">L</span>
-              <span class="zreactor_name">Line Number Multiplier</span>
-              <span class="zreactor_value" id="Z_1_value">0</span>
-              <span class="zreactor_upgrade_level" id="Z_1_upgrade_level">0</span>
-              <span class="zreactor_level" id="Z_1_level">0</span>
-              <span class="zreactor_exp" id="Z_1_exp">0</span>
+              <div class="zreactor_symbol">L</div>
+              <div class="zreactor_name">Line Number Multiplier</div>
+              <div class="zreactor_value" id="Z_1_value">0</div>
+              <div class="zreactor_upgrade_level" id="Z_1_upgrade_level">0</div>
+              <div class="zreactor_level" id="Z_1_level">0</div>
+              <div class="zreactor_exp" id="Z_1_exp">0</div>
             </div>
             <div class="zreactor" id="zreactor_2">
-              <span class="zreactor_symbol">E</span>
-              <span class="zreactor_name">Spiral Equation Speed</span>
-              <span class="zreactor_value" id="Z_2_value">0</span>
-              <span class="zreactor_upgrade_level" id="Z_2_upgrade_level">0</span>
-              <span class="zreactor_level" id="Z_2_level">0</span>
-              <span class="zreactor_exp" id="Z_2_exp">0</span>
+              <div class="zreactor_symbol">E</div>
+              <div class="zreactor_name">Spiral Equation Speed</div>
+              <div class="zreactor_value" id="Z_2_value">0</div>
+              <div class="zreactor_upgrade_level" id="Z_2_upgrade_level">0</div>
+              <div class="zreactor_level" id="Z_2_level">0</div>
+              <div class="zreactor_exp" id="Z_2_exp">0</div>
             </div>
             <div class="zreactor" id="zreactor_3">
-              <span class="zreactor_symbol">S</span>
-              <span class="zreactor_name">Battle Stats</span>
-              <span class="zreactor_value" id="Z_3_value">0</span>
-              <span class="zreactor_upgrade_level" id="Z_3_upgrade_level">0</span>
-              <span class="zreactor_level" id="Z_3_level">0</span>
-              <span class="zreactor_exp" id="Z_3_exp">0</span>
+              <div class="zreactor_symbol">S</div>
+              <div class="zreactor_name">Battle Stats</div>
+              <div class="zreactor_value" id="Z_3_value">0</div>
+              <div class="zreactor_upgrade_level" id="Z_3_upgrade_level">0</div>
+              <div class="zreactor_level" id="Z_3_level">0</div>
+              <div class="zreactor_exp" id="Z_3_exp">0</div>
             </div>
             <div class="zreactor" id="zreactor_4">
-              <span class="zreactor_symbol">CR</span>
-              <span class="zreactor_name">Critical Rate</span>
-              <span class="zreactor_value" id="Z_4_value">0</span>
-              <span class="zreactor_upgrade_level" id="Z_4_upgrade_level">0</span>
-              <span class="zreactor_level" id="Z_4_level">0</span>
-              <span class="zreactor_exp" id="Z_4_exp">0</span>
+              <div class="zreactor_symbol">CR</div>
+              <div class="zreactor_name">Critical Rate</div>
+              <div class="zreactor_value" id="Z_4_value">0</div>
+              <div class="zreactor_upgrade_level" id="Z_4_upgrade_level">0</div>
+              <div class="zreactor_level" id="Z_4_level">0</div>
+              <div class="zreactor_exp" id="Z_4_exp">0</div>
             </div>
             <div class="zreactor" id="zreactor_5">
-              <span class="zreactor_symbol">CRX</span>
-              <span class="zreactor_name">S-Critical Rate</span>
-              <span class="zreactor_value" id="Z_5_value">0</span>
-              <span class="zreactor_upgrade_level" id="Z_5_upgrade_level">0</span>
-              <span class="zreactor_level" id="Z_5_level">0</span>
-              <span class="zreactor_exp" id="Z_5_exp">0</span>
+              <div class="zreactor_symbol">CRX</div>
+              <div class="zreactor_name">S-Critical Rate</div>
+              <div class="zreactor_value" id="Z_5_value">0</div>
+              <div class="zreactor_upgrade_level" id="Z_5_upgrade_level">0</div>
+              <div class="zreactor_level" id="Z_5_level">0</div>
+              <div class="zreactor_exp" id="Z_5_exp">0</div>
             </div>
         </div>
       </section>
@@ -1205,6 +1237,9 @@
               - Loading C tab info
             v0.2206152045
               - Loading Z tab info
+            v0.2206170010
+              - Improved r tab layout
+              - Added r tab formulas
         </div>
       </section>
 

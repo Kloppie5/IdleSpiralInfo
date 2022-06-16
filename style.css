@@ -2,6 +2,10 @@
   outline: 1px solid #000;
   outline-offset: -1px;
 }
+body {
+  width: 960px;
+  margin: 0 auto;
+}
 
 .disabled {
   background-color: #aaa;
@@ -25,4 +29,16 @@
 }
 .tab.visible {
   display: block;
+}
+
+.r_upgrade {
+  width: 230px;
+  margin: 5px;
+  float: left;
+}
+.r_upgrade > .upgrade_name {
+  font-size: 1.5em;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
 }
