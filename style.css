@@ -3,6 +3,10 @@
   outline-offset: -1px;
 }
 
+.disabled {
+  background-color: #aaa;
+}
+
 .tab-selector {
   padding: 10px 12px;
   line-height: 20px;
