@@ -69,3 +69,20 @@ body {
   width: 100%;
   text-align: center;
 }
+
+.faq_entry {
+  width: 100%;
+  margin: 5px;
+  float: left;
+}
+.faq_question {
+  font-size: 1.5em;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+}
+.faq_answer {
+  font-size: 1.2em;
+  width: 100%;
+  text-align: center;
+}
