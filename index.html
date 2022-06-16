@@ -699,63 +699,96 @@
       </section>
       <section id="tab-p" class="tab hidden">
         <div>
-          p upgrades:<br/>
           <div id="p_upgrades">
             <div class="p_upgrade">
               <div class="upgrade_name">n</div>
+              <div class="upgrade_effect">n += level</div>
+              <div class="upgrade_cost">1 * 5 ^ level</div>
               <div class="upgrade_level" id="p_n_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">v</div>
+              <div class="upgrade_effect">v += 10 * level</div>
+              <div class="upgrade_cost">1 * 2 ^ level</div>
               <div class="upgrade_level" id="p_v_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">u</div>
+              <div class="upgrade_effect">u += level</div>
+              <div class="upgrade_cost">1e1 * 1e1 ^ level</div>
               <div class="upgrade_level" id="p_u_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">parmA</div>
+              <div class="upgrade_effect">a += 0.1 * level</div>
+              <div class="upgrade_cost">1e1 * 1.5 ^ level</div>
               <div class="upgrade_level" id="p_parmA_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">parmK</div>
+              <div class="upgrade_effect">k += 10 * level</div>
+              <div class="upgrade_cost">1e1 * 10 ^ level</div>
               <div class="upgrade_level" id="p_parmK_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">parmB</div>
+              <div class="upgrade_effect">b += 0.1 * level</div>
+              <div class="upgrade_cost">1e2 * 1.5 ^ level</div>
               <div class="upgrade_level" id="p_parmB_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">parmC</div>
+              <div class="upgrade_effect">c += 0.1 * level</div>
+              <div class="upgrade_cost">1e3 * 1.5 ^ level</div>
               <div class="upgrade_level" id="p_parmC_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">parmD</div>
+              <div class="upgrade_effect">d += 0.1 * level</div>
+              <div class="upgrade_cost">1e4 * 1.5 ^ level</div>
               <div class="upgrade_level" id="p_parmD_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">parmE</div>
+              <div class="upgrade_effect">e += 0.1 * level</div>
+              <div class="upgrade_cost">1e5 * 1.5 ^ level</div>
               <div class="upgrade_level" id="p_parmE_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">parmF</div>
+              <div class="upgrade_effect">f += 0.1 * level</div>
+              <div class="upgrade_cost">1e6 * 1.5 ^ level</div>
               <div class="upgrade_level" id="p_parmF_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">parmG</div>
+              <div class="upgrade_effect">g += 0.1 * level</div>
+              <div class="upgrade_cost">1e7 * 1.5 ^ level</div>
               <div class="upgrade_level" id="p_parmG_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">exponentK</div>
+              <div class="upgrade_effect">k_exponent += 0.1 * level</div>
+              <div class="upgrade_cost">1e7 * 1e1 ^ level</div>
               <div class="upgrade_level" id="p_exponentK_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">alpha</div>
+              <div class="upgrade_effect">&alpha; += 0.01 * level</div>
+              <div class="upgrade_cost">1e21 * 1.25 ^ level</div>
               <div class="upgrade_level" id="p_alpha_level">0</div>
             </div>
             <div class="p_upgrade">
               <div class="upgrade_name">beta</div>
+              <div class="upgrade_effect">&beta; += 0.01 * level</div>
+              <div class="upgrade_cost">1e24 * 1.4 ^ level</div>
               <div class="upgrade_level" id="p_beta_level">0</div>
+            </div>
+            <div class="p_upgrade unavailable">
+              <div class="upgrade_name">ppd</div>
+              <div class="upgrade_effect">ppd *= 0.95 ^ level</div>
+              <div class="upgrade_cost">5 * 2 ^ level</div>
+              <div class="upgrade_level" id="p_prestigepoint_denominator_level">0</div>
             </div>
           </div>
         </div>
@@ -1240,6 +1273,9 @@
             v0.2206170010
               - Improved r tab layout
               - Added r tab formulas
+            v0.2206170018
+              - Improved p tab layout
+              - Added p tab formulas
         </div>
       </section>
 
