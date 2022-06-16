@@ -795,54 +795,77 @@
       </section>
       <section id="tab-z" class="tab hidden">
         <div>
-          z upgrades:<br/>
           <div id="z_upgrades">
             <div class="z_upgrade">
               <div class="upgrade_name">z_multiplier</div>
+              <div class="upgrade_effect">&Delta;r *= 1.2 + 0.02 * level * log10(z + 1)</div>
+              <div class="upgrade_cost">1 + 5 * level</div>
               <div class="upgrade_level" id="z_z_multiplier_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">Omega</div>
+              <div class="upgrade_effect">&Omega; += 0.1 * level</div>
+              <div class="upgrade_cost">1e2 * 2 ^ level</div>
               <div class="upgrade_level" id="z_Omega_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">gamma</div>
+              <div class="upgrade_effect">&gamma; += 0.1 * level</div>
+              <div class="upgrade_cost">1e2 * 2 ^ level</div>
               <div class="upgrade_level" id="z_gamma_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">delta</div>
+              <div class="upgrade_effect">&delta; += 0.1 * level</div>
+              <div class="upgrade_cost">1e2 * 2 ^ level</div>
               <div class="upgrade_level" id="z_delta_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">a_mul</div>
+              <div class="upgrade_effect">a *= 1 + 0.1 * level</div>
+              <div class="upgrade_cost">1e3 * 1e1 ^ level</div>
               <div class="upgrade_level" id="z_a_mul_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">b_mul</div>
+              <div class="upgrade_effect">b *= 1 + 0.1 * level</div>
+              <div class="upgrade_cost">1e4 * 1e1 ^ level</div>
               <div class="upgrade_level" id="z_b_mul_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">c_mul</div>
+              <div class="upgrade_effect">c *= 1 + 0.1 * level</div>
+              <div class="upgrade_cost">1e5 * 1e1 ^ level</div>
               <div class="upgrade_level" id="z_c_mul_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">d_mul</div>
+              <div class="upgrade_effect">d *= 1 + 0.1 * level</div>
+              <div class="upgrade_cost">1e6 * 1e1 ^ level</div>
               <div class="upgrade_level" id="z_d_mul_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">e_mul</div>
+              <div class="upgrade_effect">e *= 1 + 0.1 * level</div>
+              <div class="upgrade_cost">1e7 * 1e1 ^ level</div>
               <div class="upgrade_level" id="z_e_mul_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">f_mul</div>
+              <div class="upgrade_effect">f *= 1 + 0.1 * level</div>
+              <div class="upgrade_cost">1e8 * 1e1 ^ level</div>
               <div class="upgrade_level" id="z_f_mul_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">g_mul</div>
+              <div class="upgrade_effect">g *= 1 + 0.1 * level</div>
+              <div class="upgrade_cost">1e9 * 1e1 ^ level</div>
               <div class="upgrade_level" id="z_g_mul_level">0</div>
             </div>
             <div class="z_upgrade">
               <div class="upgrade_name">m</div>
+              <div class="upgrade_effect">m += level</div>
+              <div class="upgrade_cost">1e12 * 1e3 ^ level</div>
               <div class="upgrade_level" id="z_m_level">0</div>
             </div>
           </div>
@@ -1276,6 +1299,9 @@
             v0.2206170018
               - Improved p tab layout
               - Added p tab formulas
+            v0.2206170028
+              - Improved z tab layout
+              - Added z tab formulas
         </div>
       </section>
 

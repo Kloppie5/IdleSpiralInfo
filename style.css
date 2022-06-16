@@ -33,6 +33,7 @@ body {
 
 .r_upgrade {
   width: 230px;
+  height: 100px;
   margin: 5px;
   float: left;
 }
@@ -45,10 +46,24 @@ body {
 
 .p_upgrade {
   width: 230px;
+  height: 100px;
   margin: 5px;
   float: left;
 }
 .p_upgrade > .upgrade_name {
+  font-size: 1.5em;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+}
+
+.z_upgrade {
+  width: 230px;
+  height: 100px;
+  margin: 5px;
+  float: left;
+}
+.z_upgrade > .upgrade_name {
   font-size: 1.5em;
   font-weight: bold;
   width: 100%;
