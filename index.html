@@ -1056,74 +1056,125 @@
       </section>
       <section id="tab-E" class="tab hidden">
         <div>
-          Spiral Equations:<br/>
           <div id="spiral_equations">
             <div class="spiral_equation" id="spiral_equation_0">
+              <div class="spiral_symbol">I</div>
+              <div class="spiral_reward">HP</div>
               <div class="spiral_name">Thales</div>
+              <div class="spiral_effect">HP *= 1 + 0.01 * level + 0.001 * [level - 1000]</div>
+              <div class="spiral_cost">10 * 1.03 ^ level</div>
               <div class="spiral_level" id="S_0_level">0</div>
               <div class="spiral_progress" id="S_0_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_1">
+              <div class="spiral_symbol">II</div>
+              <div class="spiral_reward">DEF</div>
               <div class="spiral_name">Hypatia</div>
+              <div class="spiral_effect">DEF *= 1 + 0.01 * level + 0.001 * [level - 1000]</div>
+              <div class="spiral_cost">30 * 1.03 ^ level</div>
               <div class="spiral_level" id="S_1_level">0</div>
               <div class="spiral_progress" id="S_1_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_2">
+              <div class="spiral_symbol">III</div>
+              <div class="spiral_reward">ATK</div>
               <div class="spiral_name">Archimedes</div>
+              <div class="spiral_effect">ATK *= 1 + 0.01 * level + 0.001 * [level - 1000]</div>
+              <div class="spiral_cost">60 * 1.03 ^ level</div>
               <div class="spiral_level" id="S_2_level">0</div>
               <div class="spiral_progress" id="S_2_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_3">
+              <div class="spiral_symbol">IV</div>
+              <div class="spiral_reward">Critical Damage</div>
               <div class="spiral_name">Pythagoras</div>
+              <div class="spiral_effect">criticalDamage *= 1 + 0.01 * level + 0.001 * [level - 1000]</div>
+              <div class="spiral_cost">120 * 1.03 ^ level</div>
               <div class="spiral_level" id="S_3_level">0</div>
               <div class="spiral_progress" id="S_3_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_4">
+              <div class="spiral_symbol">V</div>
+              <div class="spiral_reward">Critical Rate</div>
               <div class="spiral_name">Euclides</div>
+              <div class="spiral_effect">criticalRate *= 1 + 0.001 * level + 0.0001 * [level - 50]</div>
+              <div class="spiral_cost">150 * 1.05 ^ level</div>
               <div class="spiral_level" id="S_4_level">0</div>
               <div class="spiral_progress" id="S_4_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_5">
+              <div class="spiral_symbol">VI</div>
+              <div class="spiral_reward">Attack Speed</div>
               <div class="spiral_name">Eratos</div>
+              <div class="spiral_effect">attack_speed *= 1 + 0.01 * log10(level + 1)</div>
+              <div class="spiral_cost">180 * 1.06 ^ level</div>
               <div class="spiral_level" id="S_5_level">0</div>
               <div class="spiral_progress" id="S_5_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_6">
+              <div class="spiral_symbol">VII</div>
+              <div class="spiral_reward">Super Critical Rate</div>
               <div class="spiral_name">Aryabhata</div>
+              <div class="spiral_effect">super_critical += 0.01 * log(level + 1)</div>
+              <div class="spiral_cost">210 * 1.07 ^ level</div>
               <div class="spiral_level" id="S_6_level">0</div>
               <div class="spiral_progress" id="S_6_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_7">
+              <div class="spiral_symbol">VIII</div>
+              <div class="spiral_reward">Equation Speed</div>
               <div class="spiral_name">Brahmagupta</div>
+              <div class="spiral_effect">equation_speed *= 1 + 0.01 * log10(level + 1)</div>
+              <div class="spiral_cost">240 * 1.1 ^ level</div>
               <div class="spiral_level" id="S_7_level">0</div>
               <div class="spiral_progress" id="S_7_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_8">
+              <div class="spiral_symbol">IX</div>
+              <div class="spiral_reward">HP Reward</div>
               <div class="spiral_name">Khuwarizmi</div>
+              <div class="spiral_effect">reward_hp_mul *= 1 + 0.001 * level + 0.0001 * [level - 1000]</div>
+              <div class="spiral_cost">100 * 1.05 ^ level</div>
               <div class="spiral_level" id="S_8_level">0</div>
               <div class="spiral_progress" id="S_8_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_9">
+              <div class="spiral_symbol">X</div>
+              <div class="spiral_reward">ATK Reward</div>
               <div class="spiral_name">Omar</div>
+              <div class="spiral_effect">reward_atk_mul *= 1 + 0.001 * level + 0.0001 * [level - 1000]</div>
+              <div class="spiral_cost">100 * 1.05 ^ level</div>
               <div class="spiral_level" id="S_9_level">0</div>
               <div class="spiral_progress" id="S_9_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_10">
+              <div class="spiral_symbol">XI</div>
+              <div class="spiral_reward">DEF Reward</div>
               <div class="spiral_name">Bhaskara</div>
+              <div class="spiral_effect">reward_def_mul *= 1 + 0.001 * level + 0.0001 * [level - 1000]</div>
+              <div class="spiral_cost">100 * 1.05 ^ level</div>
               <div class="spiral_level" id="S_10_level">0</div>
               <div class="spiral_progress" id="S_10_progress">0</div>
             </div>
             <div class="spiral_equation" id="spiral_equation_11">
+              <div class="spiral_symbol">XII</div>
+              <div class="spiral_reward">EXP Reward</div>
               <div class="spiral_name">Madhava</div>
+              <div class="spiral_effect">reward_exp_mul *= 1 + 0.0005 * level + 0.00005 * [level - 1000]</div>
+              <div class="spiral_cost">500 * 1.1 ^ level</div>
               <div class="spiral_level" id="S_11_level">0</div>
               <div class="spiral_progress" id="S_11_progress">0</div>
             </div>
             <div class="spiral_equation unavailable" id="spiral_equation_12">
+              <div class="spiral_symbol">XIII</div>
+              <div class="spiral_reward">???</div>
               <div class="spiral_name">Bartolomeo</div>
               <div class="spiral_level" id="S_12_level">0</div>
               <div class="spiral_progress" id="S_12_progress">0</div>
             </div>
             <div class="spiral_equation unavailable" id="spiral_equation_13">
+              <div class="spiral_symbol">XIV</div>
+              <div class="spiral_reward">???</div>
               <div class="spiral_name">Cardano</div>
               <div class="spiral_level" id="S_13_level">0</div>
               <div class="spiral_progress" id="S_13_progress">0</div>
@@ -1305,11 +1356,13 @@
               - Added z tab formulas
             v0.2206170033
               - Added faq tab
+            v0.2206170118
+              - Improved E tab layout
+              - Added E tab formulas
         </div>
       </section>
       <section id="tab-faq" class="tab hidden">
         <div>
-          FAQ:<br/>
           <div class="faq_entry">
             <div class="faq_question">Why?</div>
             <div class="faq_answer">
