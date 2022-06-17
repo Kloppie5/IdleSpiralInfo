@@ -490,6 +490,23 @@
               return statSummary.delta_r;
             statSummary.delta_r = evaluate_m() * evaluate_recurrence() + evaluate_k();
             statSummary.delta_r *= evaluate_z_multiplier();
+            statSummary.delta_r *= 1 + 0.5 * dto.challengeLevels[1]; // Basic
+            if ( dto.challengeLevels[4] > 0 ) {
+              poormath = 1;
+              poormath *= evaluate_a() * evaluate_b() * evaluate_c();
+              if ( dto.challengeLevels[4] >= 2 )
+                poormath *= evaluate_d();
+              if ( dto.challengeLevels[4] >= 3 )
+                poormath *= evaluate_e();
+              if ( dto.challengeLevels[4] >= 4 )
+                poormath *= evaluate_f();
+              if ( dto.challengeLevels[4] >= 5 )
+                poormath *= evaluate_g();
+              statSummary.delta_r *= dto.challengeLevels[4] ** (1/11); // Poor Math
+            }
+            if ( dto.challengeLevels[10] > 0 ) {
+              statSummary.delta_r *= 1 + Math.log(dto.timeSinceOmegaPrestige / 13 + 1) / Math.log(10 - dto.challengeLevels[10]); // Sinkhole
+            }
             return statSummary.delta_r;
           }
 
@@ -497,6 +514,7 @@
             if ( statSummary.omega != -1 )
               return statSummary.omega;
             statSummary.omega = 1
+            statSummary.omega *= 1 + 0.1 * dto.challengeLevels[2]; // Slow spiral
             statSummary.omega *= 1.25 ** dto.softResetNum;
             return statSummary.omega;
           }
@@ -505,6 +523,7 @@
               return statSummary.omega_exponent;
             statSummary.omega_exponent = 1;
             statSummary.omega_exponent += dto.softResetNum;
+            statSummary.omega_exponent += 0.1 * dto.challengeLevels[8]; // Drunk
             return statSummary.omega_exponent;
           }
 
@@ -682,6 +701,7 @@
             statSummary.k += 10 * upgradeContainer.p.parmK;
             statSummary.k += battleRewardContainer.k;
             statSummary.k *= 1 + battleRewardContainer.k_mul;
+            statSummary.k *= 1 + dto.challengeLevels[4]; // Straight
             statSummary.k **= 1 + 0.1 * upgradeContainer.p.exponentK;
             return statSummary.k;
           }
