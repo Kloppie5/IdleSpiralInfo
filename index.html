@@ -446,6 +446,13 @@
           var statSummary = {
             delta_r : -1,
 
+            omega : -1,
+            omega_exponent : -1,
+
+            recurrence : -1,
+            A_i : [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            integral : -1,
+
             u : -1,
             v : -1,
             n : -1,
@@ -481,9 +488,51 @@
           function evaluate_delta_r ( ) {
             if ( statSummary.delta_r != -1 )
               return statSummary.delta_r;
-            statSummary.delta_r = 1;
+            statSummary.delta_r = evaluate_m() * evaluate_recurrence() + evaluate_k();
             statSummary.delta_r *= evaluate_z_multiplier();
             return statSummary.delta_r;
+          }
+
+          function evaluate_omega ( ) {
+            if ( statSummary.omega != -1 )
+              return statSummary.omega;
+            statSummary.omega = 1
+            statSummary.omega *= 1.25 ** dto.softResetNum;
+            return statSummary.omega;
+          }
+          function evaluate_omega_exponent ( ) {
+            if ( statSummary.omega_exponent != -1 )
+              return statSummary.omega_exponent;
+            statSummary.omega_exponent = 1;
+            statSummary.omega_exponent += dto.softResetNum;
+            return statSummary.omega_exponent;
+          }
+
+          function evaluate_recurrence ( ) {
+            if ( statSummary.recurrence != -1 )
+              return statSummary.recurrence;
+            statSummary.recurrence = 0;
+            evaluate_A_i();
+            for (var i = 0; i < evaluate_n(); i++) {
+              statSummary.recurrence += statSummary.A_i[i] * evaluate_omega() ** evaluate_omega_exponent();
+            }
+            return statSummary.recurrence;
+          }
+
+          function evaluate_A_i ( ) {
+            if ( statSummary.A_i[evaluate_n()-1] != -1 )
+              return statSummary.A_i[evaluate_n()-1];
+            statSummary.A_i[0] = evaluate_A_1();
+            for (var i = 1; i < evaluate_n(); i++) {
+              statSummary.A_i[i] = evaluate_integral() * evaluate_u() * statSummary.A_i[i-1] + evaluate_v();
+            }
+            return statSummary.A_i[evaluate_n()-1];
+          }
+          function evaluate_integral ( ) {
+            if ( statSummary.integral != -1 )
+              return statSummary.integral;
+            statSummary.integral = 2.0 * evaluate_alpha() ** (evaluate_beta() + 1.0) / (evaluate_beta() + 1.0);
+            return statSummary.integral;
           }
 
           function evaluate_u ( ) {
@@ -496,7 +545,7 @@
           function evaluate_v ( ) {
             if ( statSummary.v != -1 )
             return statSummary.v;
-            statSummary.v = 1;
+            statSummary.v = 0;
             statSummary.v += 10 * upgradeContainer.p.v;
             return statSummary.v;
           }
@@ -708,38 +757,35 @@
           }
 
           function updateStatSummary ( ) {
-            $("#stat_delta_r > .stat_value").text(evaluate_delta_r());
+            $("#stat_delta_r > .stat_value").text(evaluate_delta_r().toExponential(3));
 
-            $("#stat_u > .stat_value").text(evaluate_u());
-            $("#stat_v > .stat_value").text(evaluate_v());
-            $("#stat_n > .stat_value").text(evaluate_n());
-            $("#stat_m > .stat_value").text(evaluate_m());
-            $("#stat_alpha > .stat_value").text(evaluate_alpha());
-            $("#stat_beta > .stat_value").text(evaluate_beta());
+            $("#stat_u > .stat_value").text(evaluate_u().toFixed());
+            $("#stat_v > .stat_value").text(evaluate_v().toFixed());
+            $("#stat_n > .stat_value").text(evaluate_n().toFixed());
+            $("#stat_m > .stat_value").text(evaluate_m().toFixed());
+            $("#stat_alpha > .stat_value").text(evaluate_alpha().toFixed(3));
+            $("#stat_beta > .stat_value").text(evaluate_beta().toFixed(3));
 
-            $("#stat_A_1 > .stat_value").text(evaluate_A_1());
+            $("#stat_A_1 > .stat_value").text(evaluate_A_1().toExponential(3));
 
-            $("#stat_a > .stat_value").text(evaluate_a());
-            $("#stat_b > .stat_value").text(evaluate_b());
-            $("#stat_c > .stat_value").text(evaluate_c());
-            $("#stat_d > .stat_value").text(evaluate_d());
-            $("#stat_e > .stat_value").text(evaluate_e());
-            $("#stat_f > .stat_value").text(evaluate_f());
-            $("#stat_g > .stat_value").text(evaluate_g());
+            $("#stat_a > .stat_value").text(evaluate_a().toExponential(3));
+            $("#stat_b > .stat_value").text(evaluate_b().toExponential(3));
+            $("#stat_c > .stat_value").text(evaluate_c().toExponential(3));
+            $("#stat_d > .stat_value").text(evaluate_d().toExponential(3));
+            $("#stat_e > .stat_value").text(evaluate_e().toExponential(3));
+            $("#stat_f > .stat_value").text(evaluate_f().toFixed(3));
+            $("#stat_g > .stat_value").text(evaluate_g().toFixed(3));
 
-            $("#stat_k > .stat_value").text(evaluate_k());
+            $("#stat_k > .stat_value").text(evaluate_k().toExponential(3));
+            $("#stat_omega > .stat_value").text(evaluate_omega().toFixed(3));
 
-            $("#stat_gamma > .stat_value").text(evaluate_gamma());
-            $("#stat_Omega > .stat_value").text(evaluate_Omega());
-            $("#stat_delta > .stat_value").text(evaluate_delta());
+            $("#stat_gamma > .stat_value").text(evaluate_gamma().toExponential(3));
+            $("#stat_Omega > .stat_value").text(evaluate_Omega().toExponential(3));
+            $("#stat_delta > .stat_value").text(evaluate_delta().toExponential(3));
           }
         </script>
         <div class="stat" id="stat_delta_r">
           <div class="stat_label">&Delta;r</div>
-          <div class="stat_value">0</div>
-        </div>
-        <div class="stat" id="stat_A_i">
-          <div class="stat_label">A_i</div>
           <div class="stat_value">0</div>
         </div>
         <div class="stat" id="stat_u">
