@@ -78,57 +78,17 @@
             }
           };
           function updateUpgradeContainer ( ) {
-            // Upgrade 0 ; r.a 1e1*(1.3^0.1)^level
-            // - Effect a add ; level * 0.1
             upgradeContainer.r.a = dto.upgradeLevels[0]
-
-            // Upgrade 1 ; r.b 1e2*(1.5^0.1)^level
-            // - Effect b add ; level * 0.01
             upgradeContainer.r.b = dto.upgradeLevels[1]
-            
-            // Upgrade 2 ; r.c 1e3*(2.0^0.1)^level
-            // - Effect c add ; level * 0.01
             upgradeContainer.r.c = dto.upgradeLevels[2]
-            
-            // Upgrade 3 ; r.d 1e4*(2.5^0.1)^level
-            // - Effect d add ; level * 0.01
             upgradeContainer.r.d = dto.upgradeLevels[3]
-
-            // Upgrade 4 ; r.e 1e5*(3.0^0.1)^level
-            // - Effect e add ; level * 0.01
             upgradeContainer.r.e = dto.upgradeLevels[4]
-
-            // Upgrade 5 ; r.f 1e6*(4^0.1)^level
-            // - Effect f add ; level * 0.01
             upgradeContainer.r.f = dto.upgradeLevels[5]
-
-            // Upgrade 6 ; r.g 1e6*(4.5^0.1)^level
-            // - Effect g add ; level * 0.01
             upgradeContainer.r.g = dto.upgradeLevels[6]
-
-            // Upgrade 7 ; r.ae11 1e4*10^level
-            // - Effect ae11 mul ;  1 + 0.01 * level
-            // - Effect a mul ; ae11
-            // - Effect b mul ; ae11
-            // - Effect c mul ; ae11
-            // - Effect d mul ; ae11
-            // - Effect e mul ; ae11
             upgradeContainer.r.ae11 = dto.upgradeLevels[7]
-
-            // Upgrade 8 ; r.logk 1e4*10^level
-            // - Effect a mul ; 1 + 0.1 * level * log10(k + 1)
             upgradeContainer.r.logk = dto.upgradeLevels[8]
-
-            // Upgrade 9 ; r.beMul 1e12*10^level
-            // - Effect a mul ; (b + c + d + e + f + g) / 6 * (1 + 0.1 * level)
             upgradeContainer.r.beMul = dto.upgradeLevels[9]
-
-            // Upgrade 35 ; r.rAll 1e18*10^level
-            // - Effect deltar mul ; (rlevels / 10000 + 1) * (1 + 0.1 * level)
             upgradeContainer.r.rAll = dto.upgradeLevels[35]
-
-            // Upgrade 10 ; r.k 1*1.1^level
-            // - Effect k add ; level
             upgradeContainer.r.k = dto.upgradeLevels[10]
 
             // Upgrade 21 ; p.u 1e1*10^level
@@ -238,8 +198,6 @@
             // Upgrade 36 ; z.m 1e12*1e3^level
             // - Effect m add ; level
             upgradeContainer.z.m = dto.upgradeLevels[36]
-
-            renderUpgradeContainer();
           }
 
           var battleRewardContainer = {
@@ -407,8 +365,6 @@
             // Reward 34 ; math_skill
             // - Effect math_skill add ; value
             battleRewardContainer.math_skill = dto.battle_rewards[34]
-
-            renderBattleRewardContainer();
           }
           function diminishedAttackSpeed ( ) {
             if ( battleRewardContainer.pure_attack_speed < 4 )
@@ -576,6 +532,7 @@
             updateTab_E();
             updateTab_C();
             updateTab_Z();
+            updateStatSummary();
           }
 
           function decrypt ( text ) {
@@ -617,6 +574,213 @@
         <a class="tab-selector" href="#tab-m">m</a>
         <a class="tab-selector" href="#tab-faq">FAQ</a>
       </nav>
+
+      <section id="stat-summary">
+        <script>
+          var statSummary = {
+            delta_r : -1,
+            k : -1,
+            a : -1,
+            b : -1,
+            c : -1,
+            d : -1,
+            e : -1,
+            f : -1,
+            g : -1,
+            ae11 : -1,
+            logk : -1,
+            beMul : -1,
+            rAll : -1,
+            rLevels : -1,
+          }
+
+          function evaluate_a ( ) {
+            if ( statSummary.a != -1 ) {
+              return statSummary.a;
+            }
+            statSummary.a = 1;
+            statSummary.a += 0.1 * upgradeContainer.r.a;
+            statSummary.a *= evaluate_ae11();
+            statSummary.a *= evaluate_logk();
+            statSummary.a *= evaluate_beMul();
+            return statSummary.a;
+          }
+          function evaluate_b ( ) {
+            if ( statSummary.b != -1 )
+              return statSummary.b;
+            statSummary.b = 1;
+            statSummary.b += 0.01 * upgradeContainer.r.b;
+            statSummary.b *= evaluate_ae11();
+            return statSummary.b;
+          }
+          function evaluate_c ( ) {
+            if ( statSummary.c != -1 )
+              return statSummary.c;
+            statSummary.c = 1;
+            statSummary.c += 0.01 * upgradeContainer.r.c;
+            statSummary.c *= evaluate_ae11();
+            return statSummary.c;
+          }
+          function evaluate_d ( ) {
+            if ( statSummary.d != -1 )
+              return statSummary.d;
+            statSummary.d = 1;
+            statSummary.d += 0.01 * upgradeContainer.r.d;
+            statSummary.d *= evaluate_ae11();
+            return statSummary.d;
+          }
+          function evaluate_e ( ) {
+            if ( statSummary.e != -1 )
+              return statSummary.e;
+            statSummary.e = 1;
+            statSummary.e += 0.01 * upgradeContainer.r.e;
+            statSummary.e *= evaluate_ae11();
+            return statSummary.e;
+          }
+          function evaluate_f ( ) {
+            if ( statSummary.f != -1 )
+              return statSummary.f;
+            statSummary.f = 1;
+            statSummary.f += 0.01 * upgradeContainer.r.f;
+            return statSummary.f;
+          }
+          function evaluate_g ( ) {
+            if ( statSummary.g != -1 )
+              return statSummary.g;
+            statSummary.g = 1;
+            statSummary.g += 0.01 * upgradeContainer.r.g;
+            return statSummary.g;
+          }
+          function evaluate_ae11 ( ) {
+            if ( statSummary.ae11 != -1 )
+              return statSummary.ae11;
+            statSummary.ae11 = 1 + 0.01 * upgradeContainer.r.ae11;
+            return statSummary.ae11;
+          }
+          function evaluate_logk ( ) {
+            if ( statSummary.logk != -1 )
+              return statSummary.logk;
+            statSummary.logk = 1 + 0.1 * upgradeContainer.r.logk * Math.log10(evaluate_k() + 1);
+            return statSummary.logk;
+          }
+          function evaluate_beMul ( ) {
+            if ( statSummary.beMul != -1 )
+              return statSummary.beMul;
+            statSummary.beMul = (evaluate_b() + evaluate_c() + evaluate_d() + evaluate_e() + evaluate_f() + evaluate_g()) / 6 * (1 + 0.1 * upgradeContainer.r.beMul);
+            return statSummary.beMul;
+          }
+          function evaluate_rAll ( ) {
+            if ( statSummary.rAll != -1 )
+              return statSummary.rAll;
+            statSummary.rLevels = 0;
+            statSummary.rLevels += upgradeContainer.r.k;
+            statSummary.rLevels += upgradeContainer.r.a;
+            statSummary.rLevels += upgradeContainer.r.b;
+            statSummary.rLevels += upgradeContainer.r.c;
+            statSummary.rLevels += upgradeContainer.r.d;
+            statSummary.rLevels += upgradeContainer.r.e;
+            statSummary.rLevels += upgradeContainer.r.ae11;
+            statSummary.rLevels += upgradeContainer.r.logk;
+            statSummary.rLevels += upgradeContainer.r.f;
+            statSummary.rLevels += upgradeContainer.r.g;
+            statSummary.rLevels += upgradeContainer.r.beMul;
+            statSummary.rLevels += upgradeContainer.r.rAll;
+            statSummary.rAll = (1 + 0.0001 * statSummary.rLevels) * (1 + 0.1 * upgradeContainer.r.rAll);
+            return statSummary.rAll;
+          }
+
+          function evaluate_k ( ) {
+            if ( statSummary.k != -1 )
+              return statSummary.k;
+            statSummary.k = 1;
+            statSummary.k += upgradeContainer.r.k;
+            return statSummary.k;
+          }
+
+          function updateStatSummary ( ) {
+            $("#stat_a > .stat_value").text(evaluate_a());
+            $("#stat_b > .stat_value").text(evaluate_b());
+            $("#stat_c > .stat_value").text(evaluate_c());
+            $("#stat_d > .stat_value").text(evaluate_d());
+            $("#stat_e > .stat_value").text(evaluate_e());
+            $("#stat_f > .stat_value").text(evaluate_f());
+            $("#stat_g > .stat_value").text(evaluate_g());
+            $("#stat_k > .stat_value").text(evaluate_k());
+          }
+        </script>
+        <div class="stat" id="stat_delta_r">
+          <div class="stat_label">&Delta;r</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_A_i">
+          <div class="stat_label">A_i</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_u">
+          <div class="stat_label">u</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_v">
+          <div class="stat_label">v</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_n">
+          <div class="stat_label">n</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_m">
+          <div class="stat_label">m</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_alpha">
+          <div class="stat_label">&alpha;</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_beta">
+          <div class="stat_label">&beta;</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_A_1">
+          <div class="stat_label">A_1</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_a">
+          <div class="stat_label">a</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_b">
+          <div class="stat_label">b</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_c">
+          <div class="stat_label">c</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_d">
+          <div class="stat_label">d</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_e">
+          <div class="stat_label">e</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_f">
+          <div class="stat_label">f</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_g">
+          <div class="stat_label">g</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_k">
+          <div class="stat_label">k</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_omega">
+          <div class="stat_label">&omega;</div>
+          <div class="stat_value">0</div>
+        </div>
+      </section>
 
       <br/><br/><br/>
 

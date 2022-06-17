@@ -34,6 +34,17 @@ body {
   display: block;
 }
 
+.stat {
+  width: 200px;
+  height: 20px;
+}
+.stat > .stat_label {
+  float: left;
+}
+.stat > .stat_value {
+  float: right;
+}
+
 .r_upgrade {
   width: 230px;
   height: 100px;
