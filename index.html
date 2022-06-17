@@ -90,65 +90,20 @@
             upgradeContainer.r.beMul = dto.upgradeLevels[9]
             upgradeContainer.r.rAll = dto.upgradeLevels[35]
             upgradeContainer.r.k = dto.upgradeLevels[10]
-
-            // Upgrade 21 ; p.u 1e1*10^level
-            // - Effect u add ; level
             upgradeContainer.p.u = dto.upgradeLevels[21]
-
-            // Upgrade 22 ; p.v 1*2^level
-            // - Effect v add ; level * 10
             upgradeContainer.p.v = dto.upgradeLevels[22]
-
-            // Upgrade 23 ; p.n 1*5^level
-            // - Effect n add ; level
             upgradeContainer.p.n = dto.upgradeLevels[23]
-
-            // Upgrade 11 ; p.parmA 1e1*1.5^level
-            // - Effect a add ; level
             upgradeContainer.p.parmA = dto.upgradeLevels[11]
-
-            // Upgrade 12 ; p.parmB 1e2*1.5^level
-            // - Effect b add ; level * 0.1
             upgradeContainer.p.parmB = dto.upgradeLevels[12]
-
-            // Upgrade 13 ; p.parmC 1e3*1.5^level
-            // - Effect c add ; level * 0.1
             upgradeContainer.p.parmC = dto.upgradeLevels[13]
-
-            // Upgrade 14 ; p.parmD 1e4*1.5^level
-            // - Effect d add ; level * 0.1
             upgradeContainer.p.parmD = dto.upgradeLevels[14]
-
-            // Upgrade 15 ; p.parmE 1e5*1.5^level
-            // - Effect e add ; level * 0.1
             upgradeContainer.p.parmE = dto.upgradeLevels[15]
-
-            // Upgrade 16 ; p.parmF 1e6*1.5^level
-            // - Effect f add ; level * 0.1
             upgradeContainer.p.parmF = dto.upgradeLevels[16]
-
-            // Upgrade 17 ; p.parmG 1e6*1.5^level
-            // - Effect g add ; level * 0.1
             upgradeContainer.p.parmG = dto.upgradeLevels[17]
-
-            // Upgrade 18 ; p.parmK 1e1*10^level
-            // - Effect k add ; level * 10
             upgradeContainer.p.parmK = dto.upgradeLevels[18]
-
-            // Upgrade 20 ; p.exponentK 1e7*10^level
-            // - Effect k exp add ; level * 0.1
             upgradeContainer.p.exponentK = dto.upgradeLevels[20]
-
-            // Upgrade 19 ; p.prestigepoint_denominator 5*2^level
-            // - Effect prestigePoint_denominator mul ; 0.95^level
             upgradeContainer.p.prestigepoint_denominator = dto.upgradeLevels[19]
-
-            // Upgrade 37 ; p.alpha 1e21*1.25^level
-            // - Effect alpha add ; level * 0.01
             upgradeContainer.p.alpha = dto.upgradeLevels[37]
-
-            // Upgrade 38 ; p.beta 1e24*1.4^level
-            // - Effect beta add ; level * 0.01
             upgradeContainer.p.beta = dto.upgradeLevels[38]
 
             // Upgrade 27 ; z.z_multiplier 1+5*level
@@ -579,6 +534,14 @@
         <script>
           var statSummary = {
             delta_r : -1,
+
+            n : -1,
+            v : -1,
+            u : -1,
+
+            alpha : -1,
+            beta : -1,
+
             k : -1,
             a : -1,
             b : -1,
@@ -587,11 +550,59 @@
             e : -1,
             f : -1,
             g : -1,
+
             ae11 : -1,
             logk : -1,
             beMul : -1,
             rAll : -1,
             rLevels : -1,
+          }
+
+          function evaluate_n ( ) {
+            if ( statSummary.n != -1 )
+              return statSummary.n;
+            statSummary.n = 1;
+            statSummary.n += upgradeContainer.p.n;
+            return statSummary.n;
+          }
+          function evaluate_v ( ) {
+            if ( statSummary.v != -1 )
+            return statSummary.v;
+            statSummary.v = 1;
+            statSummary.v += 10 * upgradeContainer.p.v;
+            return statSummary.v;
+          }
+          function evaluate_u ( ) {
+            if ( statSummary.u != -1 )
+              return statSummary.u;
+            statSummary.u = 1;
+            statSummary.u += upgradeContainer.p.u;
+            return statSummary.u;
+          }
+
+          function evaluate_alpha ( ) {
+            if ( statSummary.alpha != -1 )
+              return statSummary.alpha;
+            statSummary.alpha = 1;
+            statSummary.alpha += 0.01 * upgradeContainer.p.alpha;
+            return statSummary.alpha;
+          }
+          function evaluate_beta ( ) {
+            if ( statSummary.beta != -1 )
+              return statSummary.beta;
+            statSummary.beta = 1;
+            statSummary.beta += 0.01 * upgradeContainer.p.beta;
+            return statSummary.beta;
+          }
+          
+          function evaluate_k ( ) {
+            if ( statSummary.k != -1 )
+              return statSummary.k;
+            statSummary.k = 1;
+            statSummary.k += upgradeContainer.r.k;
+            statSummary.k += 10 * upgradeContainer.p.parmK;
+            statSummary.k **= 1 + 0.1 * upgradeContainer.p.exponentK;
+            return statSummary.k;
           }
 
           function evaluate_a ( ) {
@@ -600,6 +611,7 @@
             }
             statSummary.a = 1;
             statSummary.a += 0.1 * upgradeContainer.r.a;
+            statSummary.a += upgradeContainer.p.parmA;
             statSummary.a *= evaluate_ae11();
             statSummary.a *= evaluate_logk();
             statSummary.a *= evaluate_beMul();
@@ -610,6 +622,7 @@
               return statSummary.b;
             statSummary.b = 1;
             statSummary.b += 0.01 * upgradeContainer.r.b;
+            statSummary.b += 0.1 * upgradeContainer.p.parmB;
             statSummary.b *= evaluate_ae11();
             return statSummary.b;
           }
@@ -618,6 +631,7 @@
               return statSummary.c;
             statSummary.c = 1;
             statSummary.c += 0.01 * upgradeContainer.r.c;
+            statSummary.c += 0.1 * upgradeContainer.p.parmC;
             statSummary.c *= evaluate_ae11();
             return statSummary.c;
           }
@@ -626,6 +640,7 @@
               return statSummary.d;
             statSummary.d = 1;
             statSummary.d += 0.01 * upgradeContainer.r.d;
+            statSummary.d += 0.1 * upgradeContainer.p.parmD;
             statSummary.d *= evaluate_ae11();
             return statSummary.d;
           }
@@ -634,6 +649,7 @@
               return statSummary.e;
             statSummary.e = 1;
             statSummary.e += 0.01 * upgradeContainer.r.e;
+            statSummary.e += 0.1 * upgradeContainer.p.parmE;
             statSummary.e *= evaluate_ae11();
             return statSummary.e;
           }
@@ -642,6 +658,7 @@
               return statSummary.f;
             statSummary.f = 1;
             statSummary.f += 0.01 * upgradeContainer.r.f;
+            statSummary.f += 0.1 * upgradeContainer.p.parmF;
             return statSummary.f;
           }
           function evaluate_g ( ) {
@@ -649,6 +666,7 @@
               return statSummary.g;
             statSummary.g = 1;
             statSummary.g += 0.01 * upgradeContainer.r.g;
+            statSummary.g += 0.1 * upgradeContainer.p.parmG;
             return statSummary.g;
           }
           function evaluate_ae11 ( ) {
@@ -689,15 +707,13 @@
             return statSummary.rAll;
           }
 
-          function evaluate_k ( ) {
-            if ( statSummary.k != -1 )
-              return statSummary.k;
-            statSummary.k = 1;
-            statSummary.k += upgradeContainer.r.k;
-            return statSummary.k;
-          }
-
           function updateStatSummary ( ) {
+            $("#stat_n > .stat_value").text(evaluate_n());
+            $("#stat_v > .stat_value").text(evaluate_v());
+            $("#stat_u > .stat_value").text(evaluate_u());
+            $("#stat_alpha > .stat_value").text(evaluate_alpha());
+            $("#stat_beta > .stat_value").text(evaluate_beta());
+
             $("#stat_a > .stat_value").text(evaluate_a());
             $("#stat_b > .stat_value").text(evaluate_b());
             $("#stat_c > .stat_value").text(evaluate_c());
@@ -705,6 +721,7 @@
             $("#stat_e > .stat_value").text(evaluate_e());
             $("#stat_f > .stat_value").text(evaluate_f());
             $("#stat_g > .stat_value").text(evaluate_g());
+            
             $("#stat_k > .stat_value").text(evaluate_k());
           }
         </script>
