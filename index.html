@@ -32,49 +32,49 @@
 
           var upgradeContainer = {
             r : {
-              k : 0,
-              a : 0,
-              b : 0,
-              c : 0,
-              d : 0,
-              e : 0,
-              ae11 : 0,
-              logk : 0,
-              f : 0,
-              g : 0,
-              beMul : 0,
-              rAll : 0
+              k : -1,
+              a : -1,
+              b : -1,
+              c : -1,
+              d : -1,
+              e : -1,
+              ae11 : -1,
+              logk : -1,
+              f : -1,
+              g : -1,
+              beMul : -1,
+              rAll : -1,
             },
             p : {
-              n : 0,
-              v : 0,
-              u : 0,
-              parmA : 0,
-              parmK : 0,
-              parmB : 0,
-              parmC : 0,
-              parmD : 0,
-              parmE : 0,
-              parmF : 0,
-              parmG : 0,
-              exponentK : 0,
-              alpha : 0,
-              beta : 0,
-              prestigepoint_denominator : 0
+              n : -1,
+              v : -1,
+              u : -1,
+              parmA : -1,
+              parmK : -1,
+              parmB : -1,
+              parmC : -1,
+              parmD : -1,
+              parmE : -1,
+              parmF : -1,
+              parmG : -1,
+              exponentK : -1,
+              alpha : -1,
+              beta : -1,
+              prestigepoint_denominator : -1
             },
             z : {
-              z_multiplier : 0,
-              Omega : 0,
-              gamma : 0,
-              delta : 0,
-              a_mul : 0,
-              b_mul : 0,
-              c_mul : 0,
-              d_mul : 0,
-              e_mul : 0,
-              f_mul : 0,
-              g_mul : 0,
-              m : 0
+              z_multiplier : -1,
+              Omega : -1,
+              gamma : -1,
+              delta : -1,
+              a_mul : -1,
+              b_mul : -1,
+              c_mul : -1,
+              d_mul : -1,
+              e_mul : -1,
+              f_mul : -1,
+              g_mul : -1,
+              m : -1,
             }
           };
           function updateUpgradeContainer ( ) {
@@ -116,72 +116,52 @@
             upgradeContainer.z.e_mul = dto.upgradeLevels[32]
             upgradeContainer.z.f_mul = dto.upgradeLevels[33]
             upgradeContainer.z.g_mul = dto.upgradeLevels[34]
-
-            // Upgrade 36 ; z.m 1e12*1e3^level
-            // - Effect m add ; level
             upgradeContainer.z.m = dto.upgradeLevels[36]
           }
 
           var battleRewardContainer = {
-            hp : 0,
-            atk : 0,
-            def : 0,
-            a : 0,
-            b : 0,
-            c : 0,
-            d : 0,
-            e : 0,
-            k : 0,
-            regene : 0,
-            critical : 0,
-            criticalDamage : 0,
-            a_mul : 0,
-            b_mul : 0,
-            c_mul : 0,
-            d_mul : 0,
-            e_mul : 0,
-            k_mul : 0,
-            hp_mul : 0,
-            atk_mul : 0,
-            def_mul : 0,
-            n : 0,
-            v : 0,
-            gamma : 0,
-            delta : 0,
-            Omega : 0,
-            pure_attack_speed : 0,
-            gamma_mul : 0,
-            delta_mul : 0,
-            Omega_mul : 0,
-            exp : 0,
-            pure_rare_chance : 0,
-            super_critical : 0,
-            super_critical_damage : 0,
-            math_skill : 0,
+            hp : -1,
+            atk : -1,
+            def : -1,
+            a : -1,
+            b : -1,
+            c : -1,
+            d : -1,
+            e : -1,
+            k : -1,
+            regene : -1,
+            critical : -1,
+            criticalDamage : -1,
+            a_mul : -1,
+            b_mul : -1,
+            c_mul : -1,
+            d_mul : -1,
+            e_mul : -1,
+            k_mul : -1,
+            hp_mul : -1,
+            atk_mul : -1,
+            def_mul : -1,
+            n : -1,
+            v : -1,
+            gamma : -1,
+            delta : -1,
+            Omega : -1,
+            pure_attack_speed : -1,
+            gamma_mul : -1,
+            delta_mul : -1,
+            Omega_mul : -1,
+            exp : -1,
+            pure_rare_chance : -1,
+            super_critical : -1,
+            super_critical_damage : -1,
+            math_skill : -1,
           }
           function updateBattleRewardContainer ( ) {
-            // Reward 3 ; a
-            // - Effect a add ; value
             battleRewardContainer.a = dto.battle_rewards[3]
-            
-            // Reward 4 ; b
-            // - Effect b add ; value
             battleRewardContainer.b = dto.battle_rewards[4]
-            
-            // Reward 5 ; c
-            // - Effect c add ; value
             battleRewardContainer.c = dto.battle_rewards[5]
-
-            // Reward 6 ; d
-            // - Effect d add ; value
             battleRewardContainer.d = dto.battle_rewards[6]
-
-            // Reward 7 ; e
-            // - Effect e add ; value
             battleRewardContainer.e = dto.battle_rewards[7]
-
-            // Reward 8 ; k
-            // - Effect k add ; value
             battleRewardContainer.k = dto.battle_rewards[8]
 
             // Reward 1 ; atk
@@ -207,17 +187,8 @@
             // Reward 11 ; criticalDamage
             // - Effect criticalDamage mul ; value + 1
             battleRewardContainer.criticalDamage = dto.battle_rewards[11]
-
-            // Reward 23 ; gamma
-            // - Effect gamma add ; value
             battleRewardContainer.gamma = dto.battle_rewards[23]
-
-            // Reward 24 ; delta
-            // - Effect delta add ; value
             battleRewardContainer.delta = dto.battle_rewards[24]
-
-            // Reward 25 ; Omega
-            // - Effect Omega add ; value
             battleRewardContainer.Omega = dto.battle_rewards[25]
 
             // Reward 32 ; super_critical
@@ -227,29 +198,11 @@
             // Reward 33 ; super_critical_damage
             // - Effect super_critical_damage mul ; value + 1
             battleRewardContainer.super_critical_damage = dto.battle_rewards[33]
-
-            // Reward 12 ; a_mul
-            // - Effect a mul ; 1 + value
             battleRewardContainer.a_mul = dto.battle_rewards[12]
-
-            // Reward 13 ; b_mul
-            // - Effect b mul ; 1 + value
             battleRewardContainer.b_mul = dto.battle_rewards[13]
-
-            // Reward 14 ; c_mul
-            // - Effect c mul ; 1 + value
             battleRewardContainer.c_mul = dto.battle_rewards[14]
-
-            // Reward 15 ; d_mul
-            // - Effect d mul ; 1 + value
             battleRewardContainer.d_mul = dto.battle_rewards[15]
-
-            // Reward 16 ; e_mul
-            // - Effect e mul ; 1 + value
             battleRewardContainer.e_mul = dto.battle_rewards[16]
-
-            // Reward 17 ; k_mul
-            // - Effect k mul ; 1 + value
             battleRewardContainer.k_mul = dto.battle_rewards[17]
 
             // Reward 18 ; hp_mul
@@ -263,17 +216,8 @@
             // Reward 20 ; def_mul
             // - Effect def mul ; 1 + value
             battleRewardContainer.def_mul = dto.battle_rewards[20]
-
-            // Reward 27 ; gamma_mul
-            // - Effect gamma mul ; 1 + value
             battleRewardContainer.gamma_mul = dto.battle_rewards[27]
-
-            // Reward 28 ; delta_mul
-            // - Effect delta mul ; 1 + value
             battleRewardContainer.delta_mul = dto.battle_rewards[28]
-
-            // Reward 29 ; Omega_mul
-            // - Effect Omega mul ; 1 + value
             battleRewardContainer.Omega_mul = dto.battle_rewards[29]
 
             // Reward 26 ; pure_attack_speed
@@ -607,10 +551,12 @@
             statSummary.a = 1;
             statSummary.a += 0.1 * upgradeContainer.r.a;
             statSummary.a += upgradeContainer.p.parmA;
+            statSummary.a += battleRewardContainer.a;
             statSummary.a *= evaluate_ae11();
             statSummary.a *= evaluate_logk();
             statSummary.a *= evaluate_beMul();
             statSummary.a *= 1 + 0.1 * upgradeContainer.z.a_mul;
+            statSummary.a *= 1 + battleRewardContainer.a_mul;
             return statSummary.a;
           }
           function evaluate_b ( ) {
@@ -619,8 +565,10 @@
             statSummary.b = 1;
             statSummary.b += 0.01 * upgradeContainer.r.b;
             statSummary.b += 0.1 * upgradeContainer.p.parmB;
+            statSummary.b += battleRewardContainer.b;
             statSummary.b *= evaluate_ae11();
             statSummary.b *= 1 + 0.1 * upgradeContainer.z.b_mul;
+            statSummary.b *= 1 + battleRewardContainer.b_mul;
             return statSummary.b;
           }
           function evaluate_c ( ) {
@@ -629,8 +577,10 @@
             statSummary.c = 1;
             statSummary.c += 0.01 * upgradeContainer.r.c;
             statSummary.c += 0.1 * upgradeContainer.p.parmC;
+            statSummary.c += battleRewardContainer.c;
             statSummary.c *= evaluate_ae11();
             statSummary.c *= 1 + 0.1 * upgradeContainer.z.c_mul;
+            statSummary.c *= 1 + battleRewardContainer.c_mul;
             return statSummary.c;
           }
           function evaluate_d ( ) {
@@ -639,8 +589,10 @@
             statSummary.d = 1;
             statSummary.d += 0.01 * upgradeContainer.r.d;
             statSummary.d += 0.1 * upgradeContainer.p.parmD;
+            statSummary.d += battleRewardContainer.d;
             statSummary.d *= evaluate_ae11();
             statSummary.d *= 1 + 0.1 * upgradeContainer.z.d_mul;
+            statSummary.d *= 1 + battleRewardContainer.d_mul;
             return statSummary.d;
           }
           function evaluate_e ( ) {
@@ -649,8 +601,10 @@
             statSummary.e = 1;
             statSummary.e += 0.01 * upgradeContainer.r.e;
             statSummary.e += 0.1 * upgradeContainer.p.parmE;
+            statSummary.e += battleRewardContainer.e;
             statSummary.e *= evaluate_ae11();
             statSummary.e *= 1 + 0.1 * upgradeContainer.z.e_mul;
+            statSummary.e *= 1 + battleRewardContainer.e_mul;
             return statSummary.e;
           }
           function evaluate_f ( ) {
@@ -677,6 +631,8 @@
             statSummary.k = 1;
             statSummary.k += upgradeContainer.r.k;
             statSummary.k += 10 * upgradeContainer.p.parmK;
+            statSummary.k += battleRewardContainer.k;
+            statSummary.k *= 1 + battleRewardContainer.k_mul;
             statSummary.k **= 1 + 0.1 * upgradeContainer.p.exponentK;
             return statSummary.k;
           }
@@ -730,18 +686,24 @@
             if ( statSummary.gamma != -1 )
               return statSummary.gamma;
             statSummary.gamma = 0.1 + 0.1 * upgradeContainer.z.gamma;
+            statSummary.gamma += battleRewardContainer.gamma;
+            statSummary.gamma *= 1 + battleRewardContainer.gamma_mul;
             return statSummary.gamma;
           }
           function evaluate_Omega ( ) {
             if ( statSummary.Omega != -1 )
               return statSummary.Omega;
             statSummary.Omega = 0.1 + 0.1 * upgradeContainer.z.Omega;
+            statSummary.Omega += battleRewardContainer.Omega;
+            statSummary.Omega *= 1 + battleRewardContainer.Omega_mul;
             return statSummary.Omega;
           }
           function evaluate_delta ( ) {
             if ( statSummary.delta != -1 )
               return statSummary.delta;
             statSummary.delta = 0.1 + 0.1 * upgradeContainer.z.delta;
+            statSummary.delta += battleRewardContainer.delta;
+            statSummary.delta *= 1 + battleRewardContainer.delta_mul;
             return statSummary.delta;
           }
 
