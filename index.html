@@ -105,49 +105,16 @@
             upgradeContainer.p.prestigepoint_denominator = dto.upgradeLevels[19]
             upgradeContainer.p.alpha = dto.upgradeLevels[37]
             upgradeContainer.p.beta = dto.upgradeLevels[38]
-
-            // Upgrade 27 ; z.z_multiplier 1+5*level
-            // - Effect deltar mul ; 1.2 + 0.02 * level * log10(z + 1.0)
             upgradeContainer.z.z_multiplier = dto.upgradeLevels[27]
-
-            // Upgrade 25 ; z.gamma 1e2*2^level
-            // - Effect gamma add ; level * 0.1
             upgradeContainer.z.gamma = dto.upgradeLevels[25]
-
-            // Upgrade 26 ; z.delta 1e2*2^level
-            // - Effect delta add ; level * 0.1
             upgradeContainer.z.delta = dto.upgradeLevels[26]
-
-            // Upgrade 24 ; z.Omega 1e2*2^level
-            // - Effect Omega add ; level * 0.1
             upgradeContainer.z.Omega = dto.upgradeLevels[24]
-
-            // Upgrade 28 ; z.a_mul 1e3*10^level
-            // - Effect a mul ; 1 + 0.1 * level
             upgradeContainer.z.a_mul = dto.upgradeLevels[28]
-
-            // Upgrade 29 ; z.b_mul 1e4*10^level
-            // - Effect b mul ; 1 + 0.1 * level
             upgradeContainer.z.b_mul = dto.upgradeLevels[29]
-
-            // Upgrade 30 ; z.c_mul 1e5*10^level
-            // - Effect c mul ; 1 + 0.1 * level
             upgradeContainer.z.c_mul = dto.upgradeLevels[30]
-
-            // Upgrade 31 ; z.d_mul 1e6*10^level
-            // - Effect d mul ; 1 + 0.1 * level
             upgradeContainer.z.d_mul = dto.upgradeLevels[31]
-
-            // Upgrade 32 ; z.e_mul 1e7*10^level
-            // - Effect e mul ; 1 + 0.1 * level
             upgradeContainer.z.e_mul = dto.upgradeLevels[32]
-
-            // Upgrade 33 ; z.f_mul 1e8*10^level
-            // - Effect f mul ; 1 + 0.1 * level
             upgradeContainer.z.f_mul = dto.upgradeLevels[33]
-
-            // Upgrade 34 ; z.g_mul 1e9*10^level
-            // - Effect g mul ; 1 + 0.1 * level
             upgradeContainer.z.g_mul = dto.upgradeLevels[34]
 
             // Upgrade 36 ; z.m 1e12*1e3^level
@@ -535,14 +502,16 @@
           var statSummary = {
             delta_r : -1,
 
-            n : -1,
-            v : -1,
             u : -1,
+            v : -1,
+            n : -1,
+            m : -1,
 
             alpha : -1,
             beta : -1,
 
-            k : -1,
+            A_1 : -1,
+
             a : -1,
             b : -1,
             c : -1,
@@ -550,20 +519,35 @@
             e : -1,
             f : -1,
             g : -1,
+            k : -1,
 
             ae11 : -1,
             logk : -1,
             beMul : -1,
             rAll : -1,
             rLevels : -1,
+
+            z_multiplier : -1,
+
+            gamma : -1,
+            Omega : -1,
+            delta : -1,
           }
 
-          function evaluate_n ( ) {
-            if ( statSummary.n != -1 )
-              return statSummary.n;
-            statSummary.n = 1;
-            statSummary.n += upgradeContainer.p.n;
-            return statSummary.n;
+          function evaluate_delta_r ( ) {
+            if ( statSummary.delta_r != -1 )
+              return statSummary.delta_r;
+            statSummary.delta_r = 1;
+            statSummary.delta_r *= evaluate_z_multiplier();
+            return statSummary.delta_r;
+          }
+
+          function evaluate_u ( ) {
+            if ( statSummary.u != -1 )
+            return statSummary.u;
+            statSummary.u = 1;
+            statSummary.u += upgradeContainer.p.u;
+            return statSummary.u;
           }
           function evaluate_v ( ) {
             if ( statSummary.v != -1 )
@@ -572,19 +556,26 @@
             statSummary.v += 10 * upgradeContainer.p.v;
             return statSummary.v;
           }
-          function evaluate_u ( ) {
-            if ( statSummary.u != -1 )
-              return statSummary.u;
-            statSummary.u = 1;
-            statSummary.u += upgradeContainer.p.u;
-            return statSummary.u;
+          function evaluate_n ( ) {
+            if ( statSummary.n != -1 )
+              return statSummary.n;
+            statSummary.n = 1;
+            statSummary.n += upgradeContainer.p.n;
+            return statSummary.n;
           }
-
+          function evaluate_m ( ) {
+            if ( statSummary.m != -1 )
+              return statSummary.m;
+            statSummary.m = 2;
+            statSummary.m += upgradeContainer.z.m;
+            return statSummary.m;
+          }
+          
           function evaluate_alpha ( ) {
             if ( statSummary.alpha != -1 )
               return statSummary.alpha;
-            statSummary.alpha = 1;
-            statSummary.alpha += 0.01 * upgradeContainer.p.alpha;
+              statSummary.alpha = 1;
+              statSummary.alpha += 0.01 * upgradeContainer.p.alpha;
             return statSummary.alpha;
           }
           function evaluate_beta ( ) {
@@ -595,14 +586,18 @@
             return statSummary.beta;
           }
           
-          function evaluate_k ( ) {
-            if ( statSummary.k != -1 )
-              return statSummary.k;
-            statSummary.k = 1;
-            statSummary.k += upgradeContainer.r.k;
-            statSummary.k += 10 * upgradeContainer.p.parmK;
-            statSummary.k **= 1 + 0.1 * upgradeContainer.p.exponentK;
-            return statSummary.k;
+          function evaluate_A_1 ( ) {
+            if ( statSummary.A_1 != -1 )
+              return statSummary.A_1;
+            statSummary.A_1 = 1;
+            statSummary.A_1 *= evaluate_a();
+            statSummary.A_1 *= evaluate_b();
+            statSummary.A_1 *= evaluate_c();
+            statSummary.A_1 *= evaluate_d();
+            statSummary.A_1 *= evaluate_e();
+            statSummary.A_1 *= evaluate_f();
+            statSummary.A_1 *= evaluate_g();
+            return statSummary.A_1;
           }
 
           function evaluate_a ( ) {
@@ -615,6 +610,7 @@
             statSummary.a *= evaluate_ae11();
             statSummary.a *= evaluate_logk();
             statSummary.a *= evaluate_beMul();
+            statSummary.a *= 1 + 0.1 * upgradeContainer.z.a_mul;
             return statSummary.a;
           }
           function evaluate_b ( ) {
@@ -624,6 +620,7 @@
             statSummary.b += 0.01 * upgradeContainer.r.b;
             statSummary.b += 0.1 * upgradeContainer.p.parmB;
             statSummary.b *= evaluate_ae11();
+            statSummary.b *= 1 + 0.1 * upgradeContainer.z.b_mul;
             return statSummary.b;
           }
           function evaluate_c ( ) {
@@ -633,6 +630,7 @@
             statSummary.c += 0.01 * upgradeContainer.r.c;
             statSummary.c += 0.1 * upgradeContainer.p.parmC;
             statSummary.c *= evaluate_ae11();
+            statSummary.c *= 1 + 0.1 * upgradeContainer.z.c_mul;
             return statSummary.c;
           }
           function evaluate_d ( ) {
@@ -642,6 +640,7 @@
             statSummary.d += 0.01 * upgradeContainer.r.d;
             statSummary.d += 0.1 * upgradeContainer.p.parmD;
             statSummary.d *= evaluate_ae11();
+            statSummary.d *= 1 + 0.1 * upgradeContainer.z.d_mul;
             return statSummary.d;
           }
           function evaluate_e ( ) {
@@ -651,6 +650,7 @@
             statSummary.e += 0.01 * upgradeContainer.r.e;
             statSummary.e += 0.1 * upgradeContainer.p.parmE;
             statSummary.e *= evaluate_ae11();
+            statSummary.e *= 1 + 0.1 * upgradeContainer.z.e_mul;
             return statSummary.e;
           }
           function evaluate_f ( ) {
@@ -659,6 +659,7 @@
             statSummary.f = 1;
             statSummary.f += 0.01 * upgradeContainer.r.f;
             statSummary.f += 0.1 * upgradeContainer.p.parmF;
+            statSummary.f *= 1 + 0.1 * upgradeContainer.z.f_mul;
             return statSummary.f;
           }
           function evaluate_g ( ) {
@@ -667,8 +668,19 @@
             statSummary.g = 1;
             statSummary.g += 0.01 * upgradeContainer.r.g;
             statSummary.g += 0.1 * upgradeContainer.p.parmG;
+            statSummary.g *= 1 + 0.1 * upgradeContainer.z.g_mul;
             return statSummary.g;
           }
+          function evaluate_k ( ) {
+            if ( statSummary.k != -1 )
+              return statSummary.k;
+            statSummary.k = 1;
+            statSummary.k += upgradeContainer.r.k;
+            statSummary.k += 10 * upgradeContainer.p.parmK;
+            statSummary.k **= 1 + 0.1 * upgradeContainer.p.exponentK;
+            return statSummary.k;
+          }
+
           function evaluate_ae11 ( ) {
             if ( statSummary.ae11 != -1 )
               return statSummary.ae11;
@@ -707,12 +719,43 @@
             return statSummary.rAll;
           }
 
+          function evaluate_z_multiplier ( ) {
+            if ( statSummary.z_multiplier != -1 )
+              return statSummary.z_multiplier;
+            statSummary.z_multiplier = 1 + (((upgradeContainer.z.z_multiplier > 0) ? 1 : 0) + 0.1 * upgradeContainer.z.z_multiplier) * Math.log10(dto.z + 1) / 5;
+            return statSummary.z_multiplier;
+          }
+
+          function evaluate_gamma ( ) {
+            if ( statSummary.gamma != -1 )
+              return statSummary.gamma;
+            statSummary.gamma = 0.1 + 0.1 * upgradeContainer.z.gamma;
+            return statSummary.gamma;
+          }
+          function evaluate_Omega ( ) {
+            if ( statSummary.Omega != -1 )
+              return statSummary.Omega;
+            statSummary.Omega = 0.1 + 0.1 * upgradeContainer.z.Omega;
+            return statSummary.Omega;
+          }
+          function evaluate_delta ( ) {
+            if ( statSummary.delta != -1 )
+              return statSummary.delta;
+            statSummary.delta = 0.1 + 0.1 * upgradeContainer.z.delta;
+            return statSummary.delta;
+          }
+
           function updateStatSummary ( ) {
-            $("#stat_n > .stat_value").text(evaluate_n());
-            $("#stat_v > .stat_value").text(evaluate_v());
+            $("#stat_delta_r > .stat_value").text(evaluate_delta_r());
+
             $("#stat_u > .stat_value").text(evaluate_u());
+            $("#stat_v > .stat_value").text(evaluate_v());
+            $("#stat_n > .stat_value").text(evaluate_n());
+            $("#stat_m > .stat_value").text(evaluate_m());
             $("#stat_alpha > .stat_value").text(evaluate_alpha());
             $("#stat_beta > .stat_value").text(evaluate_beta());
+
+            $("#stat_A_1 > .stat_value").text(evaluate_A_1());
 
             $("#stat_a > .stat_value").text(evaluate_a());
             $("#stat_b > .stat_value").text(evaluate_b());
@@ -721,8 +764,12 @@
             $("#stat_e > .stat_value").text(evaluate_e());
             $("#stat_f > .stat_value").text(evaluate_f());
             $("#stat_g > .stat_value").text(evaluate_g());
-            
+
             $("#stat_k > .stat_value").text(evaluate_k());
+
+            $("#stat_gamma > .stat_value").text(evaluate_gamma());
+            $("#stat_Omega > .stat_value").text(evaluate_Omega());
+            $("#stat_delta > .stat_value").text(evaluate_delta());
           }
         </script>
         <div class="stat" id="stat_delta_r">
@@ -795,6 +842,18 @@
         </div>
         <div class="stat" id="stat_omega">
           <div class="stat_label">&omega;</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_gamma">
+          <div class="stat_label">&gamma;</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_Omega">
+          <div class="stat_label">&Omega;</div>
+          <div class="stat_value">0</div>
+        </div>
+        <div class="stat" id="stat_delta">
+          <div class="stat_label">&delta;</div>
           <div class="stat_value">0</div>
         </div>
       </section>
@@ -980,7 +1039,7 @@
           <div id="z_upgrades">
             <div class="z_upgrade">
               <div class="upgrade_name">z_multiplier</div>
-              <div class="upgrade_effect">&Delta;r *= 1.2 + 0.02 * level * log10(z + 1)</div>
+              <div class="upgrade_effect">&Delta;r *= 1 + ((level > 0) + 0.1 * level) * log10(z + 1)</div>
               <div class="upgrade_cost">1 + 5 * level</div>
               <div class="upgrade_level" id="z_z_multiplier_level">0</div>
             </div>
@@ -1113,13 +1172,13 @@
                 <div class="reward_value" id="B_def_mul_value">0</div>
               </div>
               <div class="battle_reward">
-                <div class="reward_name">Critical Rate</div
-                   <div class="reward_value" id="B_critical_value">0</div>
-                  </div>
+                <div class="reward_name">Critical Rate</div>
+                <div class="reward_value" id="B_critical_value">0</div>
+              </div>
               <div class="battle_reward">
-                <div class="reward_name">Critical Damage</div
-                   <div class="reward_value" id="B_criticalDamage_value">0</div>
-                  </div>
+                <div class="reward_name">Critical Damage</div>
+                <div class="reward_value" id="B_criticalDamage_value">0</div>
+              </div>
               <div class="battle_reward">
                 <div class="reward_name">Regenerate</div>
                 <div class="reward_value" id="B_regene_value">0</div>
