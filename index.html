@@ -371,6 +371,15 @@
               reactor.find(".zreactor_exp").text(dto.reactor_exp[i]); 
             }
           }
+          function updateTab_D ( ) {
+            for (var i = 0; i < dto.design_isUnlocked.length; i++) {
+              var design = $("#design_" + i);
+              if (dto.design_isUnlocked[i]) {
+                design.addClass("unlocked");
+              }
+            }
+            $("design_"+dto.currentDesign).addClass("selected");
+          }
 
           function loadSaveFile ( ) {
             val = $.trim($("#savefiletextarea").val());
@@ -398,6 +407,7 @@
             updateTab_E();
             updateTab_C();
             updateTab_Z();
+            updateTab_D();
             updateStatSummary();
           }
 
@@ -434,7 +444,7 @@
         <a class="tab-selector" href="#tab-B">B</a>
         <a class="tab-selector" href="#tab-E">E</a>
         <a class="tab-selector" href="#tab-C">C</a>
-        <a class="tab-selector disabled" href="#tab-D">D</a>
+        <a class="tab-selector" href="#tab-D">D</a>
         <a class="tab-selector" href="#tab-Z">Z</a>
         <a class="tab-selector" href="#tab-c">c</a>
         <a class="tab-selector" href="#tab-m">m</a>
@@ -516,6 +526,10 @@
             statSummary.omega = 1
             statSummary.omega *= 1 + 0.1 * dto.challengeLevels[2]; // Slow spiral
             statSummary.omega *= 1.25 ** dto.softResetNum;
+            if ( dto.design_isUnlocked[31] ) // spaceShip
+                statSummary.omega *= 1.1;
+              if ( dto.currentDesign == 31 ) // spaceShip
+                statSummary.omega *= 1.1;
             return statSummary.omega;
           }
           function evaluate_omega_exponent ( ) {
@@ -566,6 +580,10 @@
             return statSummary.v;
             statSummary.v = 0;
             statSummary.v += 10 * upgradeContainer.p.v;
+            if ( dto.currentDesign == 16 ) // stripe_white
+              statSummary.v += 5;
+            if ( dto.design_isUnlocked[16] ) // stripe_white
+              statSummary.v += 2;
             return statSummary.v;
           }
           function evaluate_n ( ) {
@@ -588,6 +606,10 @@
               return statSummary.alpha;
               statSummary.alpha = 1;
               statSummary.alpha += 0.01 * upgradeContainer.p.alpha;
+              if ( dto.design_isUnlocked[32] ) // seigaiha
+                statSummary.alpha += 0.01;
+              if ( dto.currentDesign == 32 ) // seigaiha
+                statSummary.alpha += 0.025;
             return statSummary.alpha;
           }
           function evaluate_beta ( ) {
@@ -595,6 +617,10 @@
               return statSummary.beta;
             statSummary.beta = 1;
             statSummary.beta += 0.01 * upgradeContainer.p.beta;
+            if ( dto.design_isUnlocked[33] ) // sippou
+              statSummary.beta += 0.01;
+            if ( dto.currentDesign == 33 ) // sippou
+              statSummary.beta += 0.025;
             return statSummary.beta;
           }
           
@@ -625,6 +651,10 @@
             statSummary.a *= evaluate_beMul();
             statSummary.a *= 1 + 0.1 * upgradeContainer.z.a_mul;
             statSummary.a *= 1 + battleRewardContainer.a_mul;
+            if ( dto.currentDesign == 0 ) // normal_brue
+              statSummary.a *= 1.1;
+            if ( dto.design_isUnlocked[14] ) // dottedLine_White
+              statSummary.a *= 1.05;
             return statSummary.a;
           }
           function evaluate_b ( ) {
@@ -637,6 +667,10 @@
             statSummary.b *= evaluate_ae11();
             statSummary.b *= 1 + 0.1 * upgradeContainer.z.b_mul;
             statSummary.b *= 1 + battleRewardContainer.b_mul;
+            if ( dto.currentDesign == 1 ) // normal_yellow
+              statSummary.b *= 1.1;
+            if ( dto.design_isUnlocked[14] ) // dottedLine_White
+              statSummary.b *= 1.05;
             return statSummary.b;
           }
           function evaluate_c ( ) {
@@ -649,6 +683,10 @@
             statSummary.c *= evaluate_ae11();
             statSummary.c *= 1 + 0.1 * upgradeContainer.z.c_mul;
             statSummary.c *= 1 + battleRewardContainer.c_mul;
+            if ( dto.currentDesign == 2 ) // normal_red
+              statSummary.c *= 1.1;
+            if ( dto.design_isUnlocked[14] ) // dottedLine_White
+              statSummary.c *= 1.05;
             return statSummary.c;
           }
           function evaluate_d ( ) {
@@ -661,6 +699,10 @@
             statSummary.d *= evaluate_ae11();
             statSummary.d *= 1 + 0.1 * upgradeContainer.z.d_mul;
             statSummary.d *= 1 + battleRewardContainer.d_mul;
+            if ( dto.currentDesign == 3 ) // normal_violet
+              statSummary.d *= 1.1;
+            if ( dto.design_isUnlocked[15] ) // dottedLine_orange_brue
+              statSummary.d *= 1.05;
             return statSummary.d;
           }
           function evaluate_e ( ) {
@@ -673,6 +715,10 @@
             statSummary.e *= evaluate_ae11();
             statSummary.e *= 1 + 0.1 * upgradeContainer.z.e_mul;
             statSummary.e *= 1 + battleRewardContainer.e_mul;
+            if ( dto.currentDesign == 4 ) // normal_mono
+              statSummary.e *= 1.1;
+            if ( dto.design_isUnlocked[15] ) // dottedLine_orange_brue
+              statSummary.e *= 1.05;
             return statSummary.e;
           }
           function evaluate_f ( ) {
@@ -682,6 +728,8 @@
             statSummary.f += 0.01 * upgradeContainer.r.f;
             statSummary.f += 0.1 * upgradeContainer.p.parmF;
             statSummary.f *= 1 + 0.1 * upgradeContainer.z.f_mul;
+            if ( dto.design_isUnlocked[15] ) // dottedLine_orange_brue
+              statSummary.f *= 1.05;
             return statSummary.f;
           }
           function evaluate_g ( ) {
@@ -756,7 +804,11 @@
               return statSummary.gamma;
             statSummary.gamma = 0.1 + 0.1 * upgradeContainer.z.gamma;
             statSummary.gamma += battleRewardContainer.gamma;
+            if ( dto.design_isUnlocked[29] ) // rahmen
+              statSummary.gamma += 1.2;
             statSummary.gamma *= 1 + battleRewardContainer.gamma_mul;
+            if ( dto.currentDesign == 29 ) // rahmen
+              statSummary.gamma *= 1.5;
             return statSummary.gamma;
           }
           function evaluate_Omega ( ) {
@@ -765,6 +817,10 @@
             statSummary.Omega = 0.1 + 0.1 * upgradeContainer.z.Omega;
             statSummary.Omega += battleRewardContainer.Omega;
             statSummary.Omega *= 1 + battleRewardContainer.Omega_mul;
+            if ( dto.currentDesign == 25 ) // pi
+              statSummary.Omega *= 1.5;
+            if ( dto.design_isUnlocked[25] ) // pi
+              statSummary.Omega *= 1.2;
             return statSummary.Omega;
           }
           function evaluate_delta ( ) {
@@ -773,6 +829,8 @@
             statSummary.delta = 0.1 + 0.1 * upgradeContainer.z.delta;
             statSummary.delta += battleRewardContainer.delta;
             statSummary.delta *= 1 + battleRewardContainer.delta_mul;
+            if ( dto.currentDesign == 28 ) // kanji
+              statSummary.delta *= 2;
             return statSummary.delta;
           }
 
@@ -1522,7 +1580,275 @@
       </section>
       <section id="tab-D" class="tab hidden">
         <div>
-          designs
+          <div id="spiral_designs">
+            <div class="design_tab" id="design_tab_star_1">
+              <div class="spiral_design" id="design_0">
+                <div class="design_name">normal_brue</div>
+                <div class="design_label">Simple Blue</div>
+                <div class="design_unlock">Default</div>
+                <div class="design_active">a *= 1.1</div>
+                <div class="design_passive"></div>
+              </div>
+              <div class="spiral_design" id="design_1">
+                <div class="design_name">normal_yellow</div>
+                <div class="design_label">Simple Yellow</div>
+                <div class="design_unlock">Default</div>
+                <div class="design_active">b *= 1.1</div>
+                <div class="design_passive"></div>
+              </div>
+              <div class="spiral_design" id="design_2">
+                <div class="design_name">normal_red</div>
+                <div class="design_label">Simple Red</div>
+                <div class="design_unlock">Default</div>
+                <div class="design_active">c *= 1.1</div>
+                <div class="design_passive"></div>
+              </div>
+              <div class="spiral_design" id="design_3">
+                <div class="design_name">normal_violet</div>
+                <div class="design_label">Simple Violet</div>
+                <div class="design_unlock">Default</div>
+                <div class="design_active">d *= 1.1</div>
+                <div class="design_passive"></div>
+              </div>
+              <div class="spiral_design" id="design_4">
+                <div class="design_name">normal_mono</div>
+                <div class="design_label">Simple White</div>
+                <div class="design_unlock">Default</div>
+                <div class="design_active">e *= 1.1</div>
+                <div class="design_passive"></div>
+              </div>
+              <div class="spiral_design" id="design_5">
+                <div class="design_name">gradation_brue_green</div>
+                <div class="design_label">Blue & Green</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral1</div>
+                <div class="design_active">HP *= 1.5</div>
+                <div class="design_passive">HP *= 1.1</div>
+              </div>
+              <div class="spiral_design" id="design_6">
+                <div class="design_name">gradation_yellow_red</div>
+                <div class="design_label">Yellow & Red</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral2</div>
+                <div class="design_active">ATK *= 1.5</div>
+                <div class="design_passive">ATK *= 1.1</div>
+              </div>
+              <div class="spiral_design" id="design_7">
+                <div class="design_name">gradation_red_blue</div>
+                <div class="design_label">Red & Blue</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral3</div>
+                <div class="design_active">DEF *= 1.5</div>
+                <div class="design_passive">DEF *= 1.1</div>
+              </div>
+              <div class="spiral_design" id="design_8">
+                <div class="design_name">gradation_violet_pink</div>
+                <div class="design_label">Violet & Pink</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral4</div>
+                <div class="design_active">critical *= 1.05</div>
+                <div class="design_passive">critical *= 1.01</div>
+              </div>
+              <div class="spiral_design" id="design_9">
+                <div class="design_name">gradation_white_cyan</div>
+                <div class="design_label">White & Cyan</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral5</div>
+                <div class="design_active">criticalDamage *= 1.2</div>
+                <div class="design_passive">criticalDamage *= 1.05</div>
+              </div>
+            </div>
+            <div class="design_tab" id="design_tab_star_2">
+              <div class="spiral_design" id="design_10">
+                <div class="design_name">circles_white</div>
+                <div class="design_label">White Circles</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral6</div>
+                <div class="design_active">regene_while_resting *= 3</div>
+                <div class="design_passive">regene_while_resting *= 1.5</div>
+              </div>
+              <div class="spiral_design" id="design_11">
+                <div class="design_name">circles_green_pink</div>
+                <div class="design_label">Green & Pink Circles</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral7</div>
+                <div class="design_active">regene_while_resting *= 1.5<br/>DEF *= 1.3</div>
+                <div class="design_passive">regene_while_resting *= 1.1<br/>DEF *= 1.05</div>
+              </div>
+              <div class="spiral_design" id="design_12">
+                <div class="design_name">circles_cyan_red</div>
+                <div class="design_label">Cyan & Red Circles</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral8</div>
+                <div class="design_active">regene_while_resting *= 1.5<br/>ATK *= 1.3</div>
+                <div class="design_passive">regene_while_resting *= 1.1<br/>ATK *= 1.05</div>
+              </div>
+              <div class="spiral_design" id="design_13">
+                <div class="design_name">dottedLine_blue</div>
+                <div class="design_label">Blue Dottered Line</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral9</div>
+                <div class="design_active">lineNumberMultiplier *= 2</div>
+                <div class="design_passive">lineNumberMultiplier *= 1.25</div>
+              </div>
+              <div class="spiral_design" id="design_14">
+                <div class="design_name">dottedLine_white</div>
+                <div class="design_label">White Dottered Line</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral10</div>
+                <div class="design_active">lineNumberMultiplier *= 1.25</div>
+                <div class="design_passive">lineNumberMultiplier *= 1.1<br/>
+                                            a *= 1.05<br/>
+                                            b *= 1.05<br/>
+                                            c *= 1.05
+                </div>
+              </div>
+              <div class="spiral_design" id="design_15">
+                <div class="design_name">dottedLine_orange_brue</div>
+                <div class="design_label">Orange & Blue Dottered Line</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral11</div>
+                <div class="design_active">lineNumberMultiplier *= 1.25</div>
+                <div class="design_passive">lineNumberMultiplier *= 1.1<br/>
+                                            d *= 1.05<br/>
+                                            e *= 1.05<br/>
+                                            f *= 1.05
+                </div>
+              </div>
+              <div class="spiral_design" id="design_16">
+                <div class="design_name">stripe_white</div>
+                <div class="design_label">Cyan & Pink Stripe</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral12</div>
+                <div class="design_active">v += 5</div>
+                <div class="design_passive">v += 2</div>
+              </div>
+              <div class="spiral_design" id="design_17">
+                <div class="design_name">stripe_blue</div>
+                <div class="design_label">Blue & Violet Stripe</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral13</div>
+                <div class="design_active">reward_atk += 5</div>
+                <div class="design_passive">reward_atk += 2</div>
+              </div>
+              <div class="spiral_design" id="design_18">
+                <div class="design_name">stripe_yellow</div>
+                <div class="design_label">Green & Orange Stripe</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral14</div>
+                <div class="design_active">reward_def += 5</div>
+                <div class="design_passive">reward_def += 2</div>
+              </div>
+            </div>
+            <div class="design_tab" id="design_tab_star_3">
+              <div class="spiral_design" id="design_19">
+                <div class="design_name">sine_green</div>
+                <div class="design_label">Green Winding</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral15</div>
+                <div class="design_active">reward_exp += 3</div>
+                <div class="design_passive">reward_exp += 1</div>
+              </div>
+              <div class="spiral_design" id="design_20">
+                <div class="design_name">sine_white_red</div>
+                <div class="design_label">White & Red Winding</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral16</div>
+                <div class="design_active">reward_exp_mul *= 1.1</div>
+                <div class="design_passive">reward_exp_mul *= 1.03</div>
+              </div>
+              <div class="spiral_design" id="design_21">
+                <div class="design_name">sine_orange_purple</div>
+                <div class="design_label">Orange & Purple Winding</div>
+                <div class="design_unlock">InfiniteUpgradeKind.spiral17</div>
+                <div class="design_active">HP *= 2<br/>
+                                          ATK *= 2<br/>
+                                          DEF *= 2
+                </div>
+                <div class="design_passive">HP *= 1.3<br/>
+                                            ATK *= 1.3<br/>
+                                            DEF *= 1.3
+                </div>
+              </div>
+              <div class="spiral_design" id="design_25">
+                <div class="design_name">pi</div>
+                <div class="design_label">&pi;</div>
+                <div class="design_unlock">ChallengeKind.basic</div>
+                <div class="design_active">Omega *= 1.5</div>
+                <div class="design_passive">Omega *= 1.2</div>
+              </div>
+              <div class="spiral_design" id="design_26">
+                <div class="design_name">rects</div>
+                <div class="design_label">Diamond</div>
+                <div class="design_unlock">ChallengeKind.drunk</div>
+                <div class="design_active">reward_exp_mul *= 1.05</div>
+                <div class="design_passive">battle_upgrade_cost *= 0.95</div>
+              </div>
+              <div class="spiral_design" id="design_27">
+                <div class="design_name">rainbow</div>
+                <div class="design_label">Rainbow</div>
+                <div class="design_unlock">ChallengeKind.SinSpiral</div>
+                <div class="design_active">equation *= 2</div>
+                <div class="design_passive">equation *= 1.5</div>
+              </div>
+              <div class="spiral_design" id="design_28">
+                <div class="design_name">kanji</div>
+                <div class="design_label">Kanji</div>
+                <div class="design_unlock">ChallengeKind.SlowSpiral</div>
+                <div class="design_active">delta *= 2</div>
+                <div class="design_passive">equationSlot += 1</div>
+              </div>
+              <div class="spiral_design" id="design_29">
+                <div class="design_name">rahmen</div>
+                <div class="design_label">Rahmen</div>
+                <div class="design_unlock">ChallengeKind.StraightLine</div>
+                <div class="design_active">gamma *= 1.5</div>
+                <div class="design_passive">gamma += 1.2</div>
+              </div>
+              <div class="spiral_design" id="design_30">
+                <div class="design_name">lazer</div>
+                <div class="design_label">Laser</div>
+                <div class="design_unlock">ChallengeKind.poorMath</div>
+                <div class="design_active">z_reactor_exp *= 1.5</div>
+                <div class="design_passive">z_reactor_exp += 1.2</div>
+              </div>
+              <div class="spiral_design" id="design_32">
+                <div class="design_name">seigaiha</div>
+                <div class="design_label">Qinghai wave</div>
+                <div class="design_unlock">ChallengeKind.no_rebirth</div>
+                <div class="design_active">alpha += 0.025</div>
+                <div class="design_passive">alpha += 0.01</div>
+              </div>
+              <div class="spiral_design" id="design_33">
+                <div class="design_name">sippou</div>
+                <div class="design_label">Cloisonne</div>
+                <div class="design_unlock">ChallengeKind.sinkhole</div>
+                <div class="design_active">beta += 0.025</div>
+                <div class="design_passive">beta += 0.01</div>
+              </div>
+              <div class="spiral_design" id="design_34">
+                <div class="design_name">lame</div>
+                <div class="design_label">Lamé</div>
+                <div class="design_unlock">ChallengeKind.sphere</div>
+                <div class="design_active">math += 1000</div>
+                <div class="design_passive">math += 200</div>
+              </div>
+            </div>
+            <div class="design_tab" id="design_tab_dlc">
+              <div class="spiral_design" id="design_22">
+                <div class="design_name">snake</div>
+                <div class="design_label">Snake</div>
+                <div class="design_unlock">DLCManager.IsSnakePossessed</div>
+                <div class="design_active">super_critical += 0.1</div>
+                <div class="design_passive">super_critical += 0.03</div>
+              </div>
+              <div class="spiral_design" id="design_23">
+                <div class="design_name">bubble</div>
+                <div class="design_label">Bubble</div>
+                <div class="design_unlock">DLCManager.IsBubblePossessed</div>
+                <div class="design_active">rare_drop *= 1.2</div>
+                <div class="design_passive">rare_drop *= 1.05</div>
+              </div>
+              <div class="spiral_design" id="design_24">
+                <div class="design_name">arrow</div>
+                <div class="design_label">Arrow</div>
+                <div class="design_unlock">DLCManager.IsArrowPossessed</div>
+                <div class="design_active">attack_speed *= 1.2</div>
+                <div class="design_passive">attack_speed *= 1.05</div>
+              </div>
+              <div class="spiral_design" id="design_31">
+                <div class="design_name">spaceShip</div>
+                <div class="design_label">Spaceship</div>
+                <div class="design_unlock">DLCManager.IsSpacePossessed</div>
+                <div class="design_active">omega *= 1.1</div>
+                <div class="design_passive">omega *= 1.1</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       <section id="tab-Z" class="tab hidden">
@@ -1627,6 +1953,8 @@
             v0.2206170118
               - Improved E tab layout
               - Added E tab formulas
+            v0.2206190113
+              - Added D tab info
         </div>
       </section>
       <section id="tab-faq" class="tab hidden">

@@ -107,6 +107,20 @@ body {
   text-align: center;
 }
 
+.design_tab {
+  width: 230px;
+  margin: 5px;
+  float: left;
+}
+.spiral_design {
+  padding-bottom: 10px;
+}
+.spiral_design > .design_label {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+}
+
 .faq_entry {
   width: 100%;
   margin: 5px;
