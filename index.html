@@ -26,233 +26,500 @@
             });
           });
 
-          var saver;
-          var save;
-          var dto;
 
-          var upgradeContainer = {
-            r : {
-              k : -1,
-              a : -1,
-              b : -1,
-              c : -1,
-              d : -1,
-              e : -1,
-              ae11 : -1,
-              logk : -1,
-              f : -1,
-              g : -1,
-              beMul : -1,
-              rAll : -1,
-            },
-            p : {
-              n : -1,
-              v : -1,
-              u : -1,
-              parmA : -1,
-              parmK : -1,
-              parmB : -1,
-              parmC : -1,
-              parmD : -1,
-              parmE : -1,
-              parmF : -1,
-              parmG : -1,
-              exponentK : -1,
-              alpha : -1,
-              beta : -1,
-              prestigepoint_denominator : -1
-            },
-            z : {
-              z_multiplier : -1,
-              Omega : -1,
-              gamma : -1,
-              delta : -1,
-              a_mul : -1,
-              b_mul : -1,
-              c_mul : -1,
-              d_mul : -1,
-              e_mul : -1,
-              f_mul : -1,
-              g_mul : -1,
-              m : -1,
+          const ParametersKind = {
+            largeA: 0,
+            a: 1,
+            b: 2,
+            c: 3,
+            d: 4,
+            e: 5,
+            f: 6,
+            g: 7,
+            k: 8,
+            p: 9,
+            q: 10,
+            n: 11,
+            sigmaA: 12,
+            omega: 13,
+            omegaExponent: 14,
+            alpha: 15,
+            m: 16,
+            beta: 17,
+            Omega: 18,
+            gamma: 19,
+            delta: 20,
+            prestigePoint_demoninator: 21,
+            prestige_level_limit: 22,
+            tornado_cost_reduction: 23,
+            cubic_root: 24,
+            logarithm_base: 25,
+            softPrestigeSkip: 26,
+            automation_interval: 27,
+            atk: 28,
+            hp: 29,
+            regene: 30,
+            regene_while_resting: 31,
+            critical: 32,
+            criticalDamage: 33,
+            def: 34,
+            block: 35,
+            deltap: 36,
+            attack_speed: 37,
+            reward_atk: 38,
+            reward_def: 39,
+            reward_hp: 40,
+            reward_exp: 41,
+            enemy_hp_reduction_add: 42,
+            reward_hp_mul: 43,
+            reward_def_mul: 44,
+            reward_exp_mul: 45,
+            reward_atk_mul: 46,
+            battle_upgrade_max_level: 47,
+            rare_drop: 48,
+            super_critical: 49,
+            super_critical_damage: 50,
+            battle_upgrade_cost: 51,
+            math: 52,
+            multiattack: 53,
+            enemy_growth_reduction: 54,
+            atk_and_def_from_pi: 55,
+            exp_from_gamma: 56,
+            s_critical_from_napier: 57,
+            battle_upgrade_max_level_2: 58,
+            line_number_multiplier: 59,
+            equation_speed: 60,
+            z_reactor_exp: 61,
+            z_reactor_cap: 62,
+            equation_slot: 63,
+          }
+          const RewardType = {
+            hp: 0,
+            atk: 1,
+            def: 2,
+            a: 3,
+            b: 4,
+            c: 5,
+            d: 6,
+            e: 7,
+            k: 8,
+            regene: 9,
+            critical: 10,
+            criticalDamage: 11,
+            a_mul: 12,
+            b_mul: 13,
+            c_mul: 14,
+            d_mul: 15,
+            e_mul: 16,
+            k_mul: 17,
+            hp_mul: 18,
+            atk_mul: 19,
+            def_mul: 20,
+            n: 21,
+            v: 22,
+            gamma: 23,
+            delta: 24,
+            Omega: 25,
+            attackSpeed: 26,
+            gamma_mul: 27,
+            delta_mul: 28,
+            Omega_mul: 29,
+            exp: 30,
+            rare_chance: 31,
+            super_critical: 32,
+            super_criticalDamage: 33,
+            math_skill: 34,
+            other: 35,
+            enemy_hp_reduction: 36,
+            regene_resting: 37,
+            maxlevelup_no_24: 38,
+            unlock: 39,
+          }
+          const UpgradeKind = {
+            a: 0,
+            b: 1,
+            c: 2,
+            d: 3,
+            e: 4,
+            f: 5,
+            g: 6,
+            ae11: 7,
+            logk: 8,
+            beMul: 9,
+            k: 10,
+            parmA: 11,
+            parmB: 12,
+            parmC: 13,
+            parmD: 14,
+            parmE: 15,
+            parmF: 16,
+            parmG: 17,
+            parmK: 18,
+            prestigepoint_denominator: 19,
+            exponentK: 20,
+            u: 21,
+            v: 22,
+            n: 23,
+            Omega: 24,
+            gamma: 25,
+            delta: 26,
+            z_multiplier: 27,
+            a_mul: 28,
+            b_mul: 29,
+            c_mul: 30,
+            d_mul: 31,
+            e_mul: 32,
+            f_mul: 33,
+            g_mul: 34,
+            rAll: 35,
+            m: 36,
+            alpha: 37,
+            beta: 38,
+          }
+          const VariableUpgradeKind = {
+            k: 0,
+            a: 1,
+            b: 2,
+            c: 3,
+            d: 4,
+            e: 5,
+          }
+          class Parameter {
+            constructor ( name, base_value ) {
+              this.name = name;
+              this.base_value = base_value;
             }
-          };
-          function updateUpgradeContainer ( ) {
-            upgradeContainer.r.a = dto.upgradeLevels[0]
-            upgradeContainer.r.b = dto.upgradeLevels[1]
-            upgradeContainer.r.c = dto.upgradeLevels[2]
-            upgradeContainer.r.d = dto.upgradeLevels[3]
-            upgradeContainer.r.e = dto.upgradeLevels[4]
-            upgradeContainer.r.f = dto.upgradeLevels[5]
-            upgradeContainer.r.g = dto.upgradeLevels[6]
-            upgradeContainer.r.ae11 = dto.upgradeLevels[7]
-            upgradeContainer.r.logk = dto.upgradeLevels[8]
-            upgradeContainer.r.beMul = dto.upgradeLevels[9]
-            upgradeContainer.r.rAll = dto.upgradeLevels[35]
-            upgradeContainer.r.k = dto.upgradeLevels[10]
-            upgradeContainer.p.u = dto.upgradeLevels[21]
-            upgradeContainer.p.v = dto.upgradeLevels[22]
-            upgradeContainer.p.n = dto.upgradeLevels[23]
-            upgradeContainer.p.parmA = dto.upgradeLevels[11]
-            upgradeContainer.p.parmB = dto.upgradeLevels[12]
-            upgradeContainer.p.parmC = dto.upgradeLevels[13]
-            upgradeContainer.p.parmD = dto.upgradeLevels[14]
-            upgradeContainer.p.parmE = dto.upgradeLevels[15]
-            upgradeContainer.p.parmF = dto.upgradeLevels[16]
-            upgradeContainer.p.parmG = dto.upgradeLevels[17]
-            upgradeContainer.p.parmK = dto.upgradeLevels[18]
-            upgradeContainer.p.exponentK = dto.upgradeLevels[20]
-            upgradeContainer.p.prestigepoint_denominator = dto.upgradeLevels[19]
-            upgradeContainer.p.alpha = dto.upgradeLevels[37]
-            upgradeContainer.p.beta = dto.upgradeLevels[38]
-            upgradeContainer.z.z_multiplier = dto.upgradeLevels[27]
-            upgradeContainer.z.gamma = dto.upgradeLevels[25]
-            upgradeContainer.z.delta = dto.upgradeLevels[26]
-            upgradeContainer.z.Omega = dto.upgradeLevels[24]
-            upgradeContainer.z.a_mul = dto.upgradeLevels[28]
-            upgradeContainer.z.b_mul = dto.upgradeLevels[29]
-            upgradeContainer.z.c_mul = dto.upgradeLevels[30]
-            upgradeContainer.z.d_mul = dto.upgradeLevels[31]
-            upgradeContainer.z.e_mul = dto.upgradeLevels[32]
-            upgradeContainer.z.f_mul = dto.upgradeLevels[33]
-            upgradeContainer.z.g_mul = dto.upgradeLevels[34]
-            upgradeContainer.z.m = dto.upgradeLevels[36]
+            addAddEffect ( name, effect ) {
+              this.add_effects.push( (name, effect) );
+            }
+            addMulEffect ( name, effect ) {
+              this.mul_effects.push( (name, effect) );
+            }
+          }
+          class IdleSpiral {
+
+            constructor ( ) {
+              this.parameters = {};
+              initialize();
+              addEffectsUpgradeContainer();
+              addEffectsTornadoPrestige();
+              // A
+              addEffectsInfiniteSpiralDomain(); 
+              addEffectsBattleRewardContainer();
+              addEffectsBattleUpgrades();
+              // E
+              // C 
+              // D 
+              // Z 
+            }
+            
+            initialize ( ) {
+              this.delta_r = new Parameter("delta_r", 0);
+              this.z = new Parameter("z", 0);
+              this.delta_z = new Parameter("delta_z", 0);
+
+              this.parameters[ParametersKind.largeA] = new Parameter("largeA", 0);
+              this.parameters[ParametersKind.sigmaA] = new Parameter("sigmaA", 0);
+              this.parameters[ParametersKind.a] = new Parameter("a", 1);
+              this.parameters[ParametersKind.b] = new Parameter("b", 1);
+              this.parameters[ParametersKind.c] = new Parameter("c", 1);
+              this.parameters[ParametersKind.d] = new Parameter("d", 1);
+              this.parameters[ParametersKind.e] = new Parameter("e", 1);
+              this.parameters[ParametersKind.f] = new Parameter("f", 1);
+              this.parameters[ParametersKind.g] = new Parameter("g", 1);
+              this.parameters[ParametersKind.k] = new Parameter("k", 0);
+              this.parameters[ParametersKind.u] = new Parameter("u", 1);
+              this.parameters[ParametersKind.v] = new Parameter("v", 0);
+              this.parameters[ParametersKind.n] = new Parameter("n", 1);
+              this.parameters[ParametersKind.m] = new Parameter("m", 1);
+              this.parameters[ParametersKind.omega] = new Parameter("omega", 1);
+              this.parameters[ParametersKind.omegaExponent] = new Parameter("omegaExponent", 1);
+              this.parameters[ParametersKind.Omega] = new Parameter("Omega", 0);
+              this.parameters[ParametersKind.gamma] = new Parameter("gamma", 0.1);
+              this.parameters[ParametersKind.delta] = new Parameter("delta", 0);
+              this.parameters[ParametersKind.alpha] = new Parameter("alpha", 1);
+              this.parameters[ParametersKind.beta] = new Parameter("beta", 1);
+              this.parameters[ParametersKind.cubic_root] = new Parameter("cubic_root", 3);
+              this.parameters[ParametersKind.logarithm_base] = new Parameter("logarithm_base", 100);
+              this.parameters[ParametersKind.prestigePoint_demoninator] = new Parameter("prestigePoint_demoninator", 100000);
+              this.parameters[ParametersKind.prestige_level_limit] = new Parameter("prestige_level_limit", 0);
+              this.parameters[ParametersKind.tornado_cost_reduction] = new Parameter("tornado_cost_reduction", 1);
+              this.parameters[ParametersKind.automation_interval] = new Parameter("automation_interval", 1);
+              this.parameters[ParametersKind.atk] = new Parameter("atk", 10);
+              this.parameters[ParametersKind.hp] = new Parameter("hp", 100);
+              this.parameters[ParametersKind.def] = new Parameter("def", 1);
+              this.parameters[ParametersKind.block] = new Parameter("block", 0);
+              this.parameters[ParametersKind.deltap] = new Parameter("deltap", 1);
+              this.parameters[ParametersKind.regene] = new Parameter("regene", 0);
+              this.parameters[ParametersKind.regene_while_resting] = new Parameter("regene_while_resting", 1);
+              this.parameters[ParametersKind.critical] = new Parameter("critical", 0.05);
+              this.parameters[ParametersKind.criticalDamage] = new Parameter("criticalDamage", 2);
+              this.parameters[ParametersKind.softPrestigeSkip] = new Parameter("softPrestigeSkip", 0);
+              this.parameters[ParametersKind.attack_speed] = new Parameter("attack_speed", 1);
+              this.parameters[ParametersKind.enemy_hp_reduction_add] = new Parameter("enemy_hp_reduction_add", 100);
+              this.parameters[ParametersKind.reward_atk] = new Parameter("reward_atk", 0);
+              this.parameters[ParametersKind.reward_def] = new Parameter("reward_def", 0);
+              this.parameters[ParametersKind.reward_hp] = new Parameter("reward_hp", 0);
+              this.parameters[ParametersKind.reward_exp] = new Parameter("reward_exp", 0);
+              this.parameters[ParametersKind.reward_atk_mul] = new Parameter("reward_atk_mul", 1);
+              this.parameters[ParametersKind.reward_def_mul] = new Parameter("reward_def_mul", 1);
+              this.parameters[ParametersKind.reward_hp_mul] = new Parameter("reward_hp_mul", 1);
+              this.parameters[ParametersKind.reward_exp_mul] = new Parameter("reward_exp_mul", 1);
+              this.parameters[ParametersKind.battle_upgrade_max_level] = new Parameter("battle_upgrade_max_level", 0);
+              this.parameters[ParametersKind.battle_upgrade_max_level_2] = new Parameter("battle_upgrade_max_level_2", 0);
+              this.parameters[ParametersKind.rare_drop] = new Parameter("rare_drop", 1);
+              this.parameters[ParametersKind.super_critical] = new Parameter("super_critical", 0);
+              this.parameters[ParametersKind.super_critical_damage] = new Parameter("super_critical_damage", 5);
+              this.parameters[ParametersKind.battle_upgrade_cost] = new Parameter("battle_upgrade_cost", 1);
+              this.parameters[ParametersKind.math] = new Parameter("math", 0);
+              this.parameters[ParametersKind.multiattack] = new Parameter("multiattack", 0);
+              this.parameters[ParametersKind.enemy_growth_reduction] = new Parameter("enemy_growth_reduction", 1);
+              this.parameters[ParametersKind.atk_and_def_from_pi] = new Parameter("atk_and_def_from_pi", 0);
+              this.parameters[ParametersKind.exp_from_gamma] = new Parameter("exp_from_gamma", 0);
+              this.parameters[ParametersKind.s_critical_from_napier] = new Parameter("s_critical_from_napier", 0);
+              this.parameters[ParametersKind.line_number_multiplier] = new Parameter("line_number_multiplier", 1);
+              this.parameters[ParametersKind.equation_speed] = new Parameter("equation_speed", 1);
+              this.parameters[ParametersKind.z_reactor_exp] = new Parameter("z_reactor_exp", 1);
+              this.parameters[ParametersKind.z_reactor_cap] = new Parameter("z_reactor_cap", 1);
+              this.parameters[ParametersKind.equation_slot] = new Parameter("equation_slot", 0);
+            }
+            addEffectsUpgradeContainer ( ) {
+              this.parameters[ParametersKind.k].addAddEffect("r upgrade k", () => this.dto.upgradeLevels[UpgradeKind.k]);
+              this.parameters[ParametersKind.a].addAddEffect("r upgrade a", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.a]);
+              this.parameters[ParametersKind.b].addAddEffect("r upgrade b", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.b]);
+              this.parameters[ParametersKind.c].addAddEffect("r upgrade c", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.c]);
+              this.parameters[ParametersKind.d].addAddEffect("r upgrade d", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.d]);
+              this.parameters[ParametersKind.e].addAddEffect("r upgrade e", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.e]);
+              this.parameters[ParametersKind.a].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.b].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.c].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.d].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.e].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.a].addMulEffect("r upgrade logk", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.logk] * Math.log10(this.parameters[ParametersKind.k].evaluate() + 1))
+              this.parameters[ParametersKind.f].addAddEffect("r upgrade f", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.f]);
+              this.parameters[ParametersKind.g].addAddEffect("r upgrade g", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.g]);
+              this.parameters[ParametersKind.a].addMulEffect("r upgrade beMul passive", () => (this.parameters[ParametersKind.b].evaluate() + this.parameters[ParametersKind.c].evaluate() + this.parameters[ParametersKind.d].evaluate() + this.parameters[ParametersKind.e].evaluate() + this.parameters[ParametersKind.f].evaluate() + this.parameters[ParametersKind.g].evaluate()) / 6.0);
+              this.parameters[ParametersKind.a].addMulEffect("r upgrade beMul active", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.beMul])
+              this.delta_r.addMulEffect("r upgrade rAll passive", () => 1 + (this.dto.upgradeLevels[UpgradeKind.k] + this.dto.upgradeLevels[UpgradeKind.a] + this.dto.upgradeLevels[UpgradeKind.b] + this.dto.upgradeLevels[UpgradeKind.c] + this.dto.upgradeLevels[UpgradeKind.d] + this.dto.upgradeLevels[UpgradeKind.ae11] + this.dto.upgradeLevels[UpgradeKind.logk] + this.dto.upgradeLevels[UpgradeKind.e] + this.dto.upgradeLevels[UpgradeKind.f] + this.dto.upgradeLevels[UpgradeKind.beMul] + this.dto.upgradeLevels[UpgradeKind.rAll]) / 10000);
+              this.delta_r.addMulEffect("r upgrade rAll active", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.rAll]);
+
+              this.parameters[ParametersKind.n].addAddEffect("p upgrade n", () => this.dto.upgradeLevels[UpgradeKind.n]);
+              this.parameters[ParametersKind.v].addAddEffect("p upgrade v", () => 10 * this.dto.upgradeLevels[UpgradeKind.v]);
+              this.parameters[ParametersKind.u].addAddEffect("p upgrade u", () => this.dto.upgradeLevels[UpgradeKind.u]);
+              this.parameters[ParametersKind.a].addAddEffect("p upgrade parmA", () => this.dto.upgradeLevels[UpgradeKind.parmA]);
+              this.parameters[ParametersKind.k].addAddEffect("p upgrade parmK", () => 10 * this.dto.upgradeLevels[UpgradeKind.parmK]);
+              this.parameters[ParametersKind.b].addAddEffect("p upgrade parmB", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmB]);
+              this.parameters[ParametersKind.c].addAddEffect("p upgrade parmC", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmC]);
+              this.parameters[ParametersKind.d].addAddEffect("p upgrade parmD", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmD]);
+              this.parameters[ParametersKind.e].addAddEffect("p upgrade parmE", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmE]);
+              this.parameters[ParametersKind.f].addAddEffect("p upgrade parmF", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmF]);
+              this.parameters[ParametersKind.g].addAddEffect("p upgrade parmG", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmG]);
+              this.parameters[ParametersKind.prestigepoint_denominator].addMulEffect("p upgrade prestigePoint_denominator", () => 0.95 ** this.dto.upgradeLevels[UpgradeKind.prestigepoint_denominator]);
+              this.parameters[ParametersKind.exponentK].addAddEffect("p upgrade exponentK", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.exponentK]);
+              this.parameters[ParametersKind.alpha].addAddEffect("p upgrade alpha", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.alpha]);
+              this.parameters[ParametersKind.beta].addAddEffect("p upgrade beta", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.beta]);
+
+              this.delta_r.addMulEffect("z upgrade z_multiplier", () => 1 + (((this.dto.upgradeLevels[UpgradeKind.z_multiplier] > 0) ? 1 : 0) + 0.1 * this.dto.upgradeLevels[UpgradeKind.z_multiplier]) * Math.log10(this.z.evaluate() + 1) / 5);
+              this.parameters[ParametersKind.Omega].addAddEffect("z upgrade Omega", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.Omega]);
+              this.parameters[ParametersKind.gamma].addAddEffect("z upgrade gamma", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.gamma]);
+              this.parameters[ParametersKind.delta].addAddEffect("z upgrade delta", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.delta]);
+              this.parameters[ParametersKind.a].addMulEffect("z upgrade a_mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.a_mul]);
+              this.parameters[ParametersKind.b].addMulEffect("z upgrade b_mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.b_mul]);
+              this.parameters[ParametersKind.c].addMulEffect("z upgrade c_mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.c_mul]);
+              this.parameters[ParametersKind.d].addMulEffect("z upgrade d_mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.d_mul]);
+              this.parameters[ParametersKind.e].addMulEffect("z upgrade e_mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.e_mul]);
+              this.parameters[ParametersKind.f].addMulEffect("z upgrade f_mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.f_mul]);
+              this.parameters[ParametersKind.g].addMulEffect("z upgrade g_mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.g_mul]);
+              this.parameters[ParametersKind.m].addAddEffect("z upgrade m", () => this.dto.upgradeLevels[UpgradeKind.m]);
+            }
+            addEffectsTornadoPrestige ( ) {
+              this.delta_r.addMulEffect("Tornado bonus delta r tier factor", () => 1 + this.dto.prestigeNum * 0.5);
+              this.delta_r.addMulEffect("Tornado bonus delta r playtime factor", () => 1 + HourFactor(this.dto.AccumulatedHour));
+              this.delta_r.addMulEffect("Tornado bonus delta r max P factor", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
+
+              this.delta_z.addMulEffect("Tornado bonus delta z tier factor", () => 1 + this.dto.prestigeNum * 0.5);
+              this.delta_z.addMulEffect("Tornado bonus delta z playtime factor", () => 1 + HourFactor(this.dto.AccumulatedHour));
+              this.delta_z.addMulEffect("Tornado bonus delta z max P factor", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
+
+              this.parameters[ParametersKind.regene_while_resting].addMulEffect("Tornado bonus regene_while_resting tier factor", () => 1 + this.dto.prestigeNum * 0.1);
+              this.parameters[ParametersKind.regene_while_resting].addMulEffect("Tornado bonus regene_while_resting playtime factor", () => 1 + HourFactor(this.dto.AccumulatedHour));
+              this.parameters[ParametersKind.regene_while_resting].addMulEffect("Tornado bonus regene_while_resting max P factor", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
+
+              
+              this.parameters[ParametersKind.a].addMulEffect("Tornado bonus a base factor", () => 0.2);
+              this.parameters[ParametersKind.a].addMulEffect("Tornado bonus a tier factor", () => this.dto.prestigeNum);
+              this.parameters[ParametersKind.a].addMulEffect("Tornado bonus a playtime factor", () => HourFactor(this.dto.AccumulatedHour));
+              this.parameters[ParametersKind.a].addMulEffect("Tornado bonus a max P factor", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
+
+              this.parameters[ParametersKind.b].addMulEffect("Tornado bonus b base factor", () => 0.02);
+              this.parameters[ParametersKind.b].addMulEffect("Tornado bonus b tier factor", () => this.dto.prestigeNum);
+              this.parameters[ParametersKind.b].addMulEffect("Tornado bonus b playtime factor", () => HourFactor(this.dto.AccumulatedHour));
+              this.parameters[ParametersKind.b].addMulEffect("Tornado bonus b max P factor", () => 1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1));
+
+              this.parameters[ParametersKind.c].addMulEffect("Tornado bonus c base factor", () => 0.02);
+              this.parameters[ParametersKind.c].addMulEffect("Tornado bonus c tier factor", () => this.dto.prestigeNum);
+              this.parameters[ParametersKind.c].addMulEffect("Tornado bonus c playtime factor", () => HourFactor(this.dto.AccumulatedHour));
+              this.parameters[ParametersKind.c].addMulEffect("Tornado bonus c max P factor", () => 1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1));
+
+              this.parameters[ParametersKind.d].addMulEffect("Tornado bonus d base factor", () => 0.02);
+              this.parameters[ParametersKind.d].addMulEffect("Tornado bonus d tier factor", () => this.dto.prestigeNum);
+              this.parameters[ParametersKind.d].addMulEffect("Tornado bonus d playtime factor", () => HourFactor(this.dto.AccumulatedHour));
+              this.parameters[ParametersKind.d].addMulEffect("Tornado bonus d max P factor", () => 1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1));
+
+              this.parameters[ParametersKind.e].addMulEffect("Tornado bonus e base factor", () => 0.02);
+              this.parameters[ParametersKind.e].addMulEffect("Tornado bonus e tier factor", () => this.dto.prestigeNum);
+              this.parameters[ParametersKind.e].addMulEffect("Tornado bonus e playtime factor", () => HourFactor(this.dto.AccumulatedHour));
+              this.parameters[ParametersKind.e].addMulEffect("Tornado bonus e max P factor", () => 1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1));
+
+              // TODO NewSigma unlock; m += 1
+              // TODO critical unlock; crit +i= 0.1
+              // TODO critical unlock; crit damage *= 2
+            }
+            addEffectsInfiniteSpiralDomain ( ) {
+              this.parameters[ParametersKind.k].addMulEffect("Store upgrade k", () => 1 + 0.01 * this.dto.variableUpgrades[VariableUpgradeKind.k]);
+              this.parameters[ParametersKind.a].addMulEffect("Store upgrade a", () => 1 + 0.01 * this.dto.variableUpgrades[VariableUpgradeKind.a]);
+              this.parameters[ParametersKind.b].addMulEffect("Store upgrade b", () => 1 + 0.01 * this.dto.variableUpgrades[VariableUpgradeKind.b]);
+              this.parameters[ParametersKind.c].addMulEffect("Store upgrade c", () => 1 + 0.01 * this.dto.variableUpgrades[VariableUpgradeKind.c]);
+              this.parameters[ParametersKind.d].addMulEffect("Store upgrade d", () => 1 + 0.01 * this.dto.variableUpgrades[VariableUpgradeKind.d]);
+              this.parameters[ParametersKind.e].addMulEffect("Store upgrade e", () => 1 + 0.01 * this.dto.variableUpgrades[VariableUpgradeKind.e]);
+            }
+            addEffectsBattleRewardContainer ( ) {    
+              this.parameters[ParametersKind.a].addAddEffect("Battle reward a", () => this.dto.battle_rewards[RewardType.a]);
+              this.parameters[ParametersKind.b].addAddEffect("Battle reward b", () => this.dto.battle_rewards[RewardType.b]);
+              this.parameters[ParametersKind.c].addAddEffect("Battle reward c", () => this.dto.battle_rewards[RewardType.c]);
+              this.parameters[ParametersKind.d].addAddEffect("Battle reward d", () => this.dto.battle_rewards[RewardType.d]);
+              this.parameters[ParametersKind.e].addAddEffect("Battle reward e", () => this.dto.battle_rewards[RewardType.e]);
+              this.parameters[ParametersKind.k].addAddEffect("Battle reward k", () => this.dto.battle_rewards[RewardType.k]);
+              
+              this.parameters[ParametersKind.atk].addAddEffect("Battle reward atk", () => this.dto.battle_rewards[RewardType.atk]);
+              this.parameters[ParametersKind.def].addAddEffect("Battle reward def", () => this.dto.battle_rewards[RewardType.def]);
+              this.parameters[ParametersKind.hp].addAddEffect("Battle reward hp", () => this.dto.battle_rewards[RewardType.hp]);
+              this.parameters[ParametersKind.regene].addAddEffect("Battle reward regene", () => this.dto.battle_rewards[RewardType.regene]);
+              this.parameters[ParametersKind.critical].addAddEffect("Battle reward critical", () => this.dto.battle_rewards[RewardType.critical]);
+              this.parameters[ParametersKind.criticalDamage].addMulEffect("Battle reward criticalDamage", () => 1 + this.dto.battle_rewards[RewardType.criticalDamage]);
+
+              this.parameters[ParametersKind.gamma].addAddEffect("Battle reward gamma", () => this.dto.battle_rewards[RewardType.gamma]);
+              this.parameters[ParametersKind.delta].addAddEffect("Battle reward delta", () => this.dto.battle_rewards[RewardType.delta]);
+              this.parameters[ParametersKind.Omega].addAddEffect("Battle reward Omega", () => this.dto.battle_rewards[RewardType.Omega]);
+
+              this.parameters[ParametersKind.super_critical].addAddEffect("Battle reward super_critical", () => this.dto.battle_rewards[RewardType.super_critical]);
+              this.parameters[ParametersKind.super_critical_damage].addMulEffect("Battle reward super_critical_damage", () => 1 + this.dto.battle_rewards[RewardType.super_critical_damage]);
+              this.parameters[ParametersKind.super_critical].addAddEffect("Battle reward super_critical threshold", () => 0.01 * (this.dto.battle_rewards[RewardType.super_critical_damage] > 5));
+
+              this.parameters[ParametersKind.a].addMulEffect("Battle reward a%", () => 1 + this.dto.battle_rewards[RewardType.a_mul]);
+              this.parameters[ParametersKind.b].addMulEffect("Battle reward b%", () => 1 + this.dto.battle_rewards[RewardType.b_mul]);
+              this.parameters[ParametersKind.c].addMulEffect("Battle reward c%", () => 1 + this.dto.battle_rewards[RewardType.c_mul]);
+              this.parameters[ParametersKind.d].addMulEffect("Battle reward d%", () => 1 + this.dto.battle_rewards[RewardType.d_mul]);
+              this.parameters[ParametersKind.e].addMulEffect("Battle reward e%", () => 1 + this.dto.battle_rewards[RewardType.e_mul]);
+              this.parameters[ParametersKind.k].addMulEffect("Battle reward k%", () => 1 + this.dto.battle_rewards[RewardType.k_mul]);
+
+              this.parameters[ParametersKind.hp].addMulEffect("Battle reward hp%", () => 1 + this.dto.battle_rewards[RewardType.hp_mul]);
+              this.parameters[ParametersKind.atk].addMulEffect("Battle reward atk%", () => 1 + this.dto.battle_rewards[RewardType.atk_mul]);
+              this.parameters[ParametersKind.def].addMulEffect("Battle reward def%", () => 1 + this.dto.battle_rewards[RewardType.def_mul]);
+
+              this.parameters[ParametersKind.gamma].addMulEffect("Battle reward gamma%", () => 1 + this.dto.battle_rewards[RewardType.gamma_mul]);
+              this.parameters[ParametersKind.delta].addMulEffect("Battle reward delta%", () => 1 + this.dto.battle_rewards[RewardType.delta_mul]);
+              this.parameters[ParametersKind.Omega].addMulEffect("Battle reward Omega%", () => 1 + this.dto.battle_rewards[RewardType.Omega_mul]);
+
+              this.parameters[ParametersKind.attack_speed].addMulEffect("Battle reward attack speed", () => DiminishAttackSpeed(this.dto.battle_rewards[RewardType.attack_speed]));
+              this.parameters[ParametersKind.rare_drop].addMultiplier("Battle reward rare drop", () => DiminishRareChance(this.dto.battle_rewards[RewardType.rare_drop]));
+              this.parameters[ParametersKind.math].addAddEffect("Battle reward math", () => this.dto.battle_rewards[RewardType.math]);
+              this.parameters[ParametersKind.multiattack].addAddEffect("Battle reward multiattack", () => BonusMultiAttack(this.dto.battle_rewards[RewardType.multiattack]));
+              this.parameters[ParametersKind.enemy_growth_reduction].addMulEffect("Battle reward enemy growth reduction", () => Decay(this.dto.battle_rewards[RewardType.enemy_growth_reduction]));
+            }
+            addEffectsBattleUpgrades ( ) {
+              this.parameters[ParametersKind.hp].addMulEffect("Battle upgrade HP +1%", () => 1 + 0.01 * this.dto.battle_upgrade_levels[0]);
+              this.parameters[ParametersKind.atk].addMulEffect("Battle upgrade ATK +1%", () => 1 + 0.01 * this.dto.battle_upgrade_levels[1]);
+              this.parameters[ParametersKind.def].addMulEffect("Battle upgrade DEF +1%", () => 1 + 0.01 * this.dto.battle_upgrade_levels[2]);
+              this.parameters[ParametersKind.regene].addMulEffect("Battle upgrade Regenerate +1%", () => 1 + 0.01 * this.dto.battle_upgrade_levels[3]);
+              this.parameters[ParametersKind.reward_hp].addAddEffect("Battle upgrade Reward HP +1", () => this.dto.battle_upgrade_levels[4]);
+              this.parameters[ParametersKind.reward_atk].addAddEffect("Battle upgrade Reward ATK +1", () => this.dto.battle_upgrade_levels[5]);
+              this.parameters[ParametersKind.reward_def].addAddEffect("Battle upgrade Reward DEF +1", () => this.dto.battle_upgrade_levels[6]);
+              this.parameters[ParametersKind.critical].addIndepEffect("Battle upgrade Critical +1%", () => 0.001 * this.dto.battle_upgrade_levels[7]);
+              this.parameters[ParametersKind.criticalDamage].addMulEffect("Battle upgrade Critical Damage +1%", () => 1 + 0.01 * this.dto.battle_upgrade_levels[8]);
+              this.parameters[ParametersKind.reward_exp].addAddEffect("Battle upgrade Reward EXP +1", () => this.dto.battle_upgrade_levels[9]);
+              this.parameters[ParametersKind.enemy_hp_reduction_add].addAddEffect("Battle upgrade Enemy HP Reduction +1%", () => -0.1 * this.dto.battle_upgrade_levels[10]);
+              this.parameters[ParametersKind.regene_while_resting].addMulEffect("Battle upgrade Regenerate While Resting +1%", () => 1 + 0.01 * this.dto.battle_upgrade_levels[11]);
+              this.parameters[ParametersKind.attack_speed].addMulEffect("Battle upgrade Attack Speed +1%", () => 1 + 0.001 * this.dto.battle_upgrade_levels[12]);
+              this.parameters[ParametersKind.hp].addMulEffect("Battle upgrade HP +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[13]);
+              this.parameters[ParametersKind.atk].addMulEffect("Battle upgrade ATK +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[14]);
+              this.parameters[ParametersKind.def].addMulEffect("Battle upgrade DEF +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[15]);
+              this.parameters[ParametersKind.regene].addMulEffect("Battle upgrade Regenerate +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[16]);
+              this.parameters[ParametersKind.reward_hp_mul].addMulEffect("Battle upgrade Reward HP +3%", () => 1 + 0.03 * this.dto.battle_upgrade_levels[17]);
+              this.parameters[ParametersKind.reward_atk_mul].addMulEffect("Battle upgrade Reward ATK +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[18]);
+              this.parameters[ParametersKind.reward_def_mul].addMulEffect("Battle upgrade Reward DEF +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[19]);
+              this.parameters[ParametersKind.reward_exp_mul].addMulEffect("Battle upgrade Reward EXP +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[20]);
+              this.parameters[ParametersKind.critical].addIndepEffect("Battle upgrade Critical +0.2%", () => 0.002 * this.dto.battle_upgrade_levels[21]);
+              this.parameters[ParametersKind.criticalDamage].addMulEffect("Battle upgrade Critical Damage +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[22]);
+              this.parameters[ParametersKind.attack_speed].addMulEffect("Battle upgrade Attack Speed +0.5%", () => 1 + 0.005 * this.dto.battle_upgrade_levels[23]);
+              this.parameters[ParametersKind.battle_upgrade_max_level].addIndepEffect("Battle upgrade Max Level +1", () => this.dto.battle_upgrade_levels[24]);
+              this.parameters[ParametersKind.atk_and_def_from_pi].addAddEffect("Battle upgrade ATK and DEF from PI", () => this.dto.battle_upgrade_levels[29]);
+              this.parameters[ParametersKind.exp_from_gamma].addAddEffect("Battle upgrade EXP from Gamma", () => this.dto.battle_upgrade_levels[30]);
+              this.parameters[ParametersKind.s_critical_from_napier].addAddEffect("Battle upgrade Critical Damage from Napier", () => this.dto.battle_upgrade_levels[31]);
+              this.parameters[ParametersKind.math].addAddEffect("Battle upgrade Math Skill", () => 100 * this.dto.battle_upgrade_levels[32]);
+              this.parameters[ParametersKind.hp].addMulEffect("Battle upgrade HP +10%", () => 1 + 0.1 * this.dto.battle_upgrade_levels[33]);
+              this.parameters[ParametersKind.atk].addMulEffect("Battle upgrade ATK +10%", () => 1 + 0.1 * this.dto.battle_upgrade_levels[34]);
+              this.parameters[ParametersKind.def].addMulEffect("Battle upgrade DEF +10%", () => 1 + 0.1 * this.dto.battle_upgrade_levels[35]);
+              this.parameters[ParametersKind.reward_hp_mul].addMulEffect("Battle upgrade Reward HP +10%", () => 1 + 0.1 * this.dto.battle_upgrade_levels[36]);
+              this.parameters[ParametersKind.reward_atk_mul].addMulEffect("Battle upgrade Reward ATK +10%", () => 1 + 0.1 * this.dto.battle_upgrade_levels[37]);
+              this.parameters[ParametersKind.reward_def_mul].addMulEffect("Battle upgrade Reward DEF +10%", () => 1 + 0.1 * this.dto.battle_upgrade_levels[38]);
+              this.parameters[ParametersKind.reward_exp_mul].addMulEffect("Battle upgrade Reward EXP +5%", () => 1 + 0.05 * this.dto.battle_upgrade_levels[39]);
+              this.parameters[ParametersKind.rare_drop].addMulEffect("Battle upgrade Rare Drop +1%", () => 1 + 0.001 * this.dto.battle_upgrade_levels[40]);
+              this.parameters[ParametersKind.battle_upgrade_max_level_2].addAddEffect("Battle upgrade Max Level 2", () => this.dto.battle_upgrade_levels[41]);
+            }
+            loadSave ( save ) {
+              save = save.split("#");
+              if ( save.length != 3 ) {
+                alert("Invalid save file!");
+                return;
+              }
+
+              this.saver = JSON.parse(decrypt(save[0]));
+              this.save = JSON.parse(decrypt(save[1]));
+              this.dto = JSON.parse(decrypt(save[2]));
+            }
+            decrypt ( text ) {
+              kdf = CryptoJS.PBKDF2("kkyyhka", "stkttnsstkttns", {
+                keySize: 8,
+                hasher: CryptoJS.algo.SHA1,
+                iterations: 1000
+              });
+              
+              key = CryptoJS.enc.Hex.parse(kdf.toString().substring(0, 32));
+              iv = CryptoJS.enc.Hex.parse(kdf.toString().substring(32, 64));
+
+              return CryptoJS.AES.decrypt({ciphertext: CryptoJS.enc.Base64.parse(text)}, key, { iv: iv }).toString(CryptoJS.enc.Utf8);
+            }
           }
 
-          var battleRewardContainer = {
-            hp : -1,
-            atk : -1,
-            def : -1,
-            a : -1,
-            b : -1,
-            c : -1,
-            d : -1,
-            e : -1,
-            k : -1,
-            regene : -1,
-            critical : -1,
-            criticalDamage : -1,
-            a_mul : -1,
-            b_mul : -1,
-            c_mul : -1,
-            d_mul : -1,
-            e_mul : -1,
-            k_mul : -1,
-            hp_mul : -1,
-            atk_mul : -1,
-            def_mul : -1,
-            n : -1,
-            v : -1,
-            gamma : -1,
-            delta : -1,
-            Omega : -1,
-            pure_attack_speed : -1,
-            gamma_mul : -1,
-            delta_mul : -1,
-            Omega_mul : -1,
-            exp : -1,
-            pure_rare_chance : -1,
-            super_critical : -1,
-            super_critical_damage : -1,
-            math_skill : -1,
+          function diminishedAttackSpeed ( pure_attack_speed ) {
+            if ( pure_attack_speed < 4 )
+              return 1 + pure_attack_speed;
+            if ( pure_attack_speed < 54 )
+              return 5 + ( pure_attack_speed - 4 ) * 0.1;
+            return 10 + ( pure_attack_speed - 54 ) * 0.01;
           }
-          function updateBattleRewardContainer ( ) {
-            battleRewardContainer.a = dto.battle_rewards[3]
-            battleRewardContainer.b = dto.battle_rewards[4]
-            battleRewardContainer.c = dto.battle_rewards[5]
-            battleRewardContainer.d = dto.battle_rewards[6]
-            battleRewardContainer.e = dto.battle_rewards[7]
-            battleRewardContainer.k = dto.battle_rewards[8]
-
-            // Reward 1 ; atk
-            // - Effect atk add ; value
-            battleRewardContainer.atk = dto.battle_rewards[1]
-
-            // Reward 2 ; def
-            // - Effect def add ; value
-            battleRewardContainer.def = dto.battle_rewards[2]
-
-            // Reward 0 ; hp
-            // - Effect hp add ; value
-            battleRewardContainer.hp = dto.battle_rewards[0]
-
-            // Reward 9 ; regene
-            // - Effect regene add ; value
-            battleRewardContainer.regene = dto.battle_rewards[9]
-
-            // Reward 10 ; critical
-            // - Effect critical add ; value
-            battleRewardContainer.critical = dto.battle_rewards[10]
-
-            // Reward 11 ; criticalDamage
-            // - Effect criticalDamage mul ; value + 1
-            battleRewardContainer.criticalDamage = dto.battle_rewards[11]
-            battleRewardContainer.gamma = dto.battle_rewards[23]
-            battleRewardContainer.delta = dto.battle_rewards[24]
-            battleRewardContainer.Omega = dto.battle_rewards[25]
-
-            // Reward 32 ; super_critical
-            // - Effect super_critical add ; value
-            battleRewardContainer.super_critical = dto.battle_rewards[32]
-
-            // Reward 33 ; super_critical_damage
-            // - Effect super_critical_damage mul ; value + 1
-            battleRewardContainer.super_critical_damage = dto.battle_rewards[33]
-            battleRewardContainer.a_mul = dto.battle_rewards[12]
-            battleRewardContainer.b_mul = dto.battle_rewards[13]
-            battleRewardContainer.c_mul = dto.battle_rewards[14]
-            battleRewardContainer.d_mul = dto.battle_rewards[15]
-            battleRewardContainer.e_mul = dto.battle_rewards[16]
-            battleRewardContainer.k_mul = dto.battle_rewards[17]
-
-            // Reward 18 ; hp_mul
-            // - Effect hp mul ; 1 + value
-            battleRewardContainer.hp_mul = dto.battle_rewards[18]
-
-            // Reward 19 ; atk_mul
-            // - Effect atk mul ; 1 + value
-            battleRewardContainer.atk_mul = dto.battle_rewards[19]
-
-            // Reward 20 ; def_mul
-            // - Effect def mul ; 1 + value
-            battleRewardContainer.def_mul = dto.battle_rewards[20]
-            battleRewardContainer.gamma_mul = dto.battle_rewards[27]
-            battleRewardContainer.delta_mul = dto.battle_rewards[28]
-            battleRewardContainer.Omega_mul = dto.battle_rewards[29]
-
-            // Reward 26 ; pure_attack_speed
-            // - Effect pure_attack_speed add ; value
-            battleRewardContainer.pure_attack_speed = dto.battle_rewards[26]
-
-            // Reward 31 ; pure_rare_chance
-            // - Effect pure_rare_chance add ; value
-            battleRewardContainer.pure_rare_chance = dto.battle_rewards[31]
-
-            // Reward 34 ; math_skill
-            // - Effect math_skill add ; value
-            battleRewardContainer.math_skill = dto.battle_rewards[34]
+          function bonusMultiAttack ( pure_attack_speed ) {
+            return (diminishedAttackSpeed(pure_attack_speed) - 1) / 4;
           }
-          function diminishedAttackSpeed ( ) {
-            if ( battleRewardContainer.pure_attack_speed < 4 )
-              return 1 + battleRewardContainer.pure_attack_speed;
-            if ( battleRewardContainer.pure_attack_speed < 54 )
-              return 5 + ( battleRewardContainer.pure_attack_speed - 4 ) * 0.1;
-            return 10 + ( battleRewardContainer.pure_attack_speed - 54 ) * 0.01;
+          function diminishedRareChance ( pure_rare_chance ) {
+            if ( pure_rare_chance < 0.5 )
+              return 1 + pure_rare_chance;
+            if ( pure_rare_chance < 5.5 )
+              return 1.5 + ( pure_rare_chance - 0.5 ) * 0.05;
+            return 1.75 + ( pure_rare_chance - 0.75 ) * 0.001;
           }
-          function bonusMultiAttack ( ) {
-            return (diminishedAttackSpeed() - 1) / 4;
+          function decay ( math_skill ) {
+            if ( math_skill < 50000 )
+              return 1 - 0.5 * math_skill / 50000;
+            return 1 - (0.9 - 1 / 1.000018326 ** math_skill);
           }
-          function diminishedRareChance ( ) {
-            if ( battleRewardContainer.pure_rare_chance < 0.5 )
-              return 1 + battleRewardContainer.pure_rare_chance;
-            if ( battleRewardContainer.pure_rare_chance < 5.5 )
-              return 1.5 + ( battleRewardContainer.pure_rare_chance - 0.5 ) * 0.05;
-            return 1.75 + ( battleRewardContainer.pure_rare_chance - 0.75 ) * 0.001;
-          }
-          function decay ( ) {
-            if ( battleRewardContainer.math_skill < 50000 )
-              return 1 - 0.5 * battleRewardContainer.math_skill / 50000;
-            return 1 - (0.9 - 1 / 1.000018326 ** battleRewardContainer.math_skill);
+          function HourFactor ( hour ) {
+            if (hour <= 100.0)
+              return hour * 1.0 * 0.01;
+            if (hour <= 1000.0)
+              return hour * 1.0 * 0.01 + (hour - 100.0) * 1.0 * 0.005;
+            return hour * 1.0 * 0.01 + (hour - 100.0) * 1.0 * 0.005 + (hour - 1100.0) * 1.0 * 0.001;
           }
 
           function updateTab_r ( ) {
@@ -268,8 +535,6 @@
             $("#r_g_level").text(upgradeContainer.r.g);
             $("#r_beMul_level").text(upgradeContainer.r.beMul);
             $("#r_rAll_level").text(upgradeContainer.r.rAll);
-          }
-          function updateTab_p ( ) {
             $("#p_n_level").text(upgradeContainer.p.n);
             $("#p_v_level").text(upgradeContainer.p.v);
             $("#p_u_level").text(upgradeContainer.p.u);
@@ -284,8 +549,6 @@
             $("#p_exponentK_level").text(upgradeContainer.p.exponentK);
             $("#p_alpha_level").text(upgradeContainer.p.alpha);
             $("#p_beta_level").text(upgradeContainer.p.beta);
-          }
-          function updateTab_z ( ) {
             $("#z_z_multiplier_level").text(upgradeContainer.z.z_multiplier);
             $("#z_Omega_level").text(upgradeContainer.z.Omega);
             $("#z_gamma_level").text(upgradeContainer.z.gamma);
@@ -298,13 +561,9 @@
             $("#z_f_mul_level").text(upgradeContainer.z.f_mul);
             $("#z_g_mul_level").text(upgradeContainer.z.g_mul);
             $("#z_m_level").text(upgradeContainer.z.m);
-          }
-          function updateTab_T ( ) {
             $("#T_tornadoPrestigeTier").text(dto.tornadoPrestigeTier);
             $("#T_AccumulatedHour").text(dto.AccumulatedHour);
             $("#T_AccumulatedMaxP").text(dto.AccumulatedMaxP);
-          }
-          function updateTab_B ( ) {
             $("#B_atk_value").text(battleRewardContainer.atk);
             $("#B_atk_mul_value").text(battleRewardContainer.atk_mul);
             $("#B_hp_value").text(battleRewardContainer.hp);
@@ -340,8 +599,7 @@
             $("#B_Omega_value").text(battleRewardContainer.Omega);
             $("#B_Omega_mul_value").text(battleRewardContainer.Omega_mul);
             $("#B_exp_value").text(battleRewardContainer.exp);
-          }
-          function updateTab_E ( ) {
+
             for (var i = 0; i < dto.spiralEquipment_isUnlocked.length; i++) {
               var spiral_equation = $("#spiral_equation_" + i);
               if (dto.spiralEquipment_isUnlocked[i]) {
@@ -355,14 +613,12 @@
               spiral_equation.find(".spiral_level").text(dto.spiralEquipment_level[i]);
               spiral_equation.find(".spiral_progress").text(dto.spiralEquipment_currentProgress[i]);
             }
-          }
-          function updateTab_C ( ) {
+
             for (var i = 0; i < dto.challengeLevels.length; i++) {
               var challenge = $("#challenge_" + i);
               challenge.find(".challenge_level").text(dto.challengeLevels[i]);
             }
-          }
-          function updateTab_Z ( ) {
+
             for (var i = 0; i < dto.reactor_values.length; i++) {
               var reactor = $("#zreactor_" + i);
               reactor.find(".zreactor_value").text(dto.reactor_values[i]);
@@ -370,8 +626,7 @@
               reactor.find(".zreactor_level").text(dto.reactor_levels[i]);
               reactor.find(".zreactor_exp").text(dto.reactor_exp[i]); 
             }
-          }
-          function updateTab_D ( ) {
+
             for (var i = 0; i < dto.design_isUnlocked.length; i++) {
               var design = $("#design_" + i);
               if (dto.design_isUnlocked[i]) {
@@ -387,43 +642,8 @@
               alert("No save file specified!");
               return;
             }
-            val = val.split("#");
-            if ( val.length != 3 ) {
-              alert("Invalid save file!");
-              return;
-            }
 
-            saver = JSON.parse(decrypt(val[0]));
-            save = JSON.parse(decrypt(val[1]));
-            dto = JSON.parse(decrypt(val[2]));
-
-            updateUpgradeContainer();
-            updateBattleRewardContainer();
-            updateTab_r();
-            updateTab_p();
-            updateTab_z();
-            updateTab_T();
-            updateTab_B();
-            updateTab_E();
-            updateTab_C();
-            updateTab_Z();
-            updateTab_D();
-            updateStatSummary();
           }
-
-          function decrypt ( text ) {
-            kdf = CryptoJS.PBKDF2("kkyyhka", "stkttnsstkttns", {
-              keySize: 8,
-              hasher: CryptoJS.algo.SHA1,
-              iterations: 1000
-            });
-            
-            key = CryptoJS.enc.Hex.parse(kdf.toString().substring(0, 32));
-            iv = CryptoJS.enc.Hex.parse(kdf.toString().substring(32, 64));
-
-            return CryptoJS.AES.decrypt({ciphertext: CryptoJS.enc.Base64.parse(text)}, key, { iv: iv }).toString(CryptoJS.enc.Utf8);
-          }
-
         </script>
     </head>
     <body>
@@ -439,8 +659,8 @@
         <a class="tab-selector" href="#tab-p">p</a>
         <a class="tab-selector" href="#tab-z">z</a>
         <a class="tab-selector" href="#tab-T">T</a>
-        <a class="tab-selector disabled" href="#tab-A">A</a>
-        <a class="tab-selector disabled" href="#tab-S">S</a>
+        <a class="tab-selector" href="#tab-A">A</a>
+        <a class="tab-selector" href="#tab-S">S</a>
         <a class="tab-selector" href="#tab-B">B</a>
         <a class="tab-selector" href="#tab-E">E</a>
         <a class="tab-selector" href="#tab-C">C</a>
@@ -1224,7 +1444,49 @@
       </section>
       <section id="tab-S" class="tab hidden">
         <div>
-          store
+          store<br/>
+          <div id="S_automation">
+            <div class="automation" id="autobuy_k">
+              <div class="automation_name">Autobuy_K</div>
+              <div class="automation_effect">Unlock Autobuy for k Upgrade</div>
+              <div class="automation_cost">10</div>
+            </div>
+            <div class="automation" id="autobuy_a">
+              <div class="automation_name">Autobuy_A</div>
+              <div class="automation_effect">Unlock Autobuy for a Upgrade</div>
+              <div class="automation_cost">50</div>
+            </div>
+            <div class="automation" id="autobuy_b">
+              <div class="automation_name">Autobuy_B</div>
+              <div class="automation_effect">Unlock Autobuy for b Upgrade</div>
+              <div class="automation_cost">75</div>
+            </div>
+            <div class="automation" id="autobuy_c">
+              <div class="automation_name">Autobuy_C</div>
+              <div class="automation_effect">Unlock Autobuy for c Upgrade</div>
+              <div class="automation_cost">100</div>
+            </div>
+            <div class="automation" id="autobuy_d">
+              <div class="automation_name">Autobuy_D</div>
+              <div class="automation_effect">Unlock Autobuy for d Upgrade</div>
+              <div class="automation_cost">125</div>
+            </div>
+            <div class="automation" id="autobuy_e">
+              <div class="automation_name">Autobuy_E</div>
+              <div class="automation_effect">Unlock Autobuy for e Upgrade</div>
+              <div class="automation_cost">150</div>
+            </div>
+            <div class="automation" id="autobuy_regularall">
+              <div class="automation_name">AutoBuy_RegularAll</div>
+              <div class="automation_effect">Unlock Autobuy for all other regular Upgrades</div>
+              <div class="automation_cost">200</div>
+            </div>
+          </div>
+          <div id="S_spiral_design">
+
+          </div>
+          <div id="S_variable">
+          </div>
         </div>
       </section>
       <section id="tab-B" class="tab hidden">
