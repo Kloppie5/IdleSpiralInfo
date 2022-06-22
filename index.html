@@ -546,49 +546,49 @@
               this.parameters[ParametersKind.delta_z].addAddEffect("Base formula", () => this.parameters[ParametersKind.gamma].evaluate() * this.parameters[ParametersKind.Omega].evaluate() + this.parameters[ParametersKind.delta].evaluate());
             }
             addEffectsTornadoPrestige ( ) {
-              this.parameters[ParametersKind.delta_r].addMulEffect("Tornado bonus delta r tier factor", () => 1 + this.dto.prestigeNum * 0.5);
+              this.parameters[ParametersKind.delta_r].addMulEffect("Tornado bonus delta r tier factor", () => 1 + this.dto.tornadoPrestigeTier * 0.5);
               this.parameters[ParametersKind.delta_r].addMulEffect("Tornado bonus delta r playtime factor", () => 1 + HourFactor(this.dto.AccumulatedHour));
               this.parameters[ParametersKind.delta_r].addMulEffect("Tornado bonus delta r max P factor", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
 
-              this.parameters[ParametersKind.delta_z].addMulEffect("Tornado bonus delta z tier factor", () => 1 + this.dto.prestigeNum * 0.5);
+              this.parameters[ParametersKind.delta_z].addMulEffect("Tornado bonus delta z tier factor", () => 1 + this.dto.tornadoPrestigeTier * 0.5);
               this.parameters[ParametersKind.delta_z].addMulEffect("Tornado bonus delta z playtime factor", () => 1 + HourFactor(this.dto.AccumulatedHour));
               this.parameters[ParametersKind.delta_z].addMulEffect("Tornado bonus delta z max P factor", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
 
-              this.parameters[ParametersKind.regene_while_resting].addMulEffect("Tornado bonus regene_while_resting tier factor", () => 1 + this.dto.prestigeNum * 0.1);
+              this.parameters[ParametersKind.regene_while_resting].addMulEffect("Tornado bonus regene_while_resting tier factor", () => 1 + this.dto.tornadoPrestigeTier * 0.1);
               this.parameters[ParametersKind.regene_while_resting].addMulEffect("Tornado bonus regene_while_resting playtime factor", () => 1 + HourFactor(this.dto.AccumulatedHour));
               this.parameters[ParametersKind.regene_while_resting].addMulEffect("Tornado bonus regene_while_resting max P factor", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
 
               var tornado_a = new Parameter("Tornado bonus a", 1);
               tornado_a.addMulEffect("Tornado bonus a base factor", () => 0.2);
-              tornado_a.addMulEffect("Tornado bonus a tier factor", () => this.dto.prestigeNum);
+              tornado_a.addMulEffect("Tornado bonus a tier factor", () => this.dto.tornadoPrestigeTier);
               tornado_a.addMulEffect("Tornado bonus a playtime factor", () => HourFactor(this.dto.AccumulatedHour));
               tornado_a.addMulEffect("Tornado bonus a max P factor", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
               this.parameters[ParametersKind.a].addAddEffect("Tornado bonus a", () => tornado_a.evaluate());
               
               var tornado_b = new Parameter("Tornado bonus b", 1);
               tornado_b.addMulEffect("Tornado bonus b base factor", () => 0.02);
-              tornado_b.addMulEffect("Tornado bonus b tier factor", () => this.dto.prestigeNum);
+              tornado_b.addMulEffect("Tornado bonus b tier factor", () => this.dto.tornadoPrestigeTier);
               tornado_b.addMulEffect("Tornado bonus b playtime factor", () => HourFactor(this.dto.AccumulatedHour));
               tornado_b.addMulEffect("Tornado bonus b max P factor", () => 1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1));
               this.parameters[ParametersKind.b].addAddEffect("Tornado bonus b", () => tornado_b.evaluate());
 
               var tornado_c = new Parameter("Tornado bonus c", 1);
               tornado_c.addMulEffect("Tornado bonus c base factor", () => 0.02);
-              tornado_c.addMulEffect("Tornado bonus c tier factor", () => this.dto.prestigeNum);
+              tornado_c.addMulEffect("Tornado bonus c tier factor", () => this.dto.tornadoPrestigeTier);
               tornado_c.addMulEffect("Tornado bonus c playtime factor", () => HourFactor(this.dto.AccumulatedHour));
               tornado_c.addMulEffect("Tornado bonus c max P factor", () => 1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1));
               this.parameters[ParametersKind.c].addAddEffect("Tornado bonus c", () => tornado_c.evaluate());
 
               var tornado_d = new Parameter("Tornado bonus d", 1);
               tornado_d.addMulEffect("Tornado bonus d base factor", () => 0.02);
-              tornado_d.addMulEffect("Tornado bonus d tier factor", () => this.dto.prestigeNum);
+              tornado_d.addMulEffect("Tornado bonus d tier factor", () => this.dto.tornadoPrestigeTier);
               tornado_d.addMulEffect("Tornado bonus d playtime factor", () => HourFactor(this.dto.AccumulatedHour));
               tornado_d.addMulEffect("Tornado bonus d max P factor", () => 1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1));
               this.parameters[ParametersKind.d].addAddEffect("Tornado bonus d", () => tornado_d.evaluate());
 
               var tornado_e = new Parameter("Tornado bonus e", 1);
               tornado_e.addMulEffect("Tornado bonus e base factor", () => 0.02);
-              tornado_e.addMulEffect("Tornado bonus e tier factor", () => this.dto.prestigeNum);
+              tornado_e.addMulEffect("Tornado bonus e tier factor", () => this.dto.tornadoPrestigeTier);
               tornado_e.addMulEffect("Tornado bonus e playtime factor", () => HourFactor(this.dto.AccumulatedHour));
               tornado_e.addMulEffect("Tornado bonus e max P factor", () => 1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1));
               this.parameters[ParametersKind.e].addAddEffect("Tornado bonus e", () => tornado_e.evaluate());
@@ -1011,7 +1011,7 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2206222055<br/>
+      v0.2206222113<br/>
       <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
       <button onclick="loadSaveFile()">Load</button>
       
