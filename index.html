@@ -331,10 +331,23 @@
               this.cached_value = value;
               return value;
             }
+            debug ( ) {
+              console.log(this.name);
+              for ( var name in this.add_effects )
+                console.log(name, this.add_effects[name]());
+              for ( var name in this.mul_effects )
+                console.log(name, this.mul_effects[name]());
+              for ( var name in this.indep_effects )
+                console.log(name, this.indep_effects[name]());
+              for ( var name in this.exponent_effects )
+                console.log(name, this.exponent_effects[name]());
+            }
           }
           class IdleSpiral {
 
             constructor ( ) {
+              this.lines = 1;
+              
               this.parameters = {};
               this.initialize();
 
@@ -356,12 +369,12 @@
               this.addEffectsReactorContainer();
             }
             debug () {
-
+              for ( var name in this.parameters )
+                this.parameters[name].debug();
             }
             
             initialize ( ) {
               this.parameters[ParametersKind.delta_r] = new Parameter("delta_r", 0);
-              this.parameters[ParametersKind.z] = new Parameter("z", 0);
               this.parameters[ParametersKind.delta_z] = new Parameter("delta_z", 0);
 
               this.parameters[ParametersKind.largeA] = new Parameter("largeA", 0);
@@ -443,7 +456,7 @@
                 if ( n == 1 )
                   return A;
                   
-                  var Ai = A;
+                var Ai = A;
                 var sum = Ai;
                 for ( var i = 1; i < n; i++ ) {
                   Ai = integral * u * Ai + v;
@@ -472,8 +485,8 @@
                   * this.parameters[ParametersKind.f].evaluate()
                   * this.parameters[ParametersKind.g].evaluate();
               });
-              this.parameters[ParametersKind.delta_r].addAddEffect("Base formula", () => this.parameters[ParametersKind.largeA].evaluate() * this.parameters[ParametersKind.omega].evaluate() ** this.parameters[ParametersKind.omegaExponent].evaluate() + this.parameters[ParametersKind.k].evaluate());
-              this.parameters[ParametersKind.delta_r].addMulEffect("Line Number Multiplier", () => 1 + 0.4 * this.parameters[ParametersKind.line_number_multiplier].evaluate());
+              this.parameters[ParametersKind.delta_r].addAddEffect("Base formula", () => this.parameters[ParametersKind.sigmaA].evaluate() * this.parameters[ParametersKind.omega].evaluate() ** this.parameters[ParametersKind.omegaExponent].evaluate() + this.parameters[ParametersKind.k].evaluate());
+              this.parameters[ParametersKind.delta_r].addMulEffect("Line Number Multiplier", () => 1 + (this.lines - 1) * this.parameters[ParametersKind.line_number_multiplier].evaluate());
             }
             addEffectsSoftPrestige ( ) {
               this.parameters[ParametersKind.omegaExponent].addAddEffect("Soft Prestige", () => this.dto.softResetNum);
@@ -486,11 +499,11 @@
               this.parameters[ParametersKind.c].addAddEffect("r upgrade c", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.c]);
               this.parameters[ParametersKind.d].addAddEffect("r upgrade d", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.d]);
               this.parameters[ParametersKind.e].addAddEffect("r upgrade e", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.e]);
-              this.parameters[ParametersKind.a].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
-              this.parameters[ParametersKind.b].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
-              this.parameters[ParametersKind.c].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
-              this.parameters[ParametersKind.d].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
-              this.parameters[ParametersKind.e].addMulEffect("r upgrade ae11", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.a].addMulEffect("r upgrade ae11", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.b].addMulEffect("r upgrade ae11", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.c].addMulEffect("r upgrade ae11", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.d].addMulEffect("r upgrade ae11", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.parameters[ParametersKind.e].addMulEffect("r upgrade ae11", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
               this.parameters[ParametersKind.a].addMulEffect("r upgrade logk", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.logk] * Math.log10(this.parameters[ParametersKind.k].evaluate() + 1))
               this.parameters[ParametersKind.f].addAddEffect("r upgrade f", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.f]);
               this.parameters[ParametersKind.g].addAddEffect("r upgrade g", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.g]);
@@ -515,7 +528,7 @@
               this.parameters[ParametersKind.alpha].addAddEffect("p upgrade alpha", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.alpha]);
               this.parameters[ParametersKind.beta].addAddEffect("p upgrade beta", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.beta]);
 
-              this.parameters[ParametersKind.delta_r].addMulEffect("z upgrade z_multiplier", () => 1 + (((this.dto.upgradeLevels[UpgradeKind.z_multiplier] > 0) ? 1 : 0) + 0.1 * this.dto.upgradeLevels[UpgradeKind.z_multiplier]) * Math.log10(this.parameters[ParametersKind.z].evaluate() + 1) / 5);
+              this.parameters[ParametersKind.delta_r].addMulEffect("z upgrade z_multiplier", () => 1 + (((this.dto.upgradeLevels[UpgradeKind.z_multiplier] > 0) ? 1 : 0) + 0.1 * this.dto.upgradeLevels[UpgradeKind.z_multiplier]) * Math.log10(this.dto.z + 1) / 5);
               this.parameters[ParametersKind.Omega].addAddEffect("z upgrade Omega", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.Omega]);
               this.parameters[ParametersKind.gamma].addAddEffect("z upgrade gamma", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.gamma]);
               this.parameters[ParametersKind.delta].addAddEffect("z upgrade delta", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.delta]);
@@ -630,11 +643,11 @@
               this.parameters[ParametersKind.delta].addMulEffect("Battle reward delta%", () => 1 + this.dto.battle_rewards[RewardType.delta_mul]);
               this.parameters[ParametersKind.Omega].addMulEffect("Battle reward Omega%", () => 1 + this.dto.battle_rewards[RewardType.Omega_mul]);
 
-              this.parameters[ParametersKind.attack_speed].addMulEffect("Battle reward attack speed", () => DiminishAttackSpeed(this.dto.battle_rewards[RewardType.attack_speed]));
-              this.parameters[ParametersKind.rare_drop].addMulEffect("Battle reward rare drop", () => DiminishRareChance(this.dto.battle_rewards[RewardType.rare_drop]));
+              this.parameters[ParametersKind.attack_speed].addMulEffect("Battle reward attack speed", () => diminishedAttackSpeed(this.dto.battle_rewards[RewardType.attack_speed]));
+              this.parameters[ParametersKind.rare_drop].addMulEffect("Battle reward rare drop", () => diminishedRareChance(this.dto.battle_rewards[RewardType.rare_drop]));
               this.parameters[ParametersKind.math].addAddEffect("Battle reward math", () => this.dto.battle_rewards[RewardType.math]);
-              this.parameters[ParametersKind.multiattack].addAddEffect("Battle reward multiattack", () => BonusMultiAttack(this.dto.battle_rewards[RewardType.multiattack]));
-              this.parameters[ParametersKind.enemy_growth_reduction].addMulEffect("Battle reward enemy growth reduction", () => Decay(this.dto.battle_rewards[RewardType.enemy_growth_reduction]));
+              this.parameters[ParametersKind.multiattack].addAddEffect("Battle reward multiattack", () => bonusMultiAttack(this.dto.battle_rewards[RewardType.multiattack]));
+              this.parameters[ParametersKind.enemy_growth_reduction].addMulEffect("Battle reward enemy growth reduction", () => decay(this.dto.battle_rewards[RewardType.enemy_growth_reduction]));
             }
             addEffectsBattleUpgrades ( ) {
               this.parameters[ParametersKind.hp].addMulEffect("Battle upgrade HP +1%", () => 1 + 0.01 * this.dto.battle_upgrade_levels[0]);
@@ -693,9 +706,9 @@
             addEffectsChallengeContainer ( ) {
               this.parameters[ParametersKind.softPrestigeSkip].addAddEffect("Challenge SlowSpiral Reward", () => this.dto.challengeLevels[ChallengeKind.SlowSpiral] >= 1);
               this.parameters[ParametersKind.softPrestigeSkip].addAddEffect("Challenge SinSpiral Reward", () => this.dto.challengeLevels[ChallengeKind.SlowSpiral] >= 1);
-              this.parameters[ParametersKind.softPrestigeSkip].addAddEffect("Challenge StraightLine Reward", () => this.dto.challenge_level[ChallengeKind.StraightLine] >= 1);
-              this.parameters[ParametersKind.softPrestigeSkip].addAddEffect("Challenge drain Reward", () => this.dto.challenge_level[ChallengeKind.drain] >= 1);
-              this.parameters[ParametersKind.softPrestigeSkip].addAddEffect("Challenge poorMath Reward", () => this.dto.challenge_level[ChallengeKind.poorMath] >= 1);
+              this.parameters[ParametersKind.softPrestigeSkip].addAddEffect("Challenge StraightLine Reward", () => this.dto.challengeLevels[ChallengeKind.StraightLine] >= 1);
+              this.parameters[ParametersKind.softPrestigeSkip].addAddEffect("Challenge drain Reward", () => this.dto.challengeLevels[ChallengeKind.drain] >= 1);
+              this.parameters[ParametersKind.softPrestigeSkip].addAddEffect("Challenge poorMath Reward", () => this.dto.challengeLevels[ChallengeKind.poorMath] >= 1);
               
               this.parameters[ParametersKind.delta_r].addMulEffect("Challenge basic Reward", () => 1 + 0.5 * this.dto.challengeLevels[ChallengeKind.basic]);
               this.parameters[ParametersKind.omega].addMulEffect("Challenge SlowSpiral Reward", () => 1 + 0.1 * this.dto.challengeLevels[ChallengeKind.SlowSpiral]);
@@ -975,6 +988,7 @@
             return hour * 1.0 * 0.01 + (hour - 100.0) * 1.0 * 0.005 + (hour - 1100.0) * 1.0 * 0.001;
           }
           function SigmaSum ( level ) {
+            var r = 0;
             for ( var i = 0; i < level; i++ )
               r += 1 / Math.sqrt(i + 1);
             return r;
@@ -988,6 +1002,7 @@
             }
             var idlespiral = new IdleSpiral();
             idlespiral.loadSave(val);
+            idlespiral.debug();
             idlespiral.updateUI();
           }
         </script>
