@@ -214,6 +214,51 @@
             maxlevelup_no_24: 38,
             unlock: 39,
           }
+          function RewardTypeByName ( name ) {
+            switch ( name ) {
+              case "hp": return RewardType.hp;
+              case "atk": return RewardType.atk;
+              case "def": return RewardType.def;
+              case "a": return RewardType.a;
+              case "b": return RewardType.b;
+              case "c": return RewardType.c;
+              case "d": return RewardType.d;
+              case "e": return RewardType.e;
+              case "k": return RewardType.k;
+              case "regene": return RewardType.regene;
+              case "critical": return RewardType.critical;
+              case "criticalDamage": return RewardType.criticalDamage;
+              case "a_mul": return RewardType.a_mul;
+              case "b_mul": return RewardType.b_mul;
+              case "c_mul": return RewardType.c_mul;
+              case "d_mul": return RewardType.d_mul;
+              case "e_mul": return RewardType.e_mul;
+              case "k_mul": return RewardType.k_mul;
+              case "hp_mul": return RewardType.hp_mul;
+              case "atk_mul": return RewardType.atk_mul;
+              case "def_mul": return RewardType.def_mul;
+              case "n": return RewardType.n;
+              case "v": return RewardType.v;
+              case "gamma": return RewardType.gamma;
+              case "delta": return RewardType.delta;
+              case "Omega": return RewardType.Omega;
+              case "attackSpeed": return RewardType.attackSpeed;
+              case "gamma_mul": return RewardType.gamma_mul;
+              case "delta_mul": return RewardType.delta_mul;
+              case "Omega_mul": return RewardType.Omega_mul;
+              case "exp": return RewardType.exp;
+              case "rare_chance": return RewardType.rare_chance;
+              case "super_critical": return RewardType.super_critical;
+              case "super_criticalDamage": return RewardType.super_criticalDamage;
+              case "math_skill": return RewardType.math_skill;
+              case "other": return RewardType.other;
+              case "enemy_hp_reduction": return RewardType.enemy_hp_reduction;
+              case "regene_resting": return RewardType.regene_resting;
+              case "maxlevelup_no_24": return RewardType.maxlevelup_no_24;
+              case "unlock": return RewardType.unlock;
+              default: return -1;
+            }
+          }
           const UnlockWithTornado = {
             AutoPrestige: 0,
             AutoOmegaPrestige: 1,
@@ -643,11 +688,11 @@
               this.parameters[ParametersKind.delta].addMulEffect("Battle reward delta%", () => 1 + this.dto.battle_rewards[RewardType.delta_mul]);
               this.parameters[ParametersKind.Omega].addMulEffect("Battle reward Omega%", () => 1 + this.dto.battle_rewards[RewardType.Omega_mul]);
 
-              this.parameters[ParametersKind.attack_speed].addMulEffect("Battle reward attack speed", () => diminishedAttackSpeed(this.dto.battle_rewards[RewardType.attack_speed]));
-              this.parameters[ParametersKind.rare_drop].addMulEffect("Battle reward rare drop", () => diminishedRareChance(this.dto.battle_rewards[RewardType.rare_drop]));
-              this.parameters[ParametersKind.math].addAddEffect("Battle reward math", () => this.dto.battle_rewards[RewardType.math]);
+              this.parameters[ParametersKind.attack_speed].addMulEffect("Battle reward attack speed", () => diminishedAttackSpeed(this.dto.battle_rewards[RewardType.attackSpeed]));
+              this.parameters[ParametersKind.rare_drop].addMulEffect("Battle reward rare drop", () => diminishedRareChance(this.dto.battle_rewards[RewardType.rare_chance]));
+              this.parameters[ParametersKind.math].addAddEffect("Battle reward math", () => this.dto.battle_rewards[RewardType.math_skill]);
               this.parameters[ParametersKind.multiattack].addAddEffect("Battle reward multiattack", () => bonusMultiAttack(this.dto.battle_rewards[RewardType.multiattack]));
-              this.parameters[ParametersKind.enemy_growth_reduction].addMulEffect("Battle reward enemy growth reduction", () => decay(this.dto.battle_rewards[RewardType.enemy_growth_reduction]));
+              this.parameters[ParametersKind.enemy_growth_reduction].addMulEffect("Battle reward enemy growth reduction", () => decay(this.dto.battle_rewards[RewardType.math_skill]));
             }
             addEffectsBattleUpgrades ( ) {
               this.parameters[ParametersKind.hp].addMulEffect("Battle upgrade HP +1%", () => 1 + 0.01 * this.dto.battle_upgrade_levels[0]);
@@ -943,6 +988,7 @@
 
             updateUI ( ) {
               var _this = this; // Good god javascript, why do you have to do this?
+
               $('.update_parameter').each(function(element) {
                 var classes = $(this).attr('class').split(' ');
                 var parameter = "";
@@ -952,9 +998,28 @@
                     break;
                   }
                 }
+                console.log(parameter, _this.parameters[parameter]);
                 var value = _this.parameters[parameter].evaluate();
-                $(this).find('.parameter_value').text(value.toFixed(2));
+                $(this).find('.parameter_value').text(value);
               });
+              $('.update_battle_reward').each(function(element) {
+                var classes = $(this).attr('class').split(' ');
+                var reward_type = "";
+                for ( var i = 0; i < classes.length; i++ ) {
+                  if ( classes[i].startsWith("battle_reward_") ) {
+                    reward_type = classes[i].substring(14);
+                    break;
+                  }
+                }
+                console.log(reward_type, RewardTypeByName(reward_type));
+                var value = _this.dto.battle_rewards[RewardTypeByName(reward_type)];
+                $(this).find('.reward_value').text(value);
+              });
+
+              update_call_attack_speed_v5(_this.dto);
+              update_call_attack_speed_v6(_this.dto);
+              update_call_rare_chance(_this.dto);
+              update_call_decay(_this.dto);
             }
           }
 
@@ -1011,7 +1076,7 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2206222132<br/>
+      v0.2206231841<br/>
       <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
       <button onclick="loadSaveFile()">Load</button>
       
@@ -1443,153 +1508,190 @@
       </section>
       <section id="tab-B" class="tab hidden">
         <div>
-          Battle Spiral rewards:<br/>
           <div id="battle_rewards">
-            Effect Gain:<br/>
-            <div id="B_effect_gain">
-              <div class="battle_reward">
-                <div class="reward_name">ATK</div>
-                <div class="reward_value" id="B_atk_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">ATK%</div>
-                <div class="reward_value" id="B_atk_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">HP</div>
-                <div class="reward_value" id="B_hp_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">HP%</div>
-                <div class="reward_value" id="B_hp_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">DEF</div>
-                <div class="reward_value" id="B_def_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">DEF%</div>
-                <div class="reward_value" id="B_def_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">Critical Rate</div>
-                <div class="reward_value" id="B_critical_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">Critical Damage</div>
-                <div class="reward_value" id="B_criticalDamage_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">Regenerate</div>
-                <div class="reward_value" id="B_regene_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">Pure Attack Speed</div>
-                <div class="reward_value" id="B_pure_attack_speed_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">S-Critical Rate</div>
-                <div class="reward_value" id="B_super_critical_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">S-Critical Damage</div>
-                <div class="reward_value" id="B_super_critical_damage_value">0</div>
-                   </div>
-              <div class="battle_reward">
-                <div class="reward_name">Pure Rare Chance</div>
-                <div class="reward_value" id="B_pure_rare_chance_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">Math Skill</div>
-                <div class="reward_value" id="B_math_skill_value">0</div>
-              </div>
+            <div class="battle_reward update_battle_reward battle_reward_atk">
+              <div class="reward_name">ATK</div>
+              <div class="reward_value" id="B_atk_value">0</div>
             </div>
-            Parameter Gain:<br/>
-            <div id="B_parameter_gain">
-              <div class="battle_reward">
-                <div class="reward_name">k</div>
-                <div class="reward_value" id="B_k_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">k%</div>
-                <div class="reward_value" id="B_k_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">a</div>
-                <div class="reward_value" id="B_a_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">a%</div>
-                <div class="reward_value" id="B_a_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">b</div>
-                <div class="reward_value" id="B_b_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">b%</div>
-                <div class="reward_value" id="B_b_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">c</div>
-                <div class="reward_value" id="B_c_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">c%</div>
-                <div class="reward_value" id="B_c_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">d</div>
-                <div class="reward_value" id="B_d_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">d%</div>
-                <div class="reward_value" id="B_d_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">e</div>
-                <div class="reward_value" id="B_e_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">e%</div>
-                <div class="reward_value" id="B_e_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">n</div>
-                <div class="reward_value" id="B_n_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">v</div>
-                <div class="reward_value" id="B_v_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">gamma</div>
-                <div class="reward_value" id="B_gamma_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">gamma%</div>
-                <div class="reward_value" id="B_gamma_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">delta</div>
-                <div class="reward_value" id="B_delta_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">delta%</div>
-                <div class="reward_value" id="B_delta_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">Omega</div>
-                <div class="reward_value" id="B_Omega_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">Omega%</div>
-                <div class="reward_value" id="B_Omega_mul_value">0</div>
-              </div>
-              <div class="battle_reward">
-                <div class="reward_name">Exp</div>
-                <div class="reward_value" id="B_exp_value">0</div>
-              </div>
+            <div class="battle_reward update_battle_reward battle_reward_atk_mul">
+              <div class="reward_name">ATK%</div>
+              <div class="reward_value" id="B_atk_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_hp">
+              <div class="reward_name">HP</div>
+              <div class="reward_value" id="B_hp_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_hp_mul">
+              <div class="reward_name">HP%</div>
+              <div class="reward_value" id="B_hp_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_def">
+              <div class="reward_name">DEF</div>
+              <div class="reward_value" id="B_def_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_def_mul">
+              <div class="reward_name">DEF%</div>
+              <div class="reward_value" id="B_def_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_criticalDamage">
+              <div class="reward_name">Critical Damage</div>
+              <div class="reward_value" id="B_criticalDamage_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_regene">
+              <div class="reward_name">Regenerate</div>
+              <div class="reward_value" id="B_regene_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_attackSpeed">
+              <div class="reward_name">Pure Attack Speed</div>
+              <div class="reward_value" id="B_pure_attack_speed_value">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat_label">Diminished Attack Speed v1.5</div>
+              <div class="stat_value" id="update_call_attack_speed_v5">0</div>
+              <script>
+                function update_call_attack_speed_v5 ( dto ) {
+                  var value = 0;
+                  var pure_attack_speed = dto.battle_rewards[RewardType.attackSpeed];
+                  if ( pure_attack_speed < 4 )
+                    value = 1 + pure_attack_speed;
+                  else if ( pure_attack_speed < 54 )
+                    value = 5 + ( pure_attack_speed - 4 ) * 0.1;
+                  else
+                    value = 10 + ( pure_attack_speed - 54 ) * 0.01;
+                  $('#update_call_attack_speed_v5').text(value);
+                }
+              </script>
+            </div>
+            <div class="stat">
+              <div class="stat_label">Diminished Attack Speed v1.6</div>
+              <div class="stat_value" id="update_call_attack_speed_v6">0</div>
+              <script>
+                function update_call_attack_speed_v6 ( dto ) {
+                  var value = 0;
+                  var pure_attack_speed = dto.battle_rewards[RewardType.attackSpeed];
+                  if ( pure_attack_speed < 4 )
+                    value = 1 + pure_attack_speed;
+                  else
+                    value = (17.5 * pure_attack_speed + 55) ** (1/3);
+                  $('#update_call_attack_speed_v6').text(value);
+                }
+              </script>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_super_criticalDamage">
+              <div class="reward_name">S-Critical Damage</div>
+              <div class="reward_value" id="B_super_critical_damage_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_rare_chance">
+              <div class="reward_name">Pure Rare Chance</div>
+              <div class="reward_value" id="B_pure_rare_chance_value">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat_label">Diminished Rare Chance</div>
+              <div class="stat_value" id="update_call_rare_chance">0</div>
+              <script>
+                function update_call_rare_chance ( dto ) {
+                  var value = 0;
+                  var pure_rare_chance = dto.battle_rewards[RewardType.rare_chance];
+                  if ( pure_rare_chance < 0.5 )
+                    value = 1 + pure_rare_chance;
+                  else if ( pure_rare_chance < 5.5 )
+                    value = 1.5 + ( pure_rare_chance - 0.5 ) * 0.05;
+                  else
+                    value = 1.75 + ( pure_rare_chance - 0.75 ) * 0.001;
+                  $('#update_call_rare_chance').text(value);
+                }
+              </script>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_math_skill">
+              <div class="reward_name">Math Skill</div>
+              <div class="reward_value" id="B_math_skill_value">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat_label">Raw Decay</div>
+              <div class="stat_value" id="update_call_decay">0</div>
+              <script>
+                function update_call_decay ( dto ) {
+                  var value = 0;
+                  var math_skill = dto.battle_rewards[RewardType.math_skill];
+                  if ( math_skill < 50000 )
+                    value = 1 - 0.5 * math_skill / 50000;
+                  else
+                    value = 1 - (0.9 - 1 / 1.000018326 ** math_skill);
+                  $('#update_call_decay').text(value);
+                }
+              </script>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_k">
+              <div class="reward_name">k</div>
+              <div class="reward_value" id="B_k_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_k_mul">
+              <div class="reward_name">k%</div>
+              <div class="reward_value" id="B_k_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_a">
+              <div class="reward_name">a</div>
+              <div class="reward_value" id="B_a_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_a_mul">
+              <div class="reward_name">a%</div>
+              <div class="reward_value" id="B_a_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_b">
+              <div class="reward_name">b</div>
+              <div class="reward_value" id="B_b_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_b_mul">
+              <div class="reward_name">b%</div>
+              <div class="reward_value" id="B_b_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_c">
+              <div class="reward_name">c</div>
+              <div class="reward_value" id="B_c_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_c_mul">
+              <div class="reward_name">c%</div>
+              <div class="reward_value" id="B_c_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_d">
+              <div class="reward_name">d</div>
+              <div class="reward_value" id="B_d_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_d_mul">
+              <div class="reward_name">d%</div>
+              <div class="reward_value" id="B_d_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_e">
+              <div class="reward_name">e</div>
+              <div class="reward_value" id="B_e_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_e_mul">
+              <div class="reward_name">e%</div>
+              <div class="reward_value" id="B_e_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_gamma">
+              <div class="reward_name">gamma</div>
+              <div class="reward_value" id="B_gamma_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_gamma_mul">
+              <div class="reward_name">gamma%</div>
+              <div class="reward_value" id="B_gamma_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_delta">
+              <div class="reward_name">delta</div>
+              <div class="reward_value" id="B_delta_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_delta_mul">
+              <div class="reward_name">delta%</div>
+              <div class="reward_value" id="B_delta_mul_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_Omega">
+              <div class="reward_name">Omega</div>
+              <div class="reward_value" id="B_Omega_value">0</div>
+            </div>
+            <div class="battle_reward update_battle_reward battle_reward_Omega_mul">
+              <div class="reward_name">Omega%</div>
+              <div class="reward_value" id="B_Omega_mul_value">0</div>
             </div>
           </div>
         </div>
@@ -2173,6 +2275,8 @@
               - Complete overhaul
             v0.2206220142
               - Small fixes and updating ui
+            v0.2206231841
+              - Linked B tab again and displaying diminished stats
         </div>
       </section>
       <section id="tab-faq" class="tab hidden">

@@ -35,13 +35,23 @@ body {
 }
 
 .stat {
-  width: 300px;
+  width: 600px;
   height: 20px;
 }
 .stat > .stat_label {
   float: left;
 }
 .stat > .stat_value {
+  float: right;
+}
+.battle_reward {
+  width: 600px;
+  height: 20px;
+}
+.battle_reward > .reward_name {
+  float: left;
+}
+.battle_reward > .reward_value {
   float: right;
 }
 
