@@ -1,4 +1,4 @@
-* {
+.marked {
   outline: 1px solid #000;
   outline-offset: -1px;
 }
@@ -32,6 +32,27 @@ body {
 }
 .tab.visible {
   display: block;
+}
+
+#FormulasCanvas {
+  width: 420px;
+}
+#formula_delta_r {
+  height: 50px;
+}
+#formula_A_i {
+  height: 65px;
+}
+.formula > div {
+  float: left;
+  margin: 0;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.variable {
+  float: left;
+  width: 50%;
 }
 
 .stat {
