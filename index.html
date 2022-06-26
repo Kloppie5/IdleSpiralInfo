@@ -453,7 +453,7 @@
               this.addEffect("Tornado bonus e", "e", "add", "tornado_e", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
 
               this.addEffect("Tornado unlock NewSigma", "m", "add", "1 if tornadoPrestigeTier >= 13", () => this.dto.tornadoPrestigeTier >= 13 ? 1 : 0);
-              this.addEffect("Tornado unlock critical", "critical", "add", "0.1 if tornadoPrestigeTier >= 17", () => this.dto.tornadoPrestigeTier >= 17 ? 0.1 : 0);
+              this.addEffect("Tornado unlock critical", "critical", "indep", "0.1 if tornadoPrestigeTier >= 17", () => this.dto.tornadoPrestigeTier >= 17 ? 0.1 : 0);
               this.addEffect("Tornado unlock criticalDamage", "criticalDamage", "mul", "2 if tornadoPrestigeTier >= 17", () => this.dto.tornadoPrestigeTier >= 17 ? 2 : 0);
               
               // InfiniteSpiralDomain
@@ -687,8 +687,8 @@
               this.addEffect("Spiral Design arrow active", "attack_speed", "mul", "1.2 if Spiral Design arrow active", () => this.dto.currentDesign == DesignID.arrow ? 1.2 : 1);
               this.addEffect("Spiral Design arrow passive", "attack_speed", "mul", "1.05 if Spiral Design arrow passive", () => this.dto.design_isUnlocked[DesignID.arrow] ? 1.05 : 1);
 
-              this.addEffect("Spiral Design Omega active", "Omega", "mul", "1.5 if Spiral Design Omega active", () => this.dto.currentDesign == DesignID.Omega ? 1.5 : 1);
-              this.addEffect("Spiral Design Omega passive", "Omega", "mul", "1.2 if Spiral Design Omega passive", () => this.dto.design_isUnlocked[DesignID.Omega] ? 1.2 : 1);
+              this.addEffect("Spiral Design pi active", "Omega", "mul", "1.5 if Spiral Design pi active", () => this.dto.currentDesign == DesignID.pi ? 1.5 : 1);
+              this.addEffect("Spiral Design pi passive", "Omega", "mul", "1.2 if Spiral Design pi passive", () => this.dto.design_isUnlocked[DesignID.pi] ? 1.2 : 1);
 
               this.addEffect("Spiral Design rects active", "reward_exp_mul", "mul", "1.05 if Spiral Design rects active", () => this.dto.currentDesign == DesignID.rects ? 1.05 : 1);
               this.addEffect("Spiral Design rects passive", "battle_upgrade_cost", "mul", "0.95 if Spiral Design rects passive", () => this.dto.design_isUnlocked[DesignID.rects] ? 0.95 : 1);
