@@ -6,27 +6,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\(','\)']]}});</script>
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script>
-          $(document).ready(function() {
-            $(".tab-selector:not(.disabled)").click(function(event) {
-              event.preventDefault();
-
-              // Activate clicked tab
-              var target = $(this).attr("href");
-              $(this).addClass("active");
-              $(target).removeClass("hidden");
-              $(target).addClass("visible");
-
-              // Deactivate all other tabs
-              $(".tab-selector").not(this).each(function() {
-                $(this).removeClass("active");
-                var target = $(this).attr("href");
-                $(target).removeClass("visible");
-                $(target).addClass("hidden");
-              });
-            });
-          });
 
           class Effect {
             constructor ( name, target, type, formula, value ) {
@@ -226,6 +207,17 @@
               this.updateFunctions.push(func);
             }
             this.update = function ( ) {
+              $('.update_display').each(function() {
+                var classes = $(this).attr('class').split(' ');
+                for ( var i = 0; i < classes.length; i++ ) {
+                  if ( classes[i].indexOf('display_') == 0 ) {
+                    var name = classes[i].substring(8);
+                    $(this).text(idlespiral.evaluate(name));
+                    break;
+                  }
+                }
+              });
+
               for (var func of this.updateFunctions)
                 func(this);
             }
@@ -943,6 +935,7 @@
             }
             idlespiral.loadSave(val);
             idlespiral.debug();
+            idlespiral.update();
           }
         </script>
     </head>
@@ -950,1166 +943,164 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2206231841<br/>
+      v0.2206261626<br/>
       <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
       <button onclick="loadSaveFile()">Load</button>
-      
-      <nav style="margin-top: 10px;">
-        <a class="tab-selector" href="#tab-c">c</a>
-        <a class="tab-selector" href="#tab-m">m</a>
-        <a class="tab-selector" href="#tab-faq">FAQ</a>
-        <a class="tab-selector" href="#tab-me">Me</a>
-      </nav>
 
-      <section id="stat-summary">
-        <div class="marked" id="FormulasCanvas">
-          <div class="formula marked" id="formula_delta_r">
-            <div class="marked">$\Delta r$</div class="marked"><div>&nbsp;=&nbsp;</div><div class="marked">$\displaystyle\sum\limits_{l_2=1}^m$</div><div class="marked">$\displaystyle\sum\limits_{l=1}^n A_l$</div><div class="marked">$\omega^{omegaExponent}$</div><div>+</div><div class="marked">$k$</div>
+      <div class="marked" style="position: absolute; width: 1920px; height: 1000px">
+        <div class="marked" style="position: absolute; width: 420px; height: 500px">
+          <div class="marked" style="position: absolute; width: 420px; height: 400px;">
+            <div class="formula marked" style="height: 50px">
+              <div class="marked">$\Delta r$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="marked">$\displaystyle\sum\limits_{l_2=1}^m$</div>
+              <div class="marked">$\displaystyle\sum\limits_{l=1}^n A_l$</div>
+              <div class="marked">$\omega^{omegaExponent}$</div>
+              <div>+</div>
+              <div class="marked">$k$</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 50px; height: 65px">
+              <div class="marked">$A_i$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="marked">$\displaystyle\int\limits_0^\alpha 2 x^\beta$</div>
+              <div class="marked">$u$</div>
+              <div class="marked">$A_{i-1}$</div>
+              <div>$dx$</div>
+              <div>+</div>
+              <div class="marked">$v$</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 115px; left: 30px; width: 120px; height: 20px">
+              <div>$u$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_u">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 115px; left: 150px; width: 120px; height: 20px">
+              <div>$v$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_v">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 135px; left: 30px; width: 120px; height: 20px">
+              <div>$n$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_n">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 135px; left: 150px; width: 120px; height: 20px">
+              <div>$m$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_m">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 155px; left: 30px; width: 120px; height: 20px">
+              <div>$\alpha$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_alpha">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 155px; left: 150px; width: 120px; height: 20px">
+              <div>$\beta$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_beta">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 175px; left: 30px; height: 20px">
+              <div class="marked">$A_1$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="marked">$a$</div>
+              <div>$\times$</div>
+              <div class="marked">$b$</div>
+              <div>$\times$</div>
+              <div class="marked">$c$</div>
+              <div>$\times$</div>
+              <div class="marked">$d$</div>
+              <div>$\times$</div>
+              <div class="marked">$e$</div>
+              <div>$\times$</div>
+              <div class="marked">$f$</div>
+              <div>$\times$</div>
+              <div class="marked">$g$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_largeA">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 195px; left: 30px; height: 20px">
+              <div>$a$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_a">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 215px; left: 30px; height: 20px">
+              <div>$b$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_b">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 235px; left: 30px; height: 20px">
+              <div>$c$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_c">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 255px; left: 30px; height: 20px">
+              <div>$d$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_d">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 275px; left: 30px; height: 20px">
+              <div>$e$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_e">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 295px; left: 30px; height: 20px">
+              <div>$f$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_f">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 315px; left: 30px; height: 20px">
+              <div>$g$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_g">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 335px; left: 30px; height: 20px">
+              <div>$k$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_k">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 370px; left: 30px; height: 20px">
+              <div>$\omega$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_omega">0</div>
+            </div>
           </div>
-          <div class="formula marked" id="formula_A_i">
-            <div class="marked">$A_i$</div><div>&nbsp;=&nbsp;</div><div class="marked">$\displaystyle\int\limits_0^\alpha 2 x^\beta$</div><div class="marked">$u$</div><div class="marked">$A_{i-1}$</div><div>$dx$</div><div>+</div><div class="marked">$v$</div>
-          </div>
-          <div class="variables">
-            <div class="variable marked" id="variable_u">$u$</div>
-            <script>
-              idlespiral.addUpdateFunction(function ( ) {
-                $('#variable_u').text("$u = " + this.evaluate("u") + "$");
-              });
-            </script>
-            <div class="variable marked">$v$</div>
-          </div>
-          <div class="variables">
-            <div class="variable marked">$n$</div>
-            <div class="variable marked">$m$</div>
-          </div>
-          <div class="variables">
-            <div class="variable marked">$\alpha$</div>
-            <div class="variable marked">$\beta$</div>
-          </div>
-          <div class="formula marked" id="formula_A_1">
-            <div class="marked">$A_1$</div><div>&nbsp;=&nbsp;</div><div class="marked">$a$</div><div>$\times$</div>
+          <div class="marked" style="position: absolute; top: 420px; width: 420px; height: 80px;">
+            <div class="formula marked" style="height: 20px">
+              <div class="marked">$\Delta z$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="marked">$\gamma$</div>
+              <div class="marked">$\Omega$</div>
+              <div>+</div>
+              <div class="marked">$\delta$</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 20px; left: 30px; height: 20px">
+              <div>$\gamma$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_gamma">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 40px; left: 30px; height: 20px">
+              <div>$\Omega$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_Omega">0</div>
+            </div>
+            <div class="formula marked" style="position: absolute; top: 60px; left: 30px; height: 20px">
+              <div>$\delta$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_delta">0</div>
+            </div>
           </div>
         </div>
 
+        <div class="marked" id="main" style="position: absolute; left: 420px; width: 1200px">
+          main
+        </div>
 
-        <div class="stat update_parameter parameter_u">
-          <div class="stat_label">u</div>
-          <div class="stat_value parameter_value">0</div>
+        <div class="marked" id="main" style="position: absolute; left: 1620px; width: 300px">
+          Battle
         </div>
-        <div class="stat update_parameter parameter_v">
-          <div class="stat_label">v</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_n">
-          <div class="stat_label">n</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_m">
-          <div class="stat_label">m</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_alpha">
-          <div class="stat_label">&alpha;</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_beta">
-          <div class="stat_label">&beta;</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_largeA">
-          <div class="stat_label">A_1</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_a">
-          <div class="stat_label">a</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_b">
-          <div class="stat_label">b</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_c">
-          <div class="stat_label">c</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_d">
-          <div class="stat_label">d</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_e">
-          <div class="stat_label">e</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_f">
-          <div class="stat_label">f</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_g">
-          <div class="stat_label">g</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_k">
-          <div class="stat_label">k</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_omega">
-          <div class="stat_label">&omega;</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_gamma">
-          <div class="stat_label">&gamma;</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_Omega">
-          <div class="stat_label">&Omega;</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-        <div class="stat update_parameter parameter_delta">
-          <div class="stat_label">&delta;</div>
-          <div class="stat_value parameter_value">0</div>
-        </div>
-      </section>
 
-      <br/><br/><br/>
+      </div>
 
-      <section id="tab-r" class="tab hidden">
-        <div>
-          <div id="r_upgrades">
-            <div class="r_upgrade">
-              <div class="upgrade_name">k</div>
-              <div class="upgrade_effect">k += level</div>
-              <div class="upgrade_cost">1 * 1.1 ^ level</div>
-              <div class="upgrade_level" id="r_k_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">a</div>
-              <div class="upgrade_effect">a += 0.1 * level</div>
-              <div class="upgrade_cost">1e1 * (1.3 ^ 0.1) ^ level</div>
-              <div class="upgrade_level" id="r_a_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">b</div>
-              <div class="upgrade_effect">b += 0.01 * level</div>
-              <div class="upgrade_cost">1e2 * (1.5 ^ 0.1) ^ level</div>
-              <div class="upgrade_level" id="r_b_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">c</div>
-              <div class="upgrade_effect">c += 0.01 * level</div>
-              <div class="upgrade_cost">1e3 * (2 ^ 0.1) ^ level</div>
-              <div class="upgrade_level" id="r_c_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">d</div>
-              <div class="upgrade_effect">d += 0.01 * level</div>
-              <div class="upgrade_cost">1e4 * (2.5 ^ 0.1) ^ level</div>
-              <div class="upgrade_level" id="r_d_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">e</div>
-              <div class="upgrade_effect">e += 0.01 * level</div>
-              <div class="upgrade_cost">1e5 * (3 ^ 0.1) ^ level</div>
-              <div class="upgrade_level" id="r_e_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">ae11</div>
-              <div class="upgrade_effect">ae11 = 1 + 0.01 * level</div>
-              <div class="upgrade_cost">1e4 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="r_ae11_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">logk</div>
-              <div class="upgrade_effect">a *= 1 + 0.1 * level * log10(k + 1)</div>
-              <div class="upgrade_cost">1e4 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="r_logk_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">f</div>
-              <div class="upgrade_effect">f += 0.01 * level</div>
-              <div class="upgrade_cost">1e6 * (4 ^ 0.1) ^ level</div>
-              <div class="upgrade_level" id="r_f_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">g</div>
-              <div class="upgrade_effect">g += 0.01 * level</div>
-              <div class="upgrade_cost">1e6 * (4.5 ^ 0.1) ^ level</div>
-              <div class="upgrade_level" id="r_g_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">beMul</div>
-              <div class="upgrade_effect">a *= (b + c + d + e + f + g) / 6<br/>a *= (1 + 0.1 * level)</div>
-              <div class="upgrade_cost">1e12 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="r_beMul_level">0</div>
-            </div>
-            <div class="r_upgrade">
-              <div class="upgrade_name">rAll</div>
-              <div class="upgrade_effect">&Delta;r *= (sum of levels / 10000 + 1)<br/>&Delta;r *= (1 + 0.1 * level)</div>
-              <div class="upgrade_cost">1e18 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="r_rAll_level">0</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="tab-p" class="tab hidden">
-        <div>
-          <div id="p_upgrades">
-            <div class="p_upgrade">
-              <div class="upgrade_name">n</div>
-              <div class="upgrade_effect">n += level</div>
-              <div class="upgrade_cost">1 * 5 ^ level</div>
-              <div class="upgrade_level" id="p_n_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">v</div>
-              <div class="upgrade_effect">v += 10 * level</div>
-              <div class="upgrade_cost">1 * 2 ^ level</div>
-              <div class="upgrade_level" id="p_v_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">u</div>
-              <div class="upgrade_effect">u += level</div>
-              <div class="upgrade_cost">1e1 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="p_u_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">parmA</div>
-              <div class="upgrade_effect">a += 0.1 * level</div>
-              <div class="upgrade_cost">1e1 * 1.5 ^ level</div>
-              <div class="upgrade_level" id="p_parmA_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">parmK</div>
-              <div class="upgrade_effect">k += 10 * level</div>
-              <div class="upgrade_cost">1e1 * 10 ^ level</div>
-              <div class="upgrade_level" id="p_parmK_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">parmB</div>
-              <div class="upgrade_effect">b += 0.1 * level</div>
-              <div class="upgrade_cost">1e2 * 1.5 ^ level</div>
-              <div class="upgrade_level" id="p_parmB_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">parmC</div>
-              <div class="upgrade_effect">c += 0.1 * level</div>
-              <div class="upgrade_cost">1e3 * 1.5 ^ level</div>
-              <div class="upgrade_level" id="p_parmC_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">parmD</div>
-              <div class="upgrade_effect">d += 0.1 * level</div>
-              <div class="upgrade_cost">1e4 * 1.5 ^ level</div>
-              <div class="upgrade_level" id="p_parmD_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">parmE</div>
-              <div class="upgrade_effect">e += 0.1 * level</div>
-              <div class="upgrade_cost">1e5 * 1.5 ^ level</div>
-              <div class="upgrade_level" id="p_parmE_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">parmF</div>
-              <div class="upgrade_effect">f += 0.1 * level</div>
-              <div class="upgrade_cost">1e6 * 1.5 ^ level</div>
-              <div class="upgrade_level" id="p_parmF_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">parmG</div>
-              <div class="upgrade_effect">g += 0.1 * level</div>
-              <div class="upgrade_cost">1e7 * 1.5 ^ level</div>
-              <div class="upgrade_level" id="p_parmG_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">exponentK</div>
-              <div class="upgrade_effect">k_exponent += 0.1 * level</div>
-              <div class="upgrade_cost">1e7 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="p_exponentK_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">alpha</div>
-              <div class="upgrade_effect">&alpha; += 0.01 * level</div>
-              <div class="upgrade_cost">1e21 * 1.25 ^ level</div>
-              <div class="upgrade_level" id="p_alpha_level">0</div>
-            </div>
-            <div class="p_upgrade">
-              <div class="upgrade_name">beta</div>
-              <div class="upgrade_effect">&beta; += 0.01 * level</div>
-              <div class="upgrade_cost">1e24 * 1.4 ^ level</div>
-              <div class="upgrade_level" id="p_beta_level">0</div>
-            </div>
-            <div class="p_upgrade unavailable">
-              <div class="upgrade_name">ppd</div>
-              <div class="upgrade_effect">ppd *= 0.95 ^ level</div>
-              <div class="upgrade_cost">5 * 2 ^ level</div>
-              <div class="upgrade_level" id="p_prestigePoint_demoninator_level">0</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="tab-z" class="tab hidden">
-        <div>
-          <div id="z_upgrades">
-            <div class="z_upgrade">
-              <div class="upgrade_name">z_multiplier</div>
-              <div class="upgrade_effect">&Delta;r *= 1 + ((level > 0) + 0.1 * level) * log10(z + 1)</div>
-              <div class="upgrade_cost">1 + 5 * level</div>
-              <div class="upgrade_level" id="z_z_multiplier_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">Omega</div>
-              <div class="upgrade_effect">&Omega; += 0.1 * level</div>
-              <div class="upgrade_cost">1e2 * 2 ^ level</div>
-              <div class="upgrade_level" id="z_Omega_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">gamma</div>
-              <div class="upgrade_effect">&gamma; += 0.1 * level</div>
-              <div class="upgrade_cost">1e2 * 2 ^ level</div>
-              <div class="upgrade_level" id="z_gamma_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">delta</div>
-              <div class="upgrade_effect">&delta; += 0.1 * level</div>
-              <div class="upgrade_cost">1e2 * 2 ^ level</div>
-              <div class="upgrade_level" id="z_delta_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">a_mul</div>
-              <div class="upgrade_effect">a *= 1 + 0.1 * level</div>
-              <div class="upgrade_cost">1e3 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="z_a_mul_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">b_mul</div>
-              <div class="upgrade_effect">b *= 1 + 0.1 * level</div>
-              <div class="upgrade_cost">1e4 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="z_b_mul_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">c_mul</div>
-              <div class="upgrade_effect">c *= 1 + 0.1 * level</div>
-              <div class="upgrade_cost">1e5 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="z_c_mul_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">d_mul</div>
-              <div class="upgrade_effect">d *= 1 + 0.1 * level</div>
-              <div class="upgrade_cost">1e6 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="z_d_mul_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">e_mul</div>
-              <div class="upgrade_effect">e *= 1 + 0.1 * level</div>
-              <div class="upgrade_cost">1e7 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="z_e_mul_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">f_mul</div>
-              <div class="upgrade_effect">f *= 1 + 0.1 * level</div>
-              <div class="upgrade_cost">1e8 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="z_f_mul_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">g_mul</div>
-              <div class="upgrade_effect">g *= 1 + 0.1 * level</div>
-              <div class="upgrade_cost">1e9 * 1e1 ^ level</div>
-              <div class="upgrade_level" id="z_g_mul_level">0</div>
-            </div>
-            <div class="z_upgrade">
-              <div class="upgrade_name">m</div>
-              <div class="upgrade_effect">m += level</div>
-              <div class="upgrade_cost">1e12 * 1e3 ^ level</div>
-              <div class="upgrade_level" id="z_m_level">0</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="tab-T" class="tab hidden">
-        <div>
-          Tornado:<br/>
-          <div>
-            <div>
-              <div>tornadoPrestigeTier</div>
-              <div id="T_tornadoPrestigeTier">0</div>
-            </div>
-            <div>
-              <div>AccumulatedHour</div>
-              <div id="T_AccumulatedHour">0</div>
-            </div>
-            <div>
-              <div>AccumulatedMaxP</div>
-              <div id="T_AccumulatedMaxP">0</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="tab-A" class="tab hidden">
-        <div>
-          achievements
-        </div>
-      </section>
-      <section id="tab-S" class="tab hidden">
-        <div>
-          store<br/>
-          <div id="S_automation">
-            <div class="automation" id="autobuy_k">
-              <div class="automation_name">Autobuy_K</div>
-              <div class="automation_effect">Unlock Autobuy for k Upgrade</div>
-              <div class="automation_cost">10</div>
-            </div>
-            <div class="automation" id="autobuy_a">
-              <div class="automation_name">Autobuy_A</div>
-              <div class="automation_effect">Unlock Autobuy for a Upgrade</div>
-              <div class="automation_cost">50</div>
-            </div>
-            <div class="automation" id="autobuy_b">
-              <div class="automation_name">Autobuy_B</div>
-              <div class="automation_effect">Unlock Autobuy for b Upgrade</div>
-              <div class="automation_cost">75</div>
-            </div>
-            <div class="automation" id="autobuy_c">
-              <div class="automation_name">Autobuy_C</div>
-              <div class="automation_effect">Unlock Autobuy for c Upgrade</div>
-              <div class="automation_cost">100</div>
-            </div>
-            <div class="automation" id="autobuy_d">
-              <div class="automation_name">Autobuy_D</div>
-              <div class="automation_effect">Unlock Autobuy for d Upgrade</div>
-              <div class="automation_cost">125</div>
-            </div>
-            <div class="automation" id="autobuy_e">
-              <div class="automation_name">Autobuy_E</div>
-              <div class="automation_effect">Unlock Autobuy for e Upgrade</div>
-              <div class="automation_cost">150</div>
-            </div>
-            <div class="automation" id="autobuy_regularall">
-              <div class="automation_name">AutoBuy_RegularAll</div>
-              <div class="automation_effect">Unlock Autobuy for all other regular Upgrades</div>
-              <div class="automation_cost">200</div>
-            </div>
-          </div>
-          <div id="S_spiral_design">
-
-          </div>
-          <div id="S_variable">
-          </div>
-        </div>
-      </section>
-      <section id="tab-B" class="tab hidden">
-        <div>
-          <div id="battle_rewards">
-            <div class="battle_reward update_battle_reward battle_reward_atk">
-              <div class="reward_name">ATK</div>
-              <div class="reward_value" id="B_atk_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_atk_mul">
-              <div class="reward_name">ATK%</div>
-              <div class="reward_value" id="B_atk_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_hp">
-              <div class="reward_name">HP</div>
-              <div class="reward_value" id="B_hp_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_hp_mul">
-              <div class="reward_name">HP%</div>
-              <div class="reward_value" id="B_hp_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_def">
-              <div class="reward_name">DEF</div>
-              <div class="reward_value" id="B_def_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_def_mul">
-              <div class="reward_name">DEF%</div>
-              <div class="reward_value" id="B_def_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_criticalDamage">
-              <div class="reward_name">Critical Damage</div>
-              <div class="reward_value" id="B_criticalDamage_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_regene">
-              <div class="reward_name">Regenerate</div>
-              <div class="reward_value" id="B_regene_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_attackSpeed">
-              <div class="reward_name">Pure Attack Speed</div>
-              <div class="reward_value" id="B_pure_attack_speed_value">0</div>
-            </div>
-            <div class="stat">
-              <div class="stat_label">Diminished Attack Speed v1.5</div>
-              <div class="stat_value" id="update_call_attack_speed_v5">0</div>
-              <script>
-                function update_call_attack_speed_v5 ( dto ) {
-                  var value = 0;
-                  var pure_attack_speed = dto.battle_rewards[RewardType.attackSpeed];
-                  if ( pure_attack_speed < 4 )
-                    value = 1 + pure_attack_speed;
-                  else if ( pure_attack_speed < 54 )
-                    value = 5 + ( pure_attack_speed - 4 ) * 0.1;
-                  else
-                    value = 10 + ( pure_attack_speed - 54 ) * 0.01;
-                  $('#update_call_attack_speed_v5').text(value);
-                }
-              </script>
-            </div>
-            <div class="stat">
-              <div class="stat_label">Diminished Attack Speed v1.6</div>
-              <div class="stat_value" id="update_call_attack_speed_v6">0</div>
-              <script>
-                function update_call_attack_speed_v6 ( dto ) {
-                  var value = 0;
-                  var pure_attack_speed = dto.battle_rewards[RewardType.attackSpeed];
-                  if ( pure_attack_speed < 4 )
-                    value = 1 + pure_attack_speed;
-                  else
-                    value = (17.5 * pure_attack_speed + 55) ** (1/3);
-                  $('#update_call_attack_speed_v6').text(value);
-                }
-              </script>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_super_criticalDamage">
-              <div class="reward_name">S-Critical Damage</div>
-              <div class="reward_value" id="B_super_critical_damage_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_rare_chance">
-              <div class="reward_name">Pure Rare Chance</div>
-              <div class="reward_value" id="B_pure_rare_chance_value">0</div>
-            </div>
-            <div class="stat">
-              <div class="stat_label">Diminished Rare Chance</div>
-              <div class="stat_value" id="update_call_rare_chance">0</div>
-              <script>
-                function update_call_rare_chance ( dto ) {
-                  var value = 0;
-                  var pure_rare_chance = dto.battle_rewards[RewardType.rare_chance];
-                  if ( pure_rare_chance < 0.5 )
-                    value = 1 + pure_rare_chance;
-                  else if ( pure_rare_chance < 5.5 )
-                    value = 1.5 + ( pure_rare_chance - 0.5 ) * 0.05;
-                  else
-                    value = 1.75 + ( pure_rare_chance - 0.75 ) * 0.001;
-                  $('#update_call_rare_chance').text(value);
-                }
-              </script>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_math_skill">
-              <div class="reward_name">Math Skill</div>
-              <div class="reward_value" id="B_math_skill_value">0</div>
-            </div>
-            <div class="stat">
-              <div class="stat_label">Raw Decay</div>
-              <div class="stat_value" id="update_call_decay">0</div>
-              <script>
-                function update_call_decay ( dto ) {
-                  var value = 0;
-                  var math_skill = dto.battle_rewards[RewardType.math_skill];
-                  if ( math_skill < 5000 )
-                    value = 1 - 0.5 * math_skill / 5000;
-                  else
-                    value = 1 - (0.9 - 1 / 1.000183 ** math_skill);
-                  $('#update_call_decay').text(value);
-                }
-              </script>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_k">
-              <div class="reward_name">k</div>
-              <div class="reward_value" id="B_k_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_k_mul">
-              <div class="reward_name">k%</div>
-              <div class="reward_value" id="B_k_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_a">
-              <div class="reward_name">a</div>
-              <div class="reward_value" id="B_a_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_a_mul">
-              <div class="reward_name">a%</div>
-              <div class="reward_value" id="B_a_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_b">
-              <div class="reward_name">b</div>
-              <div class="reward_value" id="B_b_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_b_mul">
-              <div class="reward_name">b%</div>
-              <div class="reward_value" id="B_b_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_c">
-              <div class="reward_name">c</div>
-              <div class="reward_value" id="B_c_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_c_mul">
-              <div class="reward_name">c%</div>
-              <div class="reward_value" id="B_c_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_d">
-              <div class="reward_name">d</div>
-              <div class="reward_value" id="B_d_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_d_mul">
-              <div class="reward_name">d%</div>
-              <div class="reward_value" id="B_d_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_e">
-              <div class="reward_name">e</div>
-              <div class="reward_value" id="B_e_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_e_mul">
-              <div class="reward_name">e%</div>
-              <div class="reward_value" id="B_e_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_gamma">
-              <div class="reward_name">gamma</div>
-              <div class="reward_value" id="B_gamma_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_gamma_mul">
-              <div class="reward_name">gamma%</div>
-              <div class="reward_value" id="B_gamma_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_delta">
-              <div class="reward_name">delta</div>
-              <div class="reward_value" id="B_delta_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_delta_mul">
-              <div class="reward_name">delta%</div>
-              <div class="reward_value" id="B_delta_mul_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_Omega">
-              <div class="reward_name">Omega</div>
-              <div class="reward_value" id="B_Omega_value">0</div>
-            </div>
-            <div class="battle_reward update_battle_reward battle_reward_Omega_mul">
-              <div class="reward_name">Omega%</div>
-              <div class="reward_value" id="B_Omega_mul_value">0</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="tab-E" class="tab hidden">
-        <div>
-          <div id="spiral_equations">
-            <div class="spiral_equation" id="spiral_equation_0">
-              <div class="spiral_symbol">I</div>
-              <div class="spiral_reward">HP</div>
-              <div class="spiral_name">Thales</div>
-              <div class="spiral_effect">HP *= 1 + 0.01 * level + 0.001 * [level - 1000]</div>
-              <div class="spiral_cost">10 * 1.03 ^ level</div>
-              <div class="spiral_level" id="S_0_level">0</div>
-              <div class="spiral_progress" id="S_0_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_1">
-              <div class="spiral_symbol">II</div>
-              <div class="spiral_reward">DEF</div>
-              <div class="spiral_name">Hypatia</div>
-              <div class="spiral_effect">DEF *= 1 + 0.01 * level + 0.001 * [level - 1000]</div>
-              <div class="spiral_cost">30 * 1.03 ^ level</div>
-              <div class="spiral_level" id="S_1_level">0</div>
-              <div class="spiral_progress" id="S_1_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_2">
-              <div class="spiral_symbol">III</div>
-              <div class="spiral_reward">ATK</div>
-              <div class="spiral_name">Archimedes</div>
-              <div class="spiral_effect">ATK *= 1 + 0.01 * level + 0.001 * [level - 1000]</div>
-              <div class="spiral_cost">60 * 1.03 ^ level</div>
-              <div class="spiral_level" id="S_2_level">0</div>
-              <div class="spiral_progress" id="S_2_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_3">
-              <div class="spiral_symbol">IV</div>
-              <div class="spiral_reward">Critical Damage</div>
-              <div class="spiral_name">Pythagoras</div>
-              <div class="spiral_effect">criticalDamage *= 1 + 0.01 * level + 0.001 * [level - 1000]</div>
-              <div class="spiral_cost">120 * 1.03 ^ level</div>
-              <div class="spiral_level" id="S_3_level">0</div>
-              <div class="spiral_progress" id="S_3_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_4">
-              <div class="spiral_symbol">V</div>
-              <div class="spiral_reward">Critical Rate</div>
-              <div class="spiral_name">Euclides</div>
-              <div class="spiral_effect">criticalRate *= 1 + 0.001 * level + 0.0001 * [level - 50]</div>
-              <div class="spiral_cost">150 * 1.05 ^ level</div>
-              <div class="spiral_level" id="S_4_level">0</div>
-              <div class="spiral_progress" id="S_4_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_5">
-              <div class="spiral_symbol">VI</div>
-              <div class="spiral_reward">Attack Speed</div>
-              <div class="spiral_name">Eratos</div>
-              <div class="spiral_effect">attack_speed *= 1 + 0.01 * log10(level + 1)</div>
-              <div class="spiral_cost">180 * 1.06 ^ level</div>
-              <div class="spiral_level" id="S_5_level">0</div>
-              <div class="spiral_progress" id="S_5_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_6">
-              <div class="spiral_symbol">VII</div>
-              <div class="spiral_reward">Super Critical Rate</div>
-              <div class="spiral_name">Aryabhata</div>
-              <div class="spiral_effect">super_critical += 0.01 * log(level + 1)</div>
-              <div class="spiral_cost">210 * 1.07 ^ level</div>
-              <div class="spiral_level" id="S_6_level">0</div>
-              <div class="spiral_progress" id="S_6_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_7">
-              <div class="spiral_symbol">VIII</div>
-              <div class="spiral_reward">Equation Speed</div>
-              <div class="spiral_name">Brahmagupta</div>
-              <div class="spiral_effect">equation_speed *= 1 + 0.01 * log10(level + 1)</div>
-              <div class="spiral_cost">240 * 1.1 ^ level</div>
-              <div class="spiral_level" id="S_7_level">0</div>
-              <div class="spiral_progress" id="S_7_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_8">
-              <div class="spiral_symbol">IX</div>
-              <div class="spiral_reward">HP Reward</div>
-              <div class="spiral_name">Khuwarizmi</div>
-              <div class="spiral_effect">reward_hp_mul *= 1 + 0.001 * level + 0.0001 * [level - 1000]</div>
-              <div class="spiral_cost">100 * 1.05 ^ level</div>
-              <div class="spiral_level" id="S_8_level">0</div>
-              <div class="spiral_progress" id="S_8_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_9">
-              <div class="spiral_symbol">X</div>
-              <div class="spiral_reward">ATK Reward</div>
-              <div class="spiral_name">Omar</div>
-              <div class="spiral_effect">reward_atk_mul *= 1 + 0.001 * level + 0.0001 * [level - 1000]</div>
-              <div class="spiral_cost">100 * 1.05 ^ level</div>
-              <div class="spiral_level" id="S_9_level">0</div>
-              <div class="spiral_progress" id="S_9_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_10">
-              <div class="spiral_symbol">XI</div>
-              <div class="spiral_reward">DEF Reward</div>
-              <div class="spiral_name">Bhaskara</div>
-              <div class="spiral_effect">reward_def_mul *= 1 + 0.001 * level + 0.0001 * [level - 1000]</div>
-              <div class="spiral_cost">100 * 1.05 ^ level</div>
-              <div class="spiral_level" id="S_10_level">0</div>
-              <div class="spiral_progress" id="S_10_progress">0</div>
-            </div>
-            <div class="spiral_equation" id="spiral_equation_11">
-              <div class="spiral_symbol">XII</div>
-              <div class="spiral_reward">EXP Reward</div>
-              <div class="spiral_name">Madhava</div>
-              <div class="spiral_effect">reward_exp_mul *= 1 + 0.0005 * level + 0.00005 * [level - 1000]</div>
-              <div class="spiral_cost">500 * 1.1 ^ level</div>
-              <div class="spiral_level" id="S_11_level">0</div>
-              <div class="spiral_progress" id="S_11_progress">0</div>
-            </div>
-            <div class="spiral_equation unavailable" id="spiral_equation_12">
-              <div class="spiral_symbol">XIII</div>
-              <div class="spiral_reward">???</div>
-              <div class="spiral_name">Bartolomeo</div>
-              <div class="spiral_level" id="S_12_level">0</div>
-              <div class="spiral_progress" id="S_12_progress">0</div>
-            </div>
-            <div class="spiral_equation unavailable" id="spiral_equation_13">
-              <div class="spiral_symbol">XIV</div>
-              <div class="spiral_reward">???</div>
-              <div class="spiral_name">Cardano</div>
-              <div class="spiral_level" id="S_13_level">0</div>
-              <div class="spiral_progress" id="S_13_progress">0</div>
-            </div>
-        </div>
-      </section>
-      <section id="tab-C" class="tab hidden">
-        <div>
-          Challenges:<br/>
-          <div id="challenges">
-            <div class="challenge hidden" id="challenge_0">
-              <div class="challenge_symbol">-</div>
-              <div class="challenge_name">Null Challenge</div>
-              <div class="challenge_level" id="C_0_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_1">
-              <div class="challenge_symbol">I</div>
-              <div class="challenge_name">Basic Challenge</div>
-              <div class="challenge_level" id="C_1_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_8">
-              <div class="challenge_symbol">II</div>
-              <div class="challenge_name">Drunk Challenge</div>
-              <div class="challenge_level" id="C_8_level">0</div>
-            </div>
-            <div class="challenge unavailable" id="challenge_5">
-              <div class="challenge_symbol">-</div>
-              <div class="challenge_name">Drain Challenge</div>
-              <div class="challenge_level" id="C_5_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_3">
-              <div class="challenge_symbol">III</div>
-              <div class="challenge_name">Flower Challenge</div>
-              <div class="challenge_level" id="C_3_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_2">
-              <div class="challenge_symbol">IV</div>
-              <div class="challenge_name">Slow Spiral Challenge</div>
-              <div class="challenge_level" id="C_2_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_9">
-              <div class="challenge_symbol">V</div>
-              <div class="challenge_name">Gluttony Challenge</div>
-              <div class="challenge_level" id="C_9_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_4">
-              <div class="challenge_symbol">VI</div>
-              <div class="challenge_name">Straight Line Challenge</div>
-              <div class="challenge_level" id="C_4_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_6">
-              <div class="challenge_symbol">VII</div>
-              <div class="challenge_name">Poor Math Challenge</div>
-              <div class="challenge_level" id="C_6_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_7">
-              <div class="challenge_symbol">VIII</div>
-              <div class="challenge_name">No Rebirth Challenge</div>
-              <div class="challenge_level" id="C_7_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_10">
-              <div class="challenge_symbol">IX</div>
-              <div class="challenge_name">Sinkhole Challenge</div>
-              <div class="challenge_level" id="C_10_level">0</div>
-            </div>            
-            <div class="challenge" id="challenge_11">
-              <div class="challenge_symbol">X</div>
-              <div class="challenge_name">Sphere Challenge</div>
-              <div class="challenge_level" id="C_11_level">0</div>
-            </div>
-            <div class="challenge" id="challenge_12">
-              <div class="challenge_symbol">XI</div>
-              <div class="challenge_name">Fury Challenge</div>
-              <div class="challenge_level" id="C_12_level">0</div>
-            </div>
-        </div>
-      </section>
-      <section id="tab-D" class="tab hidden">
-        <div>
-          <div id="spiral_designs">
-            <div class="design_tab" id="design_tab_star_1">
-              <div class="spiral_design" id="design_0">
-                <div class="design_name">normal_brue</div>
-                <div class="design_label">Simple Blue</div>
-                <div class="design_unlock">Default</div>
-                <div class="design_active">a *= 1.1</div>
-                <div class="design_passive"></div>
-              </div>
-              <div class="spiral_design" id="design_1">
-                <div class="design_name">normal_yellow</div>
-                <div class="design_label">Simple Yellow</div>
-                <div class="design_unlock">Default</div>
-                <div class="design_active">b *= 1.1</div>
-                <div class="design_passive"></div>
-              </div>
-              <div class="spiral_design" id="design_2">
-                <div class="design_name">normal_red</div>
-                <div class="design_label">Simple Red</div>
-                <div class="design_unlock">Default</div>
-                <div class="design_active">c *= 1.1</div>
-                <div class="design_passive"></div>
-              </div>
-              <div class="spiral_design" id="design_3">
-                <div class="design_name">normal_violet</div>
-                <div class="design_label">Simple Violet</div>
-                <div class="design_unlock">Default</div>
-                <div class="design_active">d *= 1.1</div>
-                <div class="design_passive"></div>
-              </div>
-              <div class="spiral_design" id="design_4">
-                <div class="design_name">normal_mono</div>
-                <div class="design_label">Simple White</div>
-                <div class="design_unlock">Default</div>
-                <div class="design_active">e *= 1.1</div>
-                <div class="design_passive"></div>
-              </div>
-              <div class="spiral_design" id="design_5">
-                <div class="design_name">gradation_brue_green</div>
-                <div class="design_label">Blue & Green</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral1</div>
-                <div class="design_active">HP *= 1.5</div>
-                <div class="design_passive">HP *= 1.1</div>
-              </div>
-              <div class="spiral_design" id="design_6">
-                <div class="design_name">gradation_yellow_red</div>
-                <div class="design_label">Yellow & Red</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral2</div>
-                <div class="design_active">ATK *= 1.5</div>
-                <div class="design_passive">ATK *= 1.1</div>
-              </div>
-              <div class="spiral_design" id="design_7">
-                <div class="design_name">gradation_red_blue</div>
-                <div class="design_label">Red & Blue</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral3</div>
-                <div class="design_active">DEF *= 1.5</div>
-                <div class="design_passive">DEF *= 1.1</div>
-              </div>
-              <div class="spiral_design" id="design_8">
-                <div class="design_name">gradation_violet_pink</div>
-                <div class="design_label">Violet & Pink</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral4</div>
-                <div class="design_active">critical *= 1.05</div>
-                <div class="design_passive">critical *= 1.01</div>
-              </div>
-              <div class="spiral_design" id="design_9">
-                <div class="design_name">gradation_white_cyan</div>
-                <div class="design_label">White & Cyan</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral5</div>
-                <div class="design_active">criticalDamage *= 1.2</div>
-                <div class="design_passive">criticalDamage *= 1.05</div>
-              </div>
-            </div>
-            <div class="design_tab" id="design_tab_star_2">
-              <div class="spiral_design" id="design_10">
-                <div class="design_name">circles_white</div>
-                <div class="design_label">White Circles</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral6</div>
-                <div class="design_active">regene_while_resting *= 3</div>
-                <div class="design_passive">regene_while_resting *= 1.5</div>
-              </div>
-              <div class="spiral_design" id="design_11">
-                <div class="design_name">circles_green_pink</div>
-                <div class="design_label">Green & Pink Circles</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral7</div>
-                <div class="design_active">regene_while_resting *= 1.5<br/>DEF *= 1.3</div>
-                <div class="design_passive">regene_while_resting *= 1.1<br/>DEF *= 1.05</div>
-              </div>
-              <div class="spiral_design" id="design_12">
-                <div class="design_name">circles_cyan_red</div>
-                <div class="design_label">Cyan & Red Circles</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral8</div>
-                <div class="design_active">regene_while_resting *= 1.5<br/>ATK *= 1.3</div>
-                <div class="design_passive">regene_while_resting *= 1.1<br/>ATK *= 1.05</div>
-              </div>
-              <div class="spiral_design" id="design_13">
-                <div class="design_name">dottedLine_blue</div>
-                <div class="design_label">Blue Dottered Line</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral9</div>
-                <div class="design_active">lineNumberMultiplier *= 2</div>
-                <div class="design_passive">lineNumberMultiplier *= 1.25</div>
-              </div>
-              <div class="spiral_design" id="design_14">
-                <div class="design_name">dottedLine_white</div>
-                <div class="design_label">White Dottered Line</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral10</div>
-                <div class="design_active">lineNumberMultiplier *= 1.25</div>
-                <div class="design_passive">lineNumberMultiplier *= 1.1<br/>
-                                            a *= 1.05<br/>
-                                            b *= 1.05<br/>
-                                            c *= 1.05
-                </div>
-              </div>
-              <div class="spiral_design" id="design_15">
-                <div class="design_name">dottedLine_orange_brue</div>
-                <div class="design_label">Orange & Blue Dottered Line</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral11</div>
-                <div class="design_active">lineNumberMultiplier *= 1.25</div>
-                <div class="design_passive">lineNumberMultiplier *= 1.1<br/>
-                                            d *= 1.05<br/>
-                                            e *= 1.05<br/>
-                                            f *= 1.05
-                </div>
-              </div>
-              <div class="spiral_design" id="design_16">
-                <div class="design_name">stripe_white</div>
-                <div class="design_label">Cyan & Pink Stripe</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral12</div>
-                <div class="design_active">v += 5</div>
-                <div class="design_passive">v += 2</div>
-              </div>
-              <div class="spiral_design" id="design_17">
-                <div class="design_name">stripe_blue</div>
-                <div class="design_label">Blue & Violet Stripe</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral13</div>
-                <div class="design_active">reward_atk += 5</div>
-                <div class="design_passive">reward_atk += 2</div>
-              </div>
-              <div class="spiral_design" id="design_18">
-                <div class="design_name">stripe_yellow</div>
-                <div class="design_label">Green & Orange Stripe</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral14</div>
-                <div class="design_active">reward_def += 5</div>
-                <div class="design_passive">reward_def += 2</div>
-              </div>
-            </div>
-            <div class="design_tab" id="design_tab_star_3">
-              <div class="spiral_design" id="design_19">
-                <div class="design_name">sine_green</div>
-                <div class="design_label">Green Winding</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral15</div>
-                <div class="design_active">reward_exp += 3</div>
-                <div class="design_passive">reward_exp += 1</div>
-              </div>
-              <div class="spiral_design" id="design_20">
-                <div class="design_name">sine_white_red</div>
-                <div class="design_label">White & Red Winding</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral16</div>
-                <div class="design_active">reward_exp_mul *= 1.1</div>
-                <div class="design_passive">reward_exp_mul *= 1.03</div>
-              </div>
-              <div class="spiral_design" id="design_21">
-                <div class="design_name">sine_orange_purple</div>
-                <div class="design_label">Orange & Purple Winding</div>
-                <div class="design_unlock">InfiniteUpgradeKind.spiral17</div>
-                <div class="design_active">HP *= 2<br/>
-                                          ATK *= 2<br/>
-                                          DEF *= 2
-                </div>
-                <div class="design_passive">HP *= 1.3<br/>
-                                            ATK *= 1.3<br/>
-                                            DEF *= 1.3
-                </div>
-              </div>
-              <div class="spiral_design" id="design_25">
-                <div class="design_name">pi</div>
-                <div class="design_label">&pi;</div>
-                <div class="design_unlock">ChallengeKind.basic</div>
-                <div class="design_active">Omega *= 1.5</div>
-                <div class="design_passive">Omega *= 1.2</div>
-              </div>
-              <div class="spiral_design" id="design_26">
-                <div class="design_name">rects</div>
-                <div class="design_label">Diamond</div>
-                <div class="design_unlock">ChallengeKind.drunk</div>
-                <div class="design_active">reward_exp_mul *= 1.05</div>
-                <div class="design_passive">battle_upgrade_cost *= 0.95</div>
-              </div>
-              <div class="spiral_design" id="design_27">
-                <div class="design_name">rainbow</div>
-                <div class="design_label">Rainbow</div>
-                <div class="design_unlock">ChallengeKind.SinSpiral</div>
-                <div class="design_active">equation *= 2</div>
-                <div class="design_passive">equation *= 1.5</div>
-              </div>
-              <div class="spiral_design" id="design_28">
-                <div class="design_name">kanji</div>
-                <div class="design_label">Kanji</div>
-                <div class="design_unlock">ChallengeKind.SlowSpiral</div>
-                <div class="design_active">delta *= 2</div>
-                <div class="design_passive">equationSlot += 1</div>
-              </div>
-              <div class="spiral_design" id="design_29">
-                <div class="design_name">rahmen</div>
-                <div class="design_label">Rahmen</div>
-                <div class="design_unlock">ChallengeKind.StraightLine</div>
-                <div class="design_active">gamma *= 1.5</div>
-                <div class="design_passive">gamma += 1.2</div>
-              </div>
-              <div class="spiral_design" id="design_30">
-                <div class="design_name">lazer</div>
-                <div class="design_label">Laser</div>
-                <div class="design_unlock">ChallengeKind.poorMath</div>
-                <div class="design_active">z_reactor_exp *= 1.5</div>
-                <div class="design_passive">z_reactor_exp += 1.2</div>
-              </div>
-              <div class="spiral_design" id="design_32">
-                <div class="design_name">seigaiha</div>
-                <div class="design_label">Qinghai wave</div>
-                <div class="design_unlock">ChallengeKind.no_rebirth</div>
-                <div class="design_active">alpha += 0.025</div>
-                <div class="design_passive">alpha += 0.01</div>
-              </div>
-              <div class="spiral_design" id="design_33">
-                <div class="design_name">sippou</div>
-                <div class="design_label">Cloisonne</div>
-                <div class="design_unlock">ChallengeKind.sinkhole</div>
-                <div class="design_active">beta += 0.025</div>
-                <div class="design_passive">beta += 0.01</div>
-              </div>
-              <div class="spiral_design" id="design_34">
-                <div class="design_name">lame</div>
-                <div class="design_label">Lamé</div>
-                <div class="design_unlock">ChallengeKind.sphere</div>
-                <div class="design_active">math += 1000</div>
-                <div class="design_passive">math += 200</div>
-              </div>
-            </div>
-            <div class="design_tab" id="design_tab_dlc">
-              <div class="spiral_design" id="design_22">
-                <div class="design_name">snake</div>
-                <div class="design_label">Snake</div>
-                <div class="design_unlock">DLCManager.IsSnakePossessed</div>
-                <div class="design_active">super_critical += 0.1</div>
-                <div class="design_passive">super_critical += 0.03</div>
-              </div>
-              <div class="spiral_design" id="design_23">
-                <div class="design_name">bubble</div>
-                <div class="design_label">Bubble</div>
-                <div class="design_unlock">DLCManager.IsBubblePossessed</div>
-                <div class="design_active">rare_drop *= 1.2</div>
-                <div class="design_passive">rare_drop *= 1.05</div>
-              </div>
-              <div class="spiral_design" id="design_24">
-                <div class="design_name">arrow</div>
-                <div class="design_label">Arrow</div>
-                <div class="design_unlock">DLCManager.IsArrowPossessed</div>
-                <div class="design_active">attack_speed *= 1.2</div>
-                <div class="design_passive">attack_speed *= 1.05</div>
-              </div>
-              <div class="spiral_design" id="design_31">
-                <div class="design_name">spaceShip</div>
-                <div class="design_label">Spaceship</div>
-                <div class="design_unlock">DLCManager.IsSpacePossessed</div>
-                <div class="design_active">omega *= 1.1</div>
-                <div class="design_passive">omega *= 1.1</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="tab-Z" class="tab hidden">
-        <div>
-          Z Reactors:<br/>
-          <div id="zreactors">
-            <div class="zreactor" id="zreactor_0">
-              <div class="zreactor_symbol">R</div>
-              <div class="zreactor_name">Delta r</div>
-              <div class="zreactor_value" id="Z_0_value">0</div>
-              <div class="zreactor_upgrade_level" id="Z_0_upgrade_level">0</div>
-              <div class="zreactor_level" id="Z_0_level">0</div>
-              <div class="zreactor_exp" id="Z_0_exp">0</div>
-            </div>
-            <div class="zreactor" id="zreactor_1">
-              <div class="zreactor_symbol">L</div>
-              <div class="zreactor_name">Line Number Multiplier</div>
-              <div class="zreactor_value" id="Z_1_value">0</div>
-              <div class="zreactor_upgrade_level" id="Z_1_upgrade_level">0</div>
-              <div class="zreactor_level" id="Z_1_level">0</div>
-              <div class="zreactor_exp" id="Z_1_exp">0</div>
-            </div>
-            <div class="zreactor" id="zreactor_2">
-              <div class="zreactor_symbol">E</div>
-              <div class="zreactor_name">Spiral Equation Speed</div>
-              <div class="zreactor_value" id="Z_2_value">0</div>
-              <div class="zreactor_upgrade_level" id="Z_2_upgrade_level">0</div>
-              <div class="zreactor_level" id="Z_2_level">0</div>
-              <div class="zreactor_exp" id="Z_2_exp">0</div>
-            </div>
-            <div class="zreactor" id="zreactor_3">
-              <div class="zreactor_symbol">S</div>
-              <div class="zreactor_name">Battle Stats</div>
-              <div class="zreactor_value" id="Z_3_value">0</div>
-              <div class="zreactor_upgrade_level" id="Z_3_upgrade_level">0</div>
-              <div class="zreactor_level" id="Z_3_level">0</div>
-              <div class="zreactor_exp" id="Z_3_exp">0</div>
-            </div>
-            <div class="zreactor" id="zreactor_4">
-              <div class="zreactor_symbol">CR</div>
-              <div class="zreactor_name">Critical Rate</div>
-              <div class="zreactor_value" id="Z_4_value">0</div>
-              <div class="zreactor_upgrade_level" id="Z_4_upgrade_level">0</div>
-              <div class="zreactor_level" id="Z_4_level">0</div>
-              <div class="zreactor_exp" id="Z_4_exp">0</div>
-            </div>
-            <div class="zreactor" id="zreactor_5">
-              <div class="zreactor_symbol">CRX</div>
-              <div class="zreactor_name">S-Critical Rate</div>
-              <div class="zreactor_value" id="Z_5_value">0</div>
-              <div class="zreactor_upgrade_level" id="Z_5_upgrade_level">0</div>
-              <div class="zreactor_level" id="Z_5_level">0</div>
-              <div class="zreactor_exp" id="Z_5_exp">0</div>
-            </div>
-        </div>
-      </section>
       <section id="tab-c" class="tab hidden">
         <div>
           Changelog:
@@ -2166,23 +1157,9 @@
               - Small fixes and updating ui
             v0.2206231841
               - Linked B tab again and displaying diminished stats
+            v0.2206261626
+              - Many overhauls
         </div>
       </section>
-      <section id="tab-faq" class="tab hidden">
-        <div>
-          <div class="faq_entry">
-            <div class="faq_question">What is spiral equation speed?</div>
-            <div class="faq_answer">
-              Spiral equation speed increases how quick you level up the Spiral Equations in the E tab.
-            </div>
-          </div>
-      </section>
-      <section id="tab-me" class="tab hidden">
-        No, I'm not a dev.
-        Yes, I suggest design changes and their implementations, such as the decoupling of the attacks from the tick rate.
-        Yes, I keep complaining about things until they are fixed.
-      </section>
-
-      <table id="datadisplay"></table>
     </body>
 </html>
