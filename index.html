@@ -215,6 +215,11 @@
                     $(this).text(idlespiral.evaluate(name));
                     break;
                   }
+                  if ( classes[i].indexOf('battle_reward_') == 0 ) {
+                    var name = classes[i].substring(14);
+                    $(this).text(idlespiral.battle_rewards[name]);
+                    break;
+                  }
                 }
               });
 
@@ -232,7 +237,7 @@
             this.addBaseValue = function ( name, value ) {
               this.addEffect("Init " + name, name, "base", value, () => value);
             }
-            this.getEffects = function ( name ) {
+            this.getEffects = function ( name, prefix = "" ) {
               var effects = {
                 "base": [],
                 "add": [],
@@ -242,7 +247,7 @@
               };
 
               for ( var effect in this.effects )
-                if ( this.effects[effect].target == name )
+                if ( this.effects[effect].target == name && this.effects[effect].name.indexOf(prefix) == 0 )
                   effects[this.effects[effect].type].push(this.effects[effect]);
               
               return effects;
@@ -271,6 +276,7 @@
               this.cache[name] = value;
               return value;
             }
+            
             this.init = function ( ) {
               // Parameter
               this.addBaseValue("a", 1);
@@ -482,7 +488,7 @@
               this.addEffect("Battle reward Omega", "Omega", "add", "battle reward Omega", () => this.battle_rewards["Omega"]);
 
               this.addEffect("Battle reward super_critical", "super_critical", "add", "battle reward super_critical", () => this.battle_rewards["super_critical"]);
-              this.addEffect("Battle reward super_critical_damage", "1 + super_critical_damage", "mul", "battle reward super_criticalDamage", () => 1 + this.battle_rewards["super_criticalDamage"]);
+              this.addEffect("Battle reward super_critical_damage", "super_critical_damage", "mul", "1 + battle reward super_criticalDamage", () => 1 + this.battle_rewards["super_criticalDamage"]);
               this.addEffect("Battle reward super_critical threshold", "super_critical", "add", "0.01 if battle reward super_criticalDamage > 5", () => this.battle_rewards["super_criticalDamage"] > 5 ? 0.01 : 0);
 
               this.addEffect("Battle reward a%", "a", "mul", "1 + battle reward a%", () => 1 + this.battle_rewards["a_mul"]);
@@ -502,7 +508,7 @@
 
               this.addEffect("Battle reward attack speed", "attack_speed", "mul", "battle reward attack speed", () => diminishedAttackSpeed(this.battle_rewards["attackSpeed"]));
               this.addEffect("Battle reward rare drop", "rare_drop", "mul", "battle reward rare chance", () => diminishedRareChance(this.battle_rewards["rare_chance"]));
-              this.addEffect("Battle reward math", "math", "add", "battle reward math", () => this.battle_rewards["math_skill"]);
+              this.addEffect("Battle reward math", "math_skill", "add", "battle reward math", () => this.battle_rewards["math_skill"]);
               this.addEffect("Battle reward enemy growth reduction", "enemy_growth_reduction", "mul", "battle reward enemy growth reduction", () => decay(this.battle_rewards["math_skill"]));
 
               // BattleUpgrades
@@ -542,7 +548,7 @@
               this.addEffect("Battle upgrade Reward ATK +10%", "reward_atk", "mul", "1 + battle upgrade Reward ATK +10%", () => 1 + 0.1 * this.battle_upgrades["reward_atk+10%"]);
               this.addEffect("Battle upgrade Reward DEF +10%", "reward_def", "mul", "1 + battle upgrade Reward DEF +10%", () => 1 + 0.1 * this.battle_upgrades["reward_def+10%"]);
               this.addEffect("Battle upgrade Reward EXP +10%", "reward_exp", "mul", "1 + battle upgrade Reward EXP +10%", () => 1 + 0.1 * this.battle_upgrades["reward_exp+10%"]);
-              this.addEffect("Battle upgrade Rare Drop +0.1%", "rare_chance", "mul", "1 + battle upgrade Rare Drop +0.1%", () => 1 + 0.001 * this.battle_upgrades["rare_chance+0.1%"]);
+              this.addEffect("Battle upgrade Rare Drop +0.1%", "rare_drop", "mul", "1 + battle upgrade Rare Drop +0.1%", () => 1 + 0.001 * this.battle_upgrades["rare_chance+0.1%"]);
               this.addEffect("Battle upgrade Max Level 2", "battle_upgrade_max_level_2", "add", "1 + battle upgrade Max Level 2", () => this.battle_upgrades["battle_upgrade_max_level_2+1"]);
             
               // SpiralEquipmentContainer
@@ -708,8 +714,8 @@
               this.addEffect("Spiral Design sippou active", "beta", "add", "0.025 if Spiral Design sippou active", () => this.dto.currentDesign == DesignID.sippou ? 0.025 : 0);
               this.addEffect("Spiral Design sippou passive", "beta", "add", "0.01 if Spiral Design sippou passive", () => this.dto.design_isUnlocked[DesignID.sippou] ? 0.01 : 0);
 
-              this.addEffect("Spiral Design lame active", "math", "add", "1000 if Spiral Design lame active", () => this.dto.currentDesign == DesignID.lame ? 1000 : 0);
-              this.addEffect("Spiral Design lame passive", "math", "add", "200 if Spiral Design lame passive", () => this.dto.design_isUnlocked[DesignID.lame] ? 200 : 0);
+              this.addEffect("Spiral Design lame active", "math_skill", "add", "1000 if Spiral Design lame active", () => this.dto.currentDesign == DesignID.lame ? 1000 : 0);
+              this.addEffect("Spiral Design lame passive", "math_skill", "add", "200 if Spiral Design lame passive", () => this.dto.design_isUnlocked[DesignID.lame] ? 200 : 0);
               
               // ReactorContainer
               this.addEffect("Reactor r active", "delta_r", "mul", "1 + 0.01 * reactor value", () => 1 + 0.01 * this.reactor_values["r"]);
@@ -894,12 +900,7 @@
           function diminishedAttackSpeed ( pure_attack_speed ) {
             if ( pure_attack_speed < 4 )
               return 1 + pure_attack_speed;
-            if ( pure_attack_speed < 54 )
-              return 5 + ( pure_attack_speed - 4 ) * 0.1;
-            return 10 + ( pure_attack_speed - 54 ) * 0.01;
-          }
-          function bonusMultiAttack ( pure_attack_speed ) {
-            return (diminishedAttackSpeed(pure_attack_speed) - 1) / 4;
+            return ( 17.5 * pure_attack_speed + 55 ) ** (1/3);
           }
           function diminishedRareChance ( pure_rare_chance ) {
             if ( pure_rare_chance < 0.5 )
@@ -909,9 +910,9 @@
             return 1.75 + ( pure_rare_chance - 0.75 ) * 0.001;
           }
           function decay ( math_skill ) {
-            if ( math_skill < 5000 )
-              return 1 - 0.5 * math_skill / 5000;
-            return 1 - (0.9 - 1 / 1.000183 ** math_skill);
+            if ( math_skill < 50000 )
+              return 1 - 0.5 * math_skill / 50000;
+            return 1 - (0.9 - 1 / 1.000018326 ** math_skill);
           }
           function HourFactor ( hour ) {
             if (hour <= 100.0)
@@ -943,11 +944,11 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2206261626<br/>
+      v0.2206261714<br/>
       <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
       <button onclick="loadSaveFile()">Load</button>
 
-      <div class="marked" style="position: absolute; width: 1920px; height: 1000px">
+      <div class="marked" style="position: absolute; width: 1500px; height: 1000px">
         <div class="marked" style="position: absolute; width: 420px; height: 500px">
           <div class="marked" style="position: absolute; width: 420px; height: 400px;">
             <div class="formula marked" style="height: 50px">
@@ -958,6 +959,8 @@
               <div class="marked">$\omega^{omegaExponent}$</div>
               <div>+</div>
               <div class="marked">$k$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_delta_r">0</div>
             </div>
             <div class="formula marked" style="position: absolute; top: 50px; height: 65px">
               <div class="marked">$A_i$</div>
@@ -1072,6 +1075,8 @@
               <div class="marked">$\Omega$</div>
               <div>+</div>
               <div class="marked">$\delta$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_delta_z">0</div>
             </div>
             <div class="formula marked" style="position: absolute; top: 20px; left: 30px; height: 20px">
               <div>$\gamma$</div>
@@ -1091,12 +1096,86 @@
           </div>
         </div>
 
-        <div class="marked" id="main" style="position: absolute; left: 420px; width: 1200px">
-          main
+        <div class="marked" id="main" style="position: absolute; left: 420px; width: 780px">
+          Still very much a work in progress; some numbers are slightly off and I'm trying to figure out why
         </div>
 
-        <div class="marked" id="main" style="position: absolute; left: 1620px; width: 300px">
-          Battle
+        <div class="marked" id="main" style="position: absolute; left: 1200px; width: 300px">
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">HP</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_hp">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">ATK</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_atk">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">DEF</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_def">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">Attack Speed</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_attack_speed">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">- Pure Attack Speed</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display battle_reward_attackSpeed">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">- Time to Attack</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div id="custom_update_time_to_attack">0</div>
+            <script>
+              idlespiral.addUpdateFunction(function() {
+                $("#custom_update_time_to_attack").text(2/idlespiral.evaluate("attack_speed"));
+              });
+            </script>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">Crit Rate</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_critical">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">Crit Damage</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_criticalDamage">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">S-Crit Rate</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_super_critical">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">S-Crit Damage</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_super_critical_damage">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">Rare Drop Rate</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_rare_drop">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">- Pure Rare Drop</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display battle_reward_rare_chance">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">Math Skill</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_math_skill">0</div>
+          </div>
+          <div class="effect marked" style="height: 20px">
+            <div class="marked">Enemy Growth Reduction</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_enemy_growth_reduction">0</div>
+          </div>
         </div>
 
       </div>
