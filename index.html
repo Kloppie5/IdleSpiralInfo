@@ -8,6 +8,34 @@
         <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\(','\)']]}});</script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script>
+          var currentExplanation = "";
+          $(document).ready(function() { 
+            $(".explainable").each(function() {
+              $(this).click(function() {
+                var name = "";
+                var classes = $(this).attr('class').split(' ');
+                for ( var i = 0; i < classes.length; i++ ) {
+                  if ( classes[i].indexOf('explain_') == 0 ) {
+                    name = classes[i].substring(8);
+                    break;
+                  }
+                }
+                if ( name == "" ) {
+                  console.log("No explaination found for " + $(this));
+                  return;
+                }
+
+                if ( currentExplanation != "") {
+                  console.log("Hiding " + currentExplanation);
+                  $(currentExplanation).hide();
+                }
+                var target = "#explanation_" + name;
+                console.log("Showing " + target);
+                $(target).show();
+                currentExplanation = target;
+              });
+            });
+          }); 
 
           class Effect {
             constructor ( name, target, type, formula, value ) {
@@ -952,116 +980,116 @@
         <div class="marked" style="position: absolute; width: 420px; height: 500px">
           <div class="marked" style="position: absolute; width: 420px; height: 400px;">
             <div class="formula marked" style="height: 50px">
-              <div class="marked">$\Delta r$</div>
+              <div class="marked explainable explain_delta_r">$\Delta r$</div>
               <div>&nbsp;=&nbsp;</div>
-              <div class="marked">$\displaystyle\sum\limits_{l_2=1}^m$</div>
-              <div class="marked">$\displaystyle\sum\limits_{l=1}^n A_l$</div>
-              <div class="marked">$\omega^{omegaExponent}$</div>
+              <div class="marked explainable explain_m">$\displaystyle\sum\limits_{l_2=1}^m$</div>
+              <div class="marked explainable explain_sigmaA">$\displaystyle\sum\limits_{l=1}^n A_l$</div>
+              <div class="marked explainable explain_omega">$\omega^{omegaExponent}$</div>
               <div>+</div>
-              <div class="marked">$k$</div>
+              <div class="marked explainable explain_k">$k$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_delta_r">0</div>
             </div>
             <div class="formula marked" style="position: absolute; top: 50px; height: 65px">
-              <div class="marked">$A_i$</div>
+              <div class="marked explainable explain_sigmaA">$A_i$</div>
               <div>&nbsp;=&nbsp;</div>
-              <div class="marked">$\displaystyle\int\limits_0^\alpha 2 x^\beta$</div>
-              <div class="marked">$u$</div>
-              <div class="marked">$A_{i-1}$</div>
+              <div class="marked explainable explain_integral">$\displaystyle\int\limits_0^\alpha 2 x^\beta$</div>
+              <div class="marked explainable explain_u">$u$</div>
+              <div class="marked explainable explain_sigmaA">$A_{i-1}$</div>
               <div>$dx$</div>
               <div>+</div>
-              <div class="marked">$v$</div>
+              <div class="marked explainable explain_v">$v$</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 115px; left: 30px; width: 120px; height: 20px">
+            <div class="formula marked explainable explain_u" style="position: absolute; top: 115px; left: 30px; width: 120px; height: 20px">
               <div>$u$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_u">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 115px; left: 150px; width: 120px; height: 20px">
+            <div class="formula marked explainable explain_v" style="position: absolute; top: 115px; left: 150px; width: 120px; height: 20px">
               <div>$v$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_v">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 135px; left: 30px; width: 120px; height: 20px">
+            <div class="formula marked explainable explain_n" style="position: absolute; top: 135px; left: 30px; width: 120px; height: 20px">
               <div>$n$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_n">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 135px; left: 150px; width: 120px; height: 20px">
+            <div class="formula marked explainable explain_m" style="position: absolute; top: 135px; left: 150px; width: 120px; height: 20px">
               <div>$m$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_m">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 155px; left: 30px; width: 120px; height: 20px">
+            <div class="formula marked explainable explain_alpha" style="position: absolute; top: 155px; left: 30px; width: 120px; height: 20px">
               <div>$\alpha$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_alpha">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 155px; left: 150px; width: 120px; height: 20px">
+            <div class="formula marked explainable explain_beta" style="position: absolute; top: 155px; left: 150px; width: 120px; height: 20px">
               <div>$\beta$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_beta">0</div>
             </div>
             <div class="formula marked" style="position: absolute; top: 175px; left: 30px; height: 20px">
-              <div class="marked">$A_1$</div>
+              <div class="marked explainable explain_largeA">$A_1$</div>
               <div>&nbsp;=&nbsp;</div>
-              <div class="marked">$a$</div>
+              <div class="marked explainable explain_a">$a$</div>
               <div>$\times$</div>
-              <div class="marked">$b$</div>
+              <div class="marked explainable explain_b">$b$</div>
               <div>$\times$</div>
-              <div class="marked">$c$</div>
+              <div class="marked explainable explain_c">$c$</div>
               <div>$\times$</div>
-              <div class="marked">$d$</div>
+              <div class="marked explainable explain_d">$d$</div>
               <div>$\times$</div>
-              <div class="marked">$e$</div>
+              <div class="marked explainable explain_e">$e$</div>
               <div>$\times$</div>
-              <div class="marked">$f$</div>
+              <div class="marked explainable explain_f">$f$</div>
               <div>$\times$</div>
-              <div class="marked">$g$</div>
+              <div class="marked explainable explain_g">$g$</div>
               <div>&nbsp;=&nbsp;</div>
-              <div class="update_display display_largeA">0</div>
+              <div class="update_display display_largeA explainable explain_largeA">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 195px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_a" style="position: absolute; top: 195px; left: 30px; height: 20px">
               <div>$a$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_a">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 215px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_b" style="position: absolute; top: 215px; left: 30px; height: 20px">
               <div>$b$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_b">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 235px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_c" style="position: absolute; top: 235px; left: 30px; height: 20px">
               <div>$c$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_c">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 255px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_d" style="position: absolute; top: 255px; left: 30px; height: 20px">
               <div>$d$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_d">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 275px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_e" style="position: absolute; top: 275px; left: 30px; height: 20px">
               <div>$e$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_e">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 295px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_f" style="position: absolute; top: 295px; left: 30px; height: 20px">
               <div>$f$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_f">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 315px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_g" style="position: absolute; top: 315px; left: 30px; height: 20px">
               <div>$g$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_g">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 335px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_k" style="position: absolute; top: 335px; left: 30px; height: 20px">
               <div>$k$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_k">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 370px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_omega" style="position: absolute; top: 370px; left: 30px; height: 20px">
               <div>$\omega$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_omega">0</div>
@@ -1069,26 +1097,26 @@
           </div>
           <div class="marked" style="position: absolute; top: 420px; width: 420px; height: 80px;">
             <div class="formula marked" style="height: 20px">
-              <div class="marked">$\Delta z$</div>
+              <div class="marked explainable explain_delta_z">$\Delta z$</div>
               <div>&nbsp;=&nbsp;</div>
-              <div class="marked">$\gamma$</div>
-              <div class="marked">$\Omega$</div>
+              <div class="marked explainable explain_gamma">$\gamma$</div>
+              <div class="marked explainable explain_Omega">$\Omega$</div>
               <div>+</div>
-              <div class="marked">$\delta$</div>
+              <div class="marked explainable explain_delta">$\delta$</div>
               <div>&nbsp;=&nbsp;</div>
-              <div class="update_display display_delta_z">0</div>
+              <div class="update_display display_delta_z explainable explain_delta_z">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 20px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_gamma" style="position: absolute; top: 20px; left: 30px; height: 20px">
               <div>$\gamma$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_gamma">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 40px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_Omega" style="position: absolute; top: 40px; left: 30px; height: 20px">
               <div>$\Omega$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_Omega">0</div>
             </div>
-            <div class="formula marked" style="position: absolute; top: 60px; left: 30px; height: 20px">
+            <div class="formula marked explainable explain_delta" style="position: absolute; top: 60px; left: 30px; height: 20px">
               <div>$\delta$</div>
               <div>&nbsp;=&nbsp;</div>
               <div class="update_display display_delta">0</div>
@@ -1098,9 +1126,81 @@
 
         <div class="marked" id="main" style="position: absolute; left: 420px; width: 780px">
           Still very much a work in progress; some numbers are slightly off and I'm trying to figure out why
+          <div class="explanation" id="explanation_delta_r" style="display: none">
+            Explanation delta r
+          </div>
+          <div class="explanation" id="explanation_sigmaA" style="display: none">
+            Explanation sigmaA
+          </div>
+          <div class="explanation" id="explanation_omega" style="display: none">
+            Explanation omega
+          </div>
+          <div class="explanation" id="explanation_k" style="display: none">
+            Explanation k
+          </div>
+          <div class="explanation" id="explanation_integral" style="display: none">
+            Explanation integral
+          </div>
+          <div class="explanation" id="explanation_u" style="display: none">
+            Explanation u
+          </div>
+          <div class="explanation" id="explanation_v" style="display: none">
+            Explanation v
+          </div>
+          <div class="explanation" id="explanation_n" style="display: none">
+            Explanation n
+          </div>
+          <div class="explanation" id="explanation_m" style="display: none">
+            Explanation m
+          </div>
+          <div class="explanation" id="explanation_alpha" style="display: none">
+            Explanation alpha
+          </div>
+          <div class="explanation" id="explanation_beta" style="display: none">
+            Explanation beta
+          </div>
+          <div class="explanation" id="explanation_largeA" style="display: none">
+            Explanation largeA
+          </div>
+          <div class="explanation" id="explanation_a" style="display: none">
+            Explanation a
+          </div>
+          <div class="explanation" id="explanation_b" style="display: none">
+            Explanation b
+          </div>
+          <div class="explanation" id="explanation_c" style="display: none">
+            Explanation c
+          </div>
+          <div class="explanation" id="explanation_d" style="display: none">
+            Explanation d
+          </div>
+          <div class="explanation" id="explanation_e" style="display: none">
+            Explanation e
+          </div>
+          <div class="explanation" id="explanation_f" style="display: none">
+            Explanation f
+          </div>
+          <div class="explanation" id="explanation_g" style="display: none">
+            Explanation g
+          </div>
+          <div class="explanation" id="explanation_delta_z" style="display: none">
+            Explanation delta z
+          </div>
+          <div class="explanation" id="explanation_gamma" style="display: none">
+            Explanation gamma
+          </div>
+          <div class="explanation" id="explanation_Omega" style="display: none">
+            Explanation Omega
+          </div>
+          <div class="explanation" id="explanation_delta" style="display: none">
+            Explanation delta
+          </div>
+          
+
+
         </div>
 
-        <div class="marked" id="main" style="position: absolute; left: 1200px; width: 300px">
+        <div class="marked" style="position: absolute; left: 1200px; width: 300px">
           <div class="effect marked" style="height: 20px">
             <div class="marked">HP</div>
             <div>&nbsp;=&nbsp;</div>
