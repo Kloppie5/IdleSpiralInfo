@@ -963,7 +963,7 @@
               return;
             }
             idlespiral.loadSave(val);
-            idlespiral.debug();
+            // idlespiral.debug();
             idlespiral.update();
           }
         </script>
@@ -976,6 +976,22 @@
       <textarea id="savefiletextarea" rows="10" cols="50" placeholder="Save file here"></textarea>
       <button onclick="loadSaveFile()">Load</button>
 
+      <div class="marked" id="navbar" style="width:1500px; height: 60px"> 
+        <div class="marked explainable explain_r_upgrades">r</div>
+        <div class="marked explainable explain_p_upgrades">p</div>
+        <div class="marked explainable explain_z_upgrades">z</div>
+        <div class="marked explainable explain_tornado_prestiges">T</div>
+        <div class="marked explainable explain_achievements">A</div>
+        <div class="marked explainable explain_store">S</div>
+        <div class="marked explainable explain_battle_spiral">B</div>
+        <div class="marked explainable explain_spiral_equations">E</div>
+        <div class="marked explainable explain_challenges">C</div>
+        <div class="marked explainable explain_spiral_designs">D</div>
+        <div class="marked explainable explain_z_reactors">Z</div>
+        <div class="marked explainable explain_changelog">c</div>
+        <div class="marked explainable explain_meta_changelog">m</div>
+        <div class="marked explainable explain_faq">faq</div>
+      </div>
       <div class="marked" style="position: absolute; width: 1500px; height: 1000px">
         <div class="marked" style="position: absolute; width: 420px; height: 500px">
           <div class="marked" style="position: absolute; width: 420px; height: 400px;">
@@ -1125,6 +1141,50 @@
         </div>
 
         <div class="marked" id="main" style="position: absolute; left: 420px; width: 780px">
+          <div class="explanation" id="explanation_r_upgrades" style="display: none">
+            Explanation r upgrades
+          </div>
+          <div class="explanation" id="explanation_p_upgrades" style="display: none">
+            Explanation p upgrades
+          </div>
+          <div class="explanation" id="explanation_z_upgrades" style="display: none">
+            Explanation z upgrades
+          </div>
+          <div class="explanation" id="explanation_tornado_prestiges" style="display: none">
+            Explanation tornado prestiges
+          </div>
+          <div class="explanation" id="explanation_achievements" style="display: none">
+            Explanation achievements
+          </div>
+          <div class="explanation" id="explanation_store" style="display: none">
+            Explanation store
+          </div>
+          <div class="explanation" id="explanation_battle_spiral" style="display: none">
+            Explanation battle spiral
+          </div>
+          <div class="explanation" id="explanation_spiral_equations" style="display: none">
+            Explanation spiral equations
+          </div>
+          <div class="explanation" id="explanation_challenges" style="display: none">
+            Explanation challenges
+          </div>
+          <div class="explanation" id="explanation_spiral_designs" style="display: none">
+            Explanation spiral designs
+          </div>
+          <div class="explanation" id="explanation_z_reactors" style="display: none">
+            Explanation z reactors
+          </div>
+          <div class="explanation" id="explanation_changelog" style="display: none">
+            Explanation changelog
+          </div>
+          <div class="explanation" id="explanation_meta_changelog" style="display: none">
+            Explanation meta changelog
+          </div>
+          <div class="explanation" id="explanation_faq" style="display: none">
+            Explanation faq
+          </div>
+
+
           <div class="explanation" id="explanation_delta_r" style="display: none">
             Explanation delta r
           </div>
@@ -1182,6 +1242,8 @@
           <div class="explanation" id="explanation_g" style="display: none">
             Explanation g
           </div>
+
+
           <div class="explanation" id="explanation_delta_z" style="display: none">
             Explanation delta z
           </div>
@@ -1194,6 +1256,8 @@
           <div class="explanation" id="explanation_delta" style="display: none">
             Explanation delta
           </div>
+
+
           <div class="explanation" id="explanation_hp" style="display: none">
             Explanation hp
           </div>
@@ -1222,7 +1286,25 @@
             Explanation rare_chance
           </div>
           <div class="explanation" id="explanation_math_skill" style="display: none">
-            Explanation math_skill
+            <p>math_skill contributes to the enemy_growth_reduction following the formula;</p>
+            <div class="formula" style="height: 75px">
+              <div class="explainable explain_enemy_growth_reduction">$enemy\_growth\_reduction$</div>
+              <div>&nbsp;*=&nbsp;</div>
+              <div>$$\begin{cases}
+                1 - 0.5 * math\_skill / 50000,& \text{if } math\_skill \lt 50000 \\
+                1 - (0.9 - 1 / 1.000018326 ^ {math\_skill}),& \text{otherwise}
+              \end{cases}$$</div>
+            </div>
+
+            <p>This enemy_growth_reduction is currently only displayed, the actual Decay follows the formula;</p>
+            <div class="formula" style="height: 50px">
+              <div>
+                $$\begin{cases}
+                  1 - 0.5 * math\_skill / 5000,& \text{if } math\_skill \lt 5000 \\
+                  1 - (0.9 - 1 / 1.000183 ^ {math\_skill}),& \text{otherwise}
+                \end{cases}$$
+              </div>
+            </div>
           </div>
           <div class="explanation" id="explanation_enemy_growth_reduction" style="display: none">
             Explanation enemy_growth_reduction

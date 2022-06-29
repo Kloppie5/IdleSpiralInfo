@@ -1,3 +1,7 @@
+p {
+  margin: 0;
+}
+
 .marked {
   outline: 1px solid #000;
   outline-offset: -1px;
@@ -31,3 +35,10 @@
   top: 50%;
   transform: translateY(-50%);
 }
+
+#navbar > div { 
+  float: left;
+  padding: 10px 12px; 
+  margin: 10px 0 0 67px;
+  line-height: 20px;
+} 
