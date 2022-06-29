@@ -1268,7 +1268,20 @@
             Explanation def
           </div>
           <div class="explanation" id="explanation_attack_speed" style="display: none">
-            Explanation attack_speed
+            <p>
+              Your battle spiral attacks at a rate of 2 / $attack\_speed$ seconds, which gets displayed as the Time to Attack.<br/>
+              This $attack\_speed$ is the product of the following factors:
+              $$\begin{array}{l l}
+                \text{Battle reward:}               & \sqrt[3]{17.5 * \text{pure attack speed} + 55} \\
+                \text{Battle upgrade 13:}           & 1 + 0.1\% * \text{level} \\
+                \text{Battle upgrade 24:}           & 1 + 0.5\% * \text{level} \\
+                \text{Spiral equation eratos:}      & 1 + 1\% * \log_{10}(\text{level} + 1) \\
+                \text{Spiral design arrow active:}  & 1.2 \text{ if you use the arrow design} \\
+                \text{Spiral design arrow passive:} & 1.05 \text{ if you own the arrow design} \\
+              \end{array}$$
+              $\text{pure attack speed}$ refers only to the attack speed you get from killing Gamma.<br/>
+              The attack speed percentage you see on the battle spiral screen only incorporates the battle reward and battle upgrade effects.
+            </p>
           </div>
           <div class="explanation" id="explanation_critical" style="display: none">
             Explanation critical
@@ -1386,6 +1399,16 @@
             <div>Enemy Growth Reduction</div>
             <div>&nbsp;=&nbsp;</div>
             <div class="update_display display_enemy_growth_reduction">0</div>
+          </div>
+          <div class="effect marked explainable explain_enemy_growth_reduction" style="height: 20px">
+            <div>- Actual Decay</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div id="custom_update_decay">0</div>
+            <script>
+              idlespiral.addUpdateFunction(function() {
+                $("#custom_update_decay").text(decay(idlespiral.battle_rewards["math_skill"]));
+              });
+            </script>
           </div>
         </div>
 
