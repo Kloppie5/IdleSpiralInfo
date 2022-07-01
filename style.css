@@ -42,3 +42,16 @@ p {
   margin: 10px 0 0 67px;
   line-height: 20px;
 } 
+
+.reward-uncommon {
+  background-color: #BBBBBB;
+}
+.reward-uncommon {
+  background-color: #00FFFF;
+}
+.reward-rare {
+  background-color: #EE7800;
+}
+.reward-onetime {
+  background-color: #AA5599;
+}
