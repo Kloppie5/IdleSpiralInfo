@@ -1271,20 +1271,42 @@
             <p>
               Your battle spiral attacks at a rate of 2 / $attack\_speed$ seconds, which gets displayed as the Time to Attack.<br/>
               This $attack\_speed$ is the product of the following factors:
-              $$\begin{array}{l l}
-                \text{Battle reward:}               & \sqrt[3]{17.5 * \text{pure attack speed} + 55} \\
-                \text{Battle upgrade 13:}           & 1 + 0.1\% * \text{level} \\
-                \text{Battle upgrade 24:}           & 1 + 0.5\% * \text{level} \\
-                \text{Spiral equation eratos:}      & 1 + 1\% * \log_{10}(\text{level} + 1) \\
-                \text{Spiral design arrow active:}  & 1.2 \text{ if you use the arrow design} \\
-                \text{Spiral design arrow passive:} & 1.05 \text{ if you own the arrow design} \\
-              \end{array}$$
+              
+              <table>
+                <tr><th> Source                      </th><th> Effect                                           </th></tr>
+                <tr><td> Battle reward               </td><td> $\sqrt[3]{17.5 * \text{pure attack speed} + 55}$ </td></tr>
+                <tr><td> Battle upgrade 13           </td><td> $1 + 0.1\% * \text{level}$                       </td></tr>
+                <tr><td> Battle upgrade 24           </td><td> $1 + 0.5\% * \text{level}$                       </td></tr>
+                <tr><td> Spiral equation eratos      </td><td> $1 + 1\% * \log_{10}(\text{level} + 1)$          </td></tr>
+                <tr><td> Spiral design arrow active  </td><td> $1 + 20\% \text{ if you use the arrow design}$   </td></tr>
+                <tr><td> Spiral design arrow passive </td><td> $1 + 5\% \text{ if you own the arrow design}$    </td></tr>
+              </table>
+              
               $\text{pure attack speed}$ refers only to the attack speed you get from killing Gamma.<br/>
               The attack speed percentage you see on the battle spiral screen only incorporates the battle reward and battle upgrade effects.
             </p>
           </div>
           <div class="explanation" id="explanation_critical" style="display: none">
-            Explanation critical
+            5%
+
+            Spiral equation euclides: * (1 + 0.001 * level)
+            Spiral design gradation_violet_pink active: * 1.05 if you use the gradation_violet_pink design
+            Spiral Design gradation_violet_pink passive: * 1.01 if you own the gradation_violet_pink design
+
+
+            0: Effect {name: 'Tornado unlock critical', target: 'critical', type: 'indep', formula: '0.1 if tornadoPrestigeTier >= 17', value: ƒ}
+1: Effect {name: 'Battle upgrade Critical +0.1%', target: 'critical', type: 'indep', formula: '1 + battle upgrade Critical +1%', value: ƒ}
+2: Effect {name: 'Battle upgrade Critical +0.2%', target: 'critical', type: 'indep', formula: '1 + battle upgrade Critical +0.2%', value: ƒ}
+3: Effect {name: 'Reactor crit active', target: 'critical', type: 'indep', formula: '0.01 * SigmaSum(Math.floor(reactor value / 1e9))', value: ƒ}
+4: Effect {name: 'Reactor crit passive', target: 'critical', type: 'indep', formula: 'Its complicated', value: ƒ}
+length: 5
+
+            <script>
+              idlespiral.addUpdateFunction(function() {
+                var effects = idlespiral.getEffects("critical");
+                console.log(effects);
+              });
+            </script>
           </div>
           <div class="explanation" id="explanation_criticalDamage" style="display: none">
             Explanation criticalDamage
