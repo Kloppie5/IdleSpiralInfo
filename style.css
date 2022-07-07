@@ -52,21 +52,21 @@ p {
   transform: translateY(-50%);
 }
 
-#explanation_r_upgrades > .entry {
+.entry {
   border: 1px solid #fff;
   margin: 20px;
 }
-#explanation_r_upgrades > .entry > .name {
+.entry > .name {
   font-size: 1.5em;
   font-weight: bold;
   background-color: #aaa;
   text-align: center;
 }
-#explanation_r_upgrades > .entry > .effect {
+.entry > .effect {
   font-size: 1.5em;
   text-align: center;
 }
-#explanation_r_upgrades > .entry > .cost {
+.entry > .cost {
   font-size: 1.5em;
   background-color: #bbb;
   text-align: center;
