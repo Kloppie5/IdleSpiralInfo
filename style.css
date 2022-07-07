@@ -1,9 +1,17 @@
+* {
+  color: #fff;
+  user-select: none;
+}
+body {
+  background-color: #000;
+}
+
 p {
   margin: 0;
 }
 
 .marked {
-  outline: 1px solid #000;
+  outline: 1px solid #fff;
   outline-offset: -1px;
 }
 
@@ -12,6 +20,13 @@ p {
 }
 .unavailable {
   background-color: #ccc;
+}
+
+#navbar > div { 
+  float: left;
+  padding: 10px 12px; 
+  margin: 10px 0 0 67px;
+  line-height: 20px;
 }
 
 .tab.hidden {
@@ -28,7 +43,8 @@ p {
   top: 50%;
   transform: translateY(-50%);
 }
-.effect > div {
+
+#battle-spiral-stats > .effect > div {
   float: left;
   margin: 0;
   position: relative;
@@ -36,12 +52,25 @@ p {
   transform: translateY(-50%);
 }
 
-#navbar > div { 
-  float: left;
-  padding: 10px 12px; 
-  margin: 10px 0 0 67px;
-  line-height: 20px;
-} 
+#explanation_r_upgrades > .entry {
+  border: 1px solid #fff;
+  margin: 20px;
+}
+#explanation_r_upgrades > .entry > .name {
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: #aaa;
+  text-align: center;
+}
+#explanation_r_upgrades > .entry > .effect {
+  font-size: 1.5em;
+  text-align: center;
+}
+#explanation_r_upgrades > .entry > .cost {
+  font-size: 1.5em;
+  background-color: #bbb;
+  text-align: center;
+}
 
 .reward-uncommon {
   background-color: #BBBBBB;
