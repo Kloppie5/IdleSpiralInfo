@@ -970,7 +970,7 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2207110952<br/>
+      v0.2207112054<br/>
 
       <input type='file' onchange='onChooseFile(event)' />
 
@@ -1353,7 +1353,173 @@
 
           </div>
           <div class="explanation" id="explanation_tornado_prestiges" style="display: none">
-            Explanation tornado prestiges
+            
+            <p>
+              <b>Tornado Prestiges</b> are the main way to progress in the game.<br>
+              <br>
+              After your first tornado prestige, you will get access to a set of small bonuses that are based on the following factors:<br>
+              <br>
+              <b>tornado tier</b> - Your current tornado tier; <span id="update_custom_tornado_tier"></span><br>
+              <script>
+                idlespiral.addUpdateFunction(function() {
+                  $("#update_custom_tornado_tier").text(idlespiral.dto.tornadoPrestigeTier);
+                });
+              </script>
+              <b>HourFactor</b> - A factor based on your total playtime in hours, following it formula below; <span id="update_custom_hour_factor"></span><br>
+              <script>
+                idlespiral.addUpdateFunction(function() {
+                  $("#update_custom_hour_factor").text(HourFactor(idlespiral.dto.AccumulatedHour));
+                });
+              </script>
+              <b>maxP</b> - The highest P you have ever had at the time of a tornado prestige; <span id="update_custom_accumulated_max_p"></span><br>
+              <script>
+                idlespiral.addUpdateFunction(function() {
+                  $("#update_custom_accumulated_max_p").text(idlespiral.dto.AccumulatedMaxP);
+                });
+              </script>
+              <div class="formula" style="height: 80px">
+                <div>$$\text{HourFactor} = \begin{cases}
+                  0.01 * \text{playtime},& \text{if playtime} \leq 100 \\
+                  0.015 * \text{playtime} - 0.5,& \text{if } 100 \lt \text{playtime} \leq 1000 \\
+                  0.016 * \text{playtime} - 1.6,& \text{otherwise}
+                \end{cases}$$</div>
+              </div>
+              <br>
+            </p>
+
+            <div class="formula marked" style="height: 30px">
+              <div class="marked explainable explain_delta_r">$\Delta r$</div>
+              <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
+              <div class="marked">$(1 + 0.5 * \text{tornado tier})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + \text{HourFactor})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + 0.1 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula marked" style="height: 30px">
+              <div class="marked explainable explain_delta_z">$\Delta z$</div>
+              <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
+              <div class="marked">$(1 + 0.5 * \text{tornado tier})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + \text{HourFactor})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + 0.1 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula marked" style="height: 30px">
+              <div class="marked">$regene\_while\_resting$</div>
+              <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
+              <div class="marked">$(1 + 0.1 * \text{tornado tier})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + \text{HourFactor})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + 0.1 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula marked" style="height: 30px">
+              <div class="marked">$spiral\_point\_multiplier$</div>
+              <div>&nbsp;$=$&nbsp;</div>
+              <div class="marked">$1 + 1\% * \text{tornado tier}$</div>
+            </div>
+            <div class="formula marked" style="height: 30px">
+              <div class="marked explainable explain_a">$a$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="marked">$0.2$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + 0.1 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula marked" style="height: 30px">
+              <div class="marked explainable explain_b">$b$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="marked">$0.02$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + 0.01 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula marked" style="height: 30px">
+              <div class="marked explainable explain_c">$c$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="marked">$0.02$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + 0.01 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula marked" style="height: 30px">
+              <div class="marked explainable explain_d">$d$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="marked">$0.02$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + 0.01 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula marked" style="height: 30px">
+              <div class="marked explainable explain_e">$e$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="marked">$0.02$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="marked">$(1 + 0.01 * \log(\text{maxP} + 1))$</div>
+            </div>
+
+            <p>
+              Besides these bonuses; you also unlock new features when you reach certain levels;
+            </p>
+
+            <!-- table -->
+            <table>
+              <thead>
+                <tr>
+                  <th>Level</th>
+                  <th>Unlock</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Basic Challenge</td></tr>
+                <tr><td>2</td><td>Auto omega Prestige</td></tr>
+                <tr><td>3</td><td>Drunk Challenge</td></tr>
+                <tr class="unavailable"><td>3</td><td>Drain Challenge</td></tr>
+                <tr><td>4</td><td>Spiral Equations</td></tr>
+                <tr><td>5</td><td>Flower Challenge</td></tr>
+                <tr><td>6</td><td>Auto p Prestige</td></tr>
+                <tr><td>7</td><td>Slow Spiral Challenge</td></tr>
+                <tr><td>8</td><td>Enemy PI</td></tr>
+                <tr><td>9</td><td>Gluttony Challenge</td></tr>
+                <tr><td>10</td><td>Z Reactors</td></tr>
+                <tr><td>11</td><td>Straight Line Challenge</td></tr>
+                <tr><td>12</td><td>Enemy Gamma</td></tr>
+                <tr><td>13</td><td>New Sigma</td></tr>
+                <tr><td>14</td><td>Poor Challenge</td></tr>
+                <tr><td>15</td><td>No Rebirth Challenge</td></tr>
+                <tr><td>16</td><td>Enemy Napier</td></tr>
+                <tr><td>17</td><td>Critical</td></tr>
+                <tr><td>18</td><td>Sinkhole Challenge</td></tr>
+                <tr><td>19</td><td>m</td></tr>
+                <tr><td>20</td><td>Sphere Challenge</td></tr>
+                <tr><td>21</td><td>Integral</td></tr>
+                <tr><td>22</td><td>New battle upgrades</td></tr>
+                <tr><td>23</td><td>Z Reactor CR</td></tr>
+                <tr><td>24</td><td>Fury Challenge</td></tr>
+                <tr><td>25</td><td>Enemy penta</td></tr>
+                <tr><td>26</td><td>Z Reactor CRX</td></tr>
+                <tr><td>27</td><td>New battle upgrades 2</td></tr>
+                <tr class="unavailable"><td>99</td><td>Exponent A</td></tr>
+              </tbody>
+            </table>
+
           </div>
           <div class="explanation" id="explanation_achievements" style="display: none">
             Explanation achievements
@@ -1366,7 +1532,11 @@
 
             There are currently 8 tiers of enemies
 
-            Training:
+            <h3>Training</h3>
+            <b>Base HP:</b> $100$<br>
+            <b>Base ATK:</b> $3$<br>
+            <b>Base DEF:</b> $1$<br>
+            <b>Attack Speed:</b> $0.3$<br>
             10 rewards
             <table>
               <tr>                        <th>Reward                            </th><th>Weight</th></tr>
@@ -1384,7 +1554,11 @@
               <tr>                        <td>                                  </td><td>$3476$</td></tr>
             </table>
 
-            Kappa:
+            <h3>Kappa</h3>
+            <b>Base HP:</b> $7000$<br>
+            <b>Base ATK:</b> $50$<br>
+            <b>Base DEF:</b> $30$<br>
+            <b>Attack Speed:</b> $0.5$<br>
             10 rewards
             <table>
               <tr>                        <th>Reward                             </th><th>Weight</th></tr>
@@ -1402,7 +1576,11 @@
               <tr>                        <td>                                   </td><td>$1074$</td></tr>
             </table>
 
-            Alpha:
+            <h3>Alpha</h3>
+            <b>Base HP:</b> $10^5$<br>
+            <b>Base ATK:</b> $1000$<br>
+            <b>Base DEF:</b> $200$<br>
+            <b>Attack Speed:</b> $0.5$<br>
             15 rewards
             <table>
               <tr>                        <th>Reward                                 </th><th>Weight</th></tr>
@@ -1420,7 +1598,11 @@
               <tr>                        <td>                                       </td><td>$2197$</td></tr>
             </table>
 
-            Beta:
+            <h3>Beta</h3>
+            <b>Base HP:</b> $10^8$<br>
+            <b>Base ATK:</b> $10^5$<br>
+            <b>Base DEF:</b> $1000$<br>
+            <b>Attack Speed:</b> $0.1$<br>
             20 rewards
             <table>
               <tr>                        <th>Reward                                 </th><th> Weight</th></tr>
@@ -1444,8 +1626,11 @@
               <tr>                        <td>                                       </td><td>$16248$</td></tr>
             </table>
 
-
-            Pi:
+            <h3>Pi</h3>
+            <b>Base HP:</b> $10^11$<br>
+            <b>Base ATK:</b> $10^5$<br>
+            <b>Base DEF:</b> $10^4$<br>
+            <b>Attack Speed:</b> $0.05$<br>
             10 rewards
             <table>
               <tr>                       <th>Reward                                               </th><th> Weight</th></tr>
@@ -1461,7 +1646,11 @@
               <tr>                       <td>                                                     </td><td>$80000$</td></tr>
             </table>
 
-            Gamma:
+            <h3>Gamma</h3>
+            <b>Base HP:</b> 5*10^{14}<br>
+            <b>Base ATK:</b> $10^6$<br>
+            <b>Base DEF:</b> $10^5$<br>
+            <b>Attack Speed:</b> $0.03$<br>
             10 rewards
             <table>
               <tr>                        <th>Reward                                       </th><th>Weight</th></tr>
@@ -1479,7 +1668,11 @@
               <tr>                        <td>                                             </td><td>$11033$</td></tr>
             </table>
 
-            Napier:
+            <h3>Napier</h3>
+            <b>Base HP:</b> $2.718*10^{18}$<br>
+            <b>Base ATK:</b> $2.718*10^8$<br>
+            <b>Base DEF:</b> $2.718*10^8$<br>
+            <b>Attack Speed:</b> $0.027$<br>
             15 rewards
             <table>
               <tr>                        <th>Reward                                                          </th><th> Weight</th></tr>
@@ -1496,7 +1689,11 @@
               <tr>                        <td>                                                                </td><td>$34020$</td></tr>
             </table>
 
-            Pentangle:
+            <h3>Penta</h3>
+            <b>Base HP:</b> $5.55*10^{23}$<br>
+            <b>Base ATK:</b> $5.55*10^{15}$<br>
+            <b>Base DEF:</b> $5.55*10^{15}$<br>
+            <b>Attack Speed:</b> $0.5$<br>
             5 rewards
             <table>
               <tr>                        <th>Reward                                   </th><th>Weight</th></tr>
@@ -1673,7 +1870,7 @@ length: 5
             <p>math_skill contributes to the enemy_growth_reduction following the formula;</p>
             <div class="formula" style="height: 75px">
               <div class="explainable explain_enemy_growth_reduction">$enemy\_growth\_reduction$</div>
-              <div>&nbsp;*=&nbsp;</div>
+              <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
               <div>$$\begin{cases}
                 1 - 0.5 * math\_skill / 50000,& \text{if } math\_skill \lt 50000 \\
                 1 - (0.9 - 1 / 1.000018326 ^ {math\_skill}),& \text{otherwise}

@@ -1,9 +1,7 @@
-* {
+html {
+  background-color: #000;
   color: #fff;
   user-select: none;
-}
-body {
-  background-color: #000;
 }
 
 p {
@@ -73,14 +71,14 @@ p {
 }
 
 .reward-uncommon {
-  background-color: #BBBBBB;
+  color: #BBBBBB;
 }
 .reward-uncommon {
-  background-color: #00FFFF;
+  color: #00FFFF;
 }
 .reward-rare {
-  background-color: #EE7800;
+  color: #EE7800;
 }
 .reward-onetime {
-  background-color: #AA5599;
+  color: #AA5599;
 }
