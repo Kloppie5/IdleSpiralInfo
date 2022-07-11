@@ -956,12 +956,12 @@
             return r;
           }
 
-          function loadSaveFile ( ) {
-            val = $.trim($("#savefiletextarea").val());
-            if ( val == "" ) {
-              alert("No save file specified!");
-              return;
-            }
+          async function onChooseFile ( event ) {
+            const file = event.target.files.item(0)
+            const text = await file.text();
+            
+            idlespiral.loadSave(text);
+            idlespiral.debug();
             idlespiral.loadSave(val);
             // idlespiral.debug();
             idlespiral.update();
@@ -972,7 +972,9 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2207071506<br/>
+      v0.2207110952<br/>
+
+      <input type='file' onchange='onChooseFile(event)' />
 
       <div class="marked" id="navbar" style="width:1500px; height: 60px"> 
         <div class="marked explainable explain_r_upgrades">r</div>
