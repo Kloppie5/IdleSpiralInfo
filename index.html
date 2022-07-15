@@ -7,6 +7,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\(','\)']]}});</script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://kit.fontawesome.com/412ef7d66d.js" crossorigin="anonymous"></script>
         <script>
           var currentExplanation = "";
           $(document).ready(function() { 
@@ -970,7 +971,7 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2207112054<br/>
+      v0.2207151547<br/>
 
       <input type='file' onchange='onChooseFile(event)' />
 
@@ -988,6 +989,7 @@
         <div class="marked explainable explain_z_reactors">Z</div>
         <div class="marked explainable explain_changelog">c</div>
         <div class="marked explainable explain_meta_changelog">m</div>
+        <div class="marked explainable explain_bugs"><i class="fa-solid fa-bug"></i></div>
         <div class="marked explainable explain_faq">faq</div>
       </div>
       <div class="marked" style="position: absolute; width: 1500px; height: 1000px">
@@ -1945,6 +1947,16 @@
             <h4>v0.2206142003</h4>
             Initial version
           </div>
+          <div class="explanation" id="explanation_bugs" style="display: none">
+            
+            <div class="entry">
+              Instead of using the 50000 threshold and enemy growth reduction from other sources like the fury challenge; the decay used to scale enemy stats incorrectly uses just the 5000 threshold math skill formula.
+            </div>
+            <div class="entry">
+              The unused block mechanic still gives the ally spiral a 0.01% chance to ignore damage.
+            </div>
+
+          </div>
           <div class="explanation" id="explanation_faq" style="display: none">
             Explanation faq
           </div>
@@ -2034,13 +2046,15 @@
           </div>
           <div class="explanation" id="explanation_attack_speed" style="display: none">
             <p>
-              Your battle spiral attacks at a rate of 2 / $attack\_speed$ seconds, which gets displayed as the Time to Attack.<br/>
-              This $attack\_speed$ is the product of the following factors:
+              Your battle spiral attacks at a rate of $2 / \text{attack speed}$ seconds, which gets displayed as the Time to Attack.<br/>
+              This $\text{attack speed}$ is the product of the following factors:
               
               <table>
                 <tr><th> Source                      </th><th> Effect                                             </th></tr>
-                <tr><td> Base amount                 </td><td> $1$                                                </td></tr>
-                <tr><td> Battle reward               </td><td> $+ \sqrt[3]{17.5 * \text{pure attack speed} + 55}$ </td></tr>
+                <tr><td> Battle reward               </td><td> $$\begin{cases}
+                  1 + \text{pure attack speed}, & \text{if pure attack speed} \lt 4 \\
+                  \sqrt[3]{17.5 * \text{pure attack speed} + 55},& \text{otherwise}
+                \end{cases}$$</td></tr>
                 <tr><td> Battle upgrade 13           </td><td> $* (1 + 0.1\% * \text{level})$                     </td></tr>
                 <tr><td> Battle upgrade 24           </td><td> $* (1 + 0.5\% * \text{level})$                     </td></tr>
                 <tr><td> Spiral equation eratos      </td><td> $* (1 + 1\% * \log_{10}(\text{level} + 1))$        </td></tr>
@@ -2202,12 +2216,5 @@ length: 5
 
       </div>
 
-      <section id="tab-c" class="tab hidden">
-        <div>
-          Changelog:
-            v1.5.0:
-              - Initial version to be tracked; might work backwards at some point
-        </div>
-      </section>
     </body>
 </html>

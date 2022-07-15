@@ -20,7 +20,7 @@ p {
 #navbar > div { 
   float: left;
   padding: 10px 12px; 
-  margin: 10px 0 0 67px;
+  margin: 10px 0 0 62px;
   line-height: 20px;
 }
 
@@ -83,4 +83,8 @@ p {
 }
 .reward-onetime {
   color: #AA5599;
+}
+
+.bug_resolved {
+  color: #00aa00;
 }
