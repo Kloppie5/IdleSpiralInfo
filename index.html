@@ -1778,7 +1778,158 @@
 
           </div>
           <div class="explanation" id="explanation_challenges" style="display: none">
-            Explanation challenges
+            
+            <div class="challenge">
+              I: Basic Challenge<br>
+              Goal: $9.99 * 10^{14} * 10^{\text{level}}$<br>
+              Max level: 10<br>
+              First Clear Reward: Nothing<br>
+              Complete Bonus: Get Spiral Design "Pi"<br>
+              Reward: $\Delta r \mathrel{{*}{=}} 1 + 0.5 * \text{level}$
+            </div>
+            <div class="challenge">
+              II: Drunk Challenge<br>
+              Goal: $9.99 * 10^{20} * (10^3)^{\text{level}}$<br>
+              Every second, $\omega$ gets set to a random number;<br>
+              Level 1: [0.1, 5)<br>
+              Level 2: [0.05, 3)<br>
+              Level 3: [0.03, 2)<br>
+              Level 4: [0.02, 1)<br>
+              Level 5: [0.01, 0.5)<br>
+              Level +: [0.001, 0.1)<br>
+              You fail if $r$ reaches 0 after 10 seconds<br>
+              Max level: 5<br>
+              Complete Bonus: Get Spiral Design "Diamond"<br>
+              Reward: $omegaExponent \mathrel{{+}{=}} 0.1 * \text{level}$
+            </div>
+            <div class="challenge unavailable">
+              Drain Challenge<br>
+              Goal: $t \geq 600$<br>
+              Start with $r = 10^6$<br>
+              Adds a variable $t$ that represents your time in the challenge in seconds<br>
+              $r \mathrel{{-}{=}} 10^4 * 10^{\text{level}} * (1 - 0.001 * t)$<br>
+              You fail if $r$ reaches 0 after 10 seconds<br>
+              You cannot prestige<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Reward: $tornado\_cost\_reduction \mathrel{{-}{=}} 0.1 * \text{level}$
+            </div>
+            <div class="challenge">
+              III : Flower Challenge<br>
+              Goal: $9.99 * 10^{14} * (10^3)^{\text{level}}$<br>
+              Adds a variable $t$ that represents your time in the challenge in seconds<br>
+              After 10 seconds; $\Delta r \mathrel{{+}{=}} \sin(3t) * 0.1 * t * (1.01 + 0.01 * \text{level}) ^ t$<br>
+              You fail if $r$ reaches 0 after 10 seconds<br>
+              You cannot prestige<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Complete Bonus: Get Spiral Design "Rainbow"<br>
+              Reward: $prestige\_level\_limit \mathrel{{+}{=}} \text{level}$
+            </div>
+            <div class="challenge">
+              IV: Slow Spiral Challenge<br>
+              Goal: $9.99 * 10^{26}$<br>
+              $\omega \mathrel{{*}{=}} 0.01 * 0.1^{\text{level}}$<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Complete Bonus: Get Spiral Design "kanji"<br>
+              Reward: $\omega \mathrel{{*}{=}} 1 + 0.1 * \text{level}$
+            </div>
+            <div class="challenge unavailable">
+              Gear Challenge<br>
+              Goal: $10^{12}$<br>
+              After 10 seconds; alterates between $\Delta r \mathrel{{*}{=}} 11$ and $\Delta r \mathrel{{*}{=}} -9$ every second. <br>
+              You fail if $r$ reaches 0<br>
+              You cannot prestige<br>
+              Max level: 5
+            </div>
+            <div class="challenge">
+              V: Gluttony Challenge<br>
+              Goal: Reach a specific difficulty;<br>
+              Level 1: Reach Training difficulty 200<br>
+              Level 2: Reach Kappa difficulty 250<br>
+              Level 3: Reach Alpha difficulty 300<br>
+              Level 4: Reach Beta difficulty 350<br>
+              Level 5: Reach Gamma difficulty 400<br>
+              Doesn't reset on prestige<br>
+              Max level: 5<br>
+              Complete Bonus: Get +1 Multiattack<br>
+              Reward: $\text{ATK}, \text{HP}, \text{DEF} \mathrel{{*}{=}} 1 + 0.2 * \text{level}$
+            </div>
+            <div class="challenge">
+              VI: Straight Line Challenge<br>
+              Goal: $9.99 * 10^{29} * (10^3)^{\text{level}}$<br>
+              $\omega \mathrel{{*}{=}} 0$<br>
+              $k \mathrel{{+}{=}} 1$<br>
+              $k \mathrel{{*}{=}} 100$<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Complete Bonus: Get Spiral Design "Rahmen"<br>
+              Reward: $k \mathrel{{*}{=}} 1 + \text{level}$
+            </div>
+            <div class="challenge">
+              VII: Poor Math Challenge<br>
+              Goal: $9.99 * 10^{35} * (10^3)^{\text{level}}$<br>
+              $A_1 = a + b + c + d + e + f + g$<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Reward: $\Delta r \mathrel{{*}{=}} \text{Some horrendous formula}$
+            </div>
+            <div class="challenge">
+              VIII: No Rebirth Challenge<br>
+              Goal: $9.99 * 10^{38} * (10^3)^{\text{level}}$<br>
+              You cannot prestige<br>
+              Max level: 5<br>
+              Complete Bonus: Get Spiral Design "Qinghai wave"<br>
+              Reward: $automation\_interval \mathrel{{*}{=}} 0.5^{\text{level}}$
+            </div>
+            <div class="challenge">
+              IX: Sinkhole Challenge<br>
+              Goal: $10^{64} * (10^3)^{\text{level}}$<br>
+              Adds a variable $t$ that increases every second, but gets reset to 0 when $r \lt 10^{12}$<br>
+              If $r \gt 10^{12}$; $\Delta r \mathrel{{*}{=}} (0.9 - 0.05 * level)^{\log{r} - 12} * (1 + 0.01 * t)^{-1}$<br>
+              Max level: 5<br>
+              Complete Bonus: Get Spiral Design "Cloisonne"<br>
+              Reward: $\Delta r \mathrel{{*}{=}} 1 + \ln(t / 13 + 1) / \ln(10 - \text{level})$
+            </div>
+            <div class="challenge">
+              X: Sphere Challenge<br>
+              Goal: $10^{74} * (10^3)^{\text{level}}$<br>
+              $\Delta z$<br>
+              Max level: 5<br>
+              First Clear Reward: $z\_reactor\_exp \mathrel{{*}{=}} 2$<br>
+              Complete Bonus: Get Spiral Design "Lam&eacute;"<br>
+              Reward: $z\_reactor\_cap \mathrel{{*}{=}} 1 + 0.05 * \text{level}$
+            </div>
+            <div class="challenge">
+              IX: Fury Challenge<br>
+              Goal: Reach difficulty 500 with amplified stats;<br>
+              $\text{enemy atk} = \text{base} * (1 + 0.5 * \text{decay}) ^ {\text{difficulty}}$<br>
+              $\text{enemy atkSpeed} = \text{base} * (1 + 0.015 * \text{difficulty})$, capped at $* 7.5$<br>
+              Level 1: Training<br>
+              Level 2: Kappa<br>
+              Level 3: Alpha<br>
+              Level 4: Beta<br>
+              Level 5: Gamma<br>
+              Level 6: Napier<br>
+              Doesn't reset on prestige<br>
+              Max level: 6<br>
+              Complete Bonus: Get +2 Multiattack<br>
+              Reward: $enemy\_growth\_reduction \mathrel{{*}{=}} 0.95^{\text{level}}$
+            </div>
+            <div class="challenge unavailable">
+              Lava Challenge<br>
+              Goal: $10^{86} * (10^3)^{\text{level}}$<br>
+              Adds a variable $t$ that represents your time in the challenge in seconds<br>
+              $\text{radius} = t * (1.05 + 0.01 * \text{level})^t$<br>
+              You fail if $r \lt \text{radius}$ after 10 seconds<br>
+              You cannot prestige<br>
+              Max level: 5
+            </div>
+            <div class="challenge unavailable">
+              Go Back To Challenge
+            </div>
+
           </div>
           <div class="explanation" id="explanation_spiral_designs" style="display: none">
             Explanation spiral designs

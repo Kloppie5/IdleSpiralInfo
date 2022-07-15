@@ -13,11 +13,8 @@ p {
   outline-offset: -1px;
 }
 
-.disabled {
-  background-color: #aaa;
-}
 .unavailable {
-  background-color: #ccc;
+  background-color: #666666;
 }
 
 #navbar > div { 
@@ -48,6 +45,11 @@ p {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.challenge {
+  border: 1px solid #fff;
+  margin: 20px;
 }
 
 .entry {
