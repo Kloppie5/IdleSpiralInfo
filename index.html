@@ -1626,7 +1626,7 @@
             </table>
 
             <h3>Pi</h3>
-            <b>Base HP:</b> $10^11$<br>
+            <b>Base HP:</b> $10^{11}$<br>
             <b>Base ATK:</b> $10^5$<br>
             <b>Base DEF:</b> $10^4$<br>
             <b>Attack Speed:</b> $0.05$<br>
@@ -1790,7 +1790,9 @@
             Explanation changelog
           </div>
           <div class="explanation" id="explanation_meta_changelog" style="display: none">
-            Explanation meta changelog
+            Some day I'll care enough to write this, or I'll start tracking things after reaching some point of completion.
+            <h4>v0.2206142003</h4>
+            Initial version
           </div>
           <div class="explanation" id="explanation_faq" style="display: none">
             Explanation faq
@@ -1885,13 +1887,14 @@
               This $attack\_speed$ is the product of the following factors:
               
               <table>
-                <tr><th> Source                      </th><th> Effect                                           </th></tr>
-                <tr><td> Battle reward               </td><td> $\sqrt[3]{17.5 * \text{pure attack speed} + 55}$ </td></tr>
-                <tr><td> Battle upgrade 13           </td><td> $1 + 0.1\% * \text{level}$                       </td></tr>
-                <tr><td> Battle upgrade 24           </td><td> $1 + 0.5\% * \text{level}$                       </td></tr>
-                <tr><td> Spiral equation eratos      </td><td> $1 + 1\% * \log_{10}(\text{level} + 1)$          </td></tr>
-                <tr><td> Spiral design arrow active  </td><td> $1 + 20\% \text{ if you use the arrow design}$   </td></tr>
-                <tr><td> Spiral design arrow passive </td><td> $1 + 5\% \text{ if you own the arrow design}$    </td></tr>
+                <tr><th> Source                      </th><th> Effect                                             </th></tr>
+                <tr><td> Base amount                 </td><td> $1$                                                </td></tr>
+                <tr><td> Battle reward               </td><td> $+ \sqrt[3]{17.5 * \text{pure attack speed} + 55}$ </td></tr>
+                <tr><td> Battle upgrade 13           </td><td> $* (1 + 0.1\% * \text{level})$                     </td></tr>
+                <tr><td> Battle upgrade 24           </td><td> $* (1 + 0.5\% * \text{level})$                     </td></tr>
+                <tr><td> Spiral equation eratos      </td><td> $* (1 + 1\% * \log_{10}(\text{level} + 1))$        </td></tr>
+                <tr><td> Spiral design arrow active  </td><td> $* (1 + 20\% \text{ if you use the arrow design})$ </td></tr>
+                <tr><td> Spiral design arrow passive </td><td> $* (1 + 5\% \text{ if you own the arrow design})$  </td></tr>
               </table>
               
               $\text{pure attack speed}$ refers only to the attack speed you get from killing Gamma.<br/>
@@ -2053,59 +2056,6 @@ length: 5
           Changelog:
             v1.5.0:
               - Initial version to be tracked; might work backwards at some point
-        </div>
-      </section>
-      <section id="tab-m" class="tab hidden">
-        <div>
-          Meta Changelog:
-            v0.2206142003
-              - Bare bones framework
-            v0.2206150111
-              - Added save decryption
-            v0.2206150140
-              - Added initial table dump
-            v0.2206151154
-              - Reconstructing UpgradeContainer
-            v0.2206151238
-              - Reconstructing BattleRewardContainer
-            v0.2206151449
-              - Added tab selection
-            v0.2206151609
-              - Loading r, p, and z tab upgrades
-            v0.2206151649
-              - Loading T tab info
-            v0.2206151710
-              - Loading B tab battle rewards
-            v0.2206151904
-              - Loading E tab info
-            v0.2206152000
-              - Loading C tab info
-            v0.2206152045
-              - Loading Z tab info
-            v0.2206170010
-              - Improved r tab layout
-              - Added r tab formulas
-            v0.2206170018
-              - Improved p tab layout
-              - Added p tab formulas
-            v0.2206170028
-              - Improved z tab layout
-              - Added z tab formulas
-            v0.2206170033
-              - Added faq tab
-            v0.2206170118
-              - Improved E tab layout
-              - Added E tab formulas
-            v0.2206190113
-              - Added D tab info
-            v0.2206210109
-              - Complete overhaul
-            v0.2206220142
-              - Small fixes and updating ui
-            v0.2206231841
-              - Linked B tab again and displaying diminished stats
-            v0.2206261626
-              - Many overhauls
         </div>
       </section>
     </body>
