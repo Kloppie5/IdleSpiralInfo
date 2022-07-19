@@ -49,6 +49,11 @@ p {
   transform: translateY(-50%);
 }
 
+.title {
+  text-align: center;
+  font-size: 50px;
+}
+
 #battle-spiral-stats > .effect > div {
   float: left;
   margin: 0;
