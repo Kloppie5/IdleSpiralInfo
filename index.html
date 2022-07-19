@@ -971,26 +971,32 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2207151547<br/>
+      v0.2207200033<br/>
 
       <input type='file' onchange='onChooseFile(event)' />
 
-      <div class="marked" id="navbar" style="width:1500px; height: 60px"> 
-        <div class="marked explainable explain_r_upgrades">r</div>
-        <div class="marked explainable explain_p_upgrades">p</div>
-        <div class="marked explainable explain_z_upgrades">z</div>
-        <div class="marked explainable explain_tornado_prestiges">T</div>
-        <div class="marked explainable explain_achievements">A</div>
-        <div class="marked explainable explain_store">S</div>
-        <div class="marked explainable explain_battle_spiral">B</div>
-        <div class="marked explainable explain_spiral_equations">E</div>
-        <div class="marked explainable explain_challenges">C</div>
-        <div class="marked explainable explain_spiral_designs">D</div>
-        <div class="marked explainable explain_z_reactors">Z</div>
-        <div class="marked explainable explain_changelog">c</div>
-        <div class="marked explainable explain_meta_changelog">m</div>
-        <div class="marked explainable explain_bugs"><i class="fa-solid fa-bug"></i></div>
-        <div class="marked explainable explain_faq">faq</div>
+      <div class="navbar marked" style="position: relative; width: 1500px; height: 60px">
+        <div class="nav-button marked explainable explain_r_upgrades" style="left: 268px">r</div>
+        <div class="nav-button marked explainable explain_p_upgrades" style="left: 576px">P</div>
+        <div class="nav-button marked explainable explain_z_upgrades" style="left: 884px">z</div>
+        <div class="nav-button marked explainable explain_tornado_prestiges" style="left: 1192px">T</div>
+      </div>
+      <div class="navbar marked" style="position: relative; width: 1500px; height: 60px">
+        <div class="nav-button marked explainable explain_achievements" style="left: 131px">A</div>
+        <div class="nav-button marked explainable explain_store" style="left: 302px">S</div>
+        <div class="nav-button marked explainable explain_battle_spiral" style="left: 473px">B</div>
+        <div class="nav-button-mini marked explainable explain_battle_upgrades" style="left: 513px">u</div>
+        <div class="nav-button marked explainable explain_spiral_equations" style="left: 644px">E</div>
+        <div class="nav-button marked explainable explain_challenges" style="left: 815px">C</div>
+        <div class="nav-button marked explainable explain_spiral_designs" style="left: 986px">D</div>
+        <div class="nav-button marked explainable explain_z_reactors" style="left: 1157px">Z</div>
+        <div class="nav-button marked explainable explain_theorems unavailable" style="left: 1328px">T</div>
+      </div>
+      <div class="navbar marked" style="position: relative; width: 1500px; height: 60px">
+        <div class="nav-button marked explainable explain_changelog" style="left: 268px">c</div>
+        <div class="nav-button marked explainable explain_meta_changelog" style="left: 576px">m</div>
+        <div class="nav-button marked explainable explain_bugs" style="left: 884px"><i class="fa-solid fa-bug"></i></div>
+        <div class="nav-button marked explainable explain_faq" style="left: 1192px">faq</div>
       </div>
       <div class="marked" style="position: absolute; width: 1500px; height: 1000px">
         <div class="marked" style="position: absolute; width: 420px; height: 500px">
@@ -1141,6 +1147,7 @@
         </div>
 
         <div class="marked" id="main" style="position: absolute; left: 420px; width: 780px">
+          
           <div class="explanation" id="explanation_r_upgrades" style="display: none">
             
             <div class="entry">
@@ -1709,6 +1716,9 @@
               <tr>                        <td>                                         </td><td>$3130$</td></tr>
             </table>
           </div>
+          <div class="explanation" id="explanation_battle_upgrades" style="display: none">
+            Explanation battle upgrades
+          </div>
           <div class="explanation" id="explanation_spiral_equations" style="display: none">
             Spiral Equations are unlocked at tornado tier 4. Upon unlocking, all enemies will display a onetime reward as their last reward, taking the place of the standard exp reward. You can select up to two equations at the start to level. You gain the ability to select an additional equation from the 'kanji' spiral design passive.<br>
             <br>
@@ -1939,6 +1949,33 @@
           <div class="explanation" id="explanation_z_reactors" style="display: none">
             Explanation z reactors
           </div>
+          <div class="explanation unavailable" id="explanation_theorems" style="display: none">
+            Explanation theorems
+            <div class="entry">
+              Pythagorean theorem
+            </div>
+            <div class="entry">
+              Square sum formula
+            </div>
+            <div class="entry">
+              Addition Theorem 1
+            </div>
+            <div class="entry">
+              Addition Theorem 2
+            </div>
+            <div class="entry">
+              Gausian Integral
+            </div>
+            <div class="entry">
+              Gamma Function
+            </div>
+            <div class="entry">
+              Euler's identity
+            </div>
+            <div class="entry">
+              Fibonacci Series
+            </div>
+          </div>
           <div class="explanation" id="explanation_changelog" style="display: none">
             Explanation changelog
           </div>
@@ -1957,6 +1994,9 @@
             </div>
             <div class="entry">
               Letter notation accidentally merged two orders of magnitude at "UQig, DQig", meaning everything after is off by one order of magnitude.
+            </div>
+            <div class="entry">
+              The Max Upgrade option for Battle Upgrades doesn't take cost reduction into account; causing it to occasionally take exp without leveling up.
             </div>
 
           </div>
