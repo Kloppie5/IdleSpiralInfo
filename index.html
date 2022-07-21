@@ -986,6 +986,7 @@
         <div class="nav-button marked explainable explain_store" style="left: 302px">S</div>
         <div class="nav-button marked explainable explain_battle_spiral" style="left: 473px">B</div>
         <div class="nav-button-mini marked explainable explain_battle_upgrades" style="left: 513px">u</div>
+        <div class="nav-button-mini marked explainable explain_battle_reward_candidates" style="top: 30px; left: 513px">r</div>
         <div class="nav-button marked explainable explain_spiral_equations" style="left: 644px">E</div>
         <div class="nav-button marked explainable explain_challenges" style="left: 815px">C</div>
         <div class="nav-button marked explainable explain_spiral_designs" style="left: 986px">D</div>
@@ -1770,48 +1771,47 @@
             </div>
           </div>
           <div class="explanation" id="explanation_battle_upgrades" style="display: none">
-            1	HP + 1\%
-            2	ATK + 1\%
-            3	DEF + 1\%
-            4	Regenerate + 1\%
-            5	HP value of +1 that appears in Reward
-            6	ATK value of +1 that appears in Reward
-            7	DEF value of +1 that appears in Reward
-            8	Critical Rate + 0.1\%
-            9	Critical Damage + 1\%
-            10	EXP value of +1 that appears in Reward
-            11	Enemy's HP -0.1 \%
-            12	Regenerate while resting +1 \%
-            13	Attack Speed +0.1 \%
-            14	HP + 5\%
-            15	ATK + 5\%
-            16	DEF + 5\%
-            17	Regenerate + 5\%
-            18	HP value of +5 \% that appears in Reward
-            19	ATK value of +5 \% that appears in Reward
-            20	DEF value of +5 \%  that appears in Reward
-            21	EXP value of +5\% that appears in Reward
-            22	Critical Rate + 0.2\%
-            23	Critical Damage + 5\%
-            24	Attack Speed +0.5 \%
-            25	Increase the maximum level of upgrades up to 24
-            26	Unlock new Spiral Equation "al-Khuwārizmī"
-            27	Unlock new Spiral Equation "Omar Khayyám"
-            28	Unlock new Spiral Equation "Bhāskara"
-            29	Unlock new Spiral Equation "Mādhava"
-            33	Math Skill +100
-            34	HP + 10\%
-            35	ATK + 10\%
-            36	DEF + 10\%
-            37	HP value of +10 \% that appears in Reward
-            38	ATK value of +10 \% that appears in Reward
-            39	DEF value of +10 \%  that appears in Reward
-            40	EXP value of +10 \% that appears in Reward
-            30	Upgrade max potential value of ATK and DEF +500 from PI
-            31	Upgrade max potential value of EXP +5 from Gamma
-            32	Upgrade max potential value of Super Critical Damage +0.01 from Napier
-            41	Rare Drop Chance +0.1 \% (This is not affected by the diminishment)
-            42	Increase the maximum level of upgrades 30 through 41
+            <div class="entry">
+              <b>Upgrade of Parameters</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td> 1</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                      </td></tr>
+                <tr><td> 2</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                     </td></tr>
+                <tr><td> 3</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                     </td></tr>
+                <tr><td> 4</td><td>$\text{Regenerate} \mathrel{{*}{=}} 1 + 1\% * \text{level}$              </td></tr>
+                <tr><td> 8</td><td>$\text{Critical Rate} \mathrel{{+}{=}} 0.1\% * \text{level}$             </td></tr>
+                <tr><td> 9</td><td>$\text{Critical Damage} \mathrel{{*}{=}} 1 + 1\% * \text{level}$         </td></tr>
+                <tr><td>11</td><td>$\text{Enemy HP Reduction Add} \mathrel{{-}{=}} 0.1 * \text{level}$      </td></tr>
+                <tr><td>12</td><td>$\text{Regenerate while resting} \mathrel{{*}{=}} 1 + 1\% * \text{level}$</td></tr>
+                <tr><td>13</td><td>$\text{Attack Speed} \mathrel{{*}{=}} 1 + 0.1\% * \text{level}$          </td></tr>
+                <tr><td>14</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                      </td></tr>
+                <tr><td>15</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                     </td></tr>
+                <tr><td>16</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                     </td></tr>
+                <tr><td>17</td><td>$\text{Regenerate} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>22</td><td>$\text{Critical Rate} \mathrel{{+}{=}} 0.2\% * \text{level}$             </td></tr>
+                <tr><td>23</td><td>$\text{Critical Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$         </td></tr>
+                <tr><td>24</td><td>$\text{Attack Speed} \mathrel{{*}{=}} 1 + 0.5\% * \text{level}$          </td></tr>
+                <tr><td>34</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                     </td></tr>
+                <tr><td>35</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                    </td></tr>
+                <tr><td>36</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                    </td></tr>
+                <tr><td>41</td><td>$\text{Rare Drop Chance} \mathrel{{*}{=}} 1 + 0.1\% * \text{level}$      </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Upgrade of Parameters</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td> 5</td><td>$\text{HP Reward} \mathrel{{+}{=}} \text{level}$                         </td></tr>
+                <tr><td> 6</td><td>$\text{ATK Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td> 7</td><td>$\text{DEF Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td>10</td><td>$\text{EXP Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td>18</td><td>$\text{HP Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$               </td></tr>
+                <tr><td>19</td><td>$\text{ATK Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>20</td><td>$\text{DEF Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>21</td><td>$\text{EXP Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>30</td><td></td>
+              </table>
+            </div>
           </div>
           <div class="explanation" id="explanation_spiral_equations" style="display: none">
             Spiral Equations are unlocked at tornado tier 4. Upon unlocking, all enemies will display a onetime reward as their last reward, taking the place of the standard exp reward. You can select up to two equations at the start to level. You gain the ability to select an additional equation from the 'kanji' spiral design passive.<br>
@@ -2103,7 +2103,61 @@
             </div>
           </div>
           <div class="explanation" id="explanation_z_reactors" style="display: none">
-            Explanation z reactors
+            <div class="title">Z Reactors</div>
+            Z Reactors are initially unlocked at T10, with additional reactors unlocked at T23 and T26.<br>
+            Each reactor has a capacity you can "fill" with $\Delta z$.<br>
+            The amount of $\Delta z$ in a reactor determines the active effect, and also builds up Reactor Exp. When a reactor gets enough Reactor Exp, it levels up and provides a stronger passive effect.<br>
+            This passive effect does not go away when you take away the $\Delta z$.
+            <div class="entry">
+              <b>Reactor - R</b><br>
+              <b>z Cost:</b> $100 * 1.5^{\text{level}}$<br>
+              <b>Capacity:</b> $100 * \text{level}$<br>
+              <b>Exp Cost:</b> $100 * 1.5^{\text{level}}$<br>
+              <b>Active Effect:</b> $\Delta r \mathrel{{*}{=}} 1 + 1\% * \text{value}$<br>
+              <b>Passive Effect:</b> $\Delta r \mathrel{{*}{=}} 1 + 0.5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - L</b><br>
+              <b>z Cost:</b> $1000 * 1.5^{\text{level}}$<br>
+              <b>Capacity:</b> $500 * \text{level}$<br>
+              <b>Exp Cost:</b> $2000 * 1.6^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{Line Number Multiplier} \mathrel{{*}{=}} 1 + 1\% * \text{value}^{\color{red}{1.8}} / 25000$<br>
+              <b>Passive Effect:</b> $\text{Line Number Multiplier} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - E</b><br>
+              <b>z Cost:</b> $3000 * 1.5^{\text{level}}$<br>
+              <b>Capacity:</b> $1000 * \text{level}$<br>
+              <b>Exp Cost:</b> $5000 * 1.7^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{Spiral Equation Speed} \mathrel{{*}{=}} 1 + 1\% * \text{value}^{1.5} / 20000$<br>
+              <b>Passive Effect:</b> $\text{Spiral Equation Speed} \mathrel{{*}{=}} 1 + 2.5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - S</b><br>
+              <b>z Cost:</b> $7500 * 1.5^{\text{level}}$<br>
+              <b>Capacity:</b> $5000 * \text{level}$<br>
+              <b>Exp Cost:</b> $10000 * 1.8^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{HP}, \text{ATK}, \text{DEF} \mathrel{{*}{=}} 1 + 1\% * \text{value}^3 / 10^{-14}$<br>
+              <b>Passive Effect:</b> $\text{HP}, \text{ATK}, \text{DEF} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - CR</b><br>
+              <b>Unlocked at T23</b><br>
+              <b>z Cost:</b> $10^{10} * 1.75^{\text{level}}$<br>
+              <b>Capacity:</b> $10^{9} * \text{level}$<br>
+              <b>Exp Cost:</b> $10^{10} * 1.9^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{Critical Rate} \mathrel{{+}{=}} 1\% * \text{"SigmaSum"}$<br>
+              <b>Passive Effect:</b> $\text{Critical Rate} \mathrel{{+}{=}} 0.005\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - CRX</b><br>
+              <b>Unlocked at T26</b><br>
+              <b>z Cost:</b> $10^{16} * 2^{\text{level}}$<br>
+              <b>Capacity:</b> $10^{15} * \text{level}$<br>
+              <b>Exp Cost:</b> $7.5^{16} * 2^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{S-Critical Rate} \mathrel{{+}{=}} 1\% * \lfloor \text{value} / (2*10^{16}) \rfloor$<br>
+              <b>Passive Effect:</b> $\text{S-Critical Rate} \mathrel{{+}{=}} 0.005\% * \text{level}$
+            </div>
           </div>
           <div class="explanation unavailable" id="explanation_theorems" style="display: none">
             <div class="title">Theorems</div>
