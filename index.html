@@ -403,7 +403,7 @@
                 return m * sigmaA * omega ** omegaExponent + k;
               });
               
-              this.addEffect("Line Number Multiplier", "delta_r", "mul", "1 + (lines - 1) * line_number_multiplier", () => 1 + (this.lines - 1) * this.evaluate("line_number_multiplier"));
+              this.addEffect("Line Number Multiplier", "delta_r", "mul", "1 + (lines - 1) * 0.1 * line_number_multiplier", () => 1 + (this.lines - 1) * 0.1 * this.evaluate("line_number_multiplier"));
             
               // SoftPrestige
               this.addEffect("omega Prestige omegaExponent", "omegaExponent", "add", "\omega prestige", () => this.omegaPrestigeLevel);
@@ -2711,6 +2711,10 @@
               $\left.\frac{\partial}{\partial \beta} \frac{2\alpha^{\beta+1}}{\beta+1} \right\vert_{\beta = 1} = \alpha^2\ln(\alpha)-\frac{\alpha^2}{2}$<br>
               This means that at $\beta = 1$, upgrading it will increase $\Delta r$ if $\alpha \gt \sqrt{e} \approx 1.65$.<br>
               It is possible to increase $\Delta r$ earlier by taking multiple upgrades of $\beta$ into account, but 1.65 is a simple threshold.
+            </div>
+            <div class="entry">
+              <b>Q:</b> What is the "line number multiplier"?<br>
+              <i>A:</i> Next to your $\Delta r$, there is a button that increases the amount of lines you see, usually at x5. This always provides a multiplier to $\Delta r$ of $1 + ((\text{lines} - 1) * 0.1) * \text{Line Number Multiplier}$.
             </div>
             <div class="entry">
               <b>Q:</b> What's with the light grey boxes?<br>
