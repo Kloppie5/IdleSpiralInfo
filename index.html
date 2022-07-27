@@ -9,6 +9,92 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script src="https://kit.fontawesome.com/412ef7d66d.js" crossorigin="anonymous"></script>
         <script>
+          // Save file management
+          var state = "uninitialized"
+          var savefile = {}
+
+          function parseJSON ( text, debug = false ) {
+            if ( debug )
+              console.log( "Parsing JSON: " + text )
+            
+            try {
+              return JSON.parse( text )
+            } catch ( e ) {
+              console.log( "Error parsing JSON: " + e )
+              return null
+            }
+          }
+          function serializeJSON ( obj, debug = false ) {
+            if ( debug )
+              console.log( "Serializing JSON: " + obj )
+          }
+          function decryptBase64 ( text, debug = false ) {
+            if ( debug )
+              console.log( "Decrypting base64: " + text )
+            
+            return CryptoJS.enc.Base64.parse(text)
+          }
+          function encryptBase64 ( text, debug = false ) {
+            if ( debug )
+              console.log( "Encrypting base64: " + text )
+            
+            return CryptoJS.enc.Base64.stringify(text)
+          }
+          function decryptAES ( text, debug = false ) {
+            if ( debug )
+              console.log( "Decrypting AES: " + text )
+            
+            var kdf = CryptoJS.PBKDF2("kkyyhka", "stkttnsstkttns", {
+              keySize: 8,
+              hasher: CryptoJS.algo.SHA1,
+              iterations: 1000
+            });
+            
+            var key = CryptoJS.enc.Hex.parse(kdf.toString().substring(0, 32));
+            var iv = CryptoJS.enc.Hex.parse(kdf.toString().substring(32, 64));
+
+            return CryptoJS.AES.decrypt({ciphertext: text}, key, { iv: iv });
+          }
+          async function loadSave ( event ) {
+            const file = event.target.files.item(0)
+            const contents = await file.text()
+            state = "encrypted"
+            savefile = contents
+            document.getElementById("savefile-input").value = savefile
+
+            decryptSave()
+            document.getElementById("savefile-decrypted").value = JSON.stringify(savefile, null, 2)
+
+            updateFields()
+          }
+          function decryptSave ( ) {
+            if ( state != "encrypted" )
+              return
+            
+            savefile = savefile.split("#");
+            for ( var i = 0; i < savefile.length; ++i ) {
+              savefile[i] = decryptBase64(savefile[i])
+              savefile[i] = decryptAES(savefile[i])
+              savefile[i] = savefile[i].toString(CryptoJS.enc.Utf8)
+              savefile[i] = parseJSON(savefile[i])
+            }
+            
+            state = "decrypted"
+          }
+          function encryptSave ( ) {
+            if ( state != "decrypted" )
+              return
+            
+            state = "encrypted"
+          }
+          function updateFields ( ) {
+            if ( state == "encrypted" )
+              decryptSave()
+            
+            
+          }
+
+          // Explanation selection
           var currentExplanation = "";
           $(document).ready(function() { 
             $(".explainable").each(function() {
@@ -38,198 +124,211 @@
             });
           }); 
 
-          class Effect {
-            constructor ( name, target, type, formula, value ) {
-              this.name = name;
-              this.target = target;
-              this.type = type;
-              this.formula = formula;
-              this.value = value;
-            }
-          }
+          // Calculations
           var idlespiral = new function IdleSpiral ( ) {
-
-            // Save file
-            this.loadSave = function ( save ) {
-              save = save.split("#");
-
-              this.saver = JSON.parse(this.decrypt(save[0]));
-              this.save = JSON.parse(this.decrypt(save[1]));
-              this.dto = JSON.parse(this.decrypt(save[2]));
-              console.log(this.dto);
-
-              this.battle_rewards = {
-                "hp": this.dto.battle_rewards[0],
-                "atk": this.dto.battle_rewards[1],
-                "def": this.dto.battle_rewards[2],
-                "a": this.dto.battle_rewards[3],
-                "b": this.dto.battle_rewards[4],
-                "c": this.dto.battle_rewards[5],
-                "d": this.dto.battle_rewards[6],
-                "e": this.dto.battle_rewards[7],
-                "k": this.dto.battle_rewards[8],
-                "regene": this.dto.battle_rewards[9],
-                "critical": this.dto.battle_rewards[10],
-                "criticalDamage": this.dto.battle_rewards[11],
-                "a_mul": this.dto.battle_rewards[12],
-                "b_mul": this.dto.battle_rewards[13],
-                "c_mul": this.dto.battle_rewards[14],
-                "d_mul": this.dto.battle_rewards[15],
-                "e_mul": this.dto.battle_rewards[16],
-                "k_mul": this.dto.battle_rewards[17],
-                "hp_mul": this.dto.battle_rewards[18],
-                "atk_mul": this.dto.battle_rewards[19],
-                "def_mul": this.dto.battle_rewards[20],
-                "n": this.dto.battle_rewards[21],
-                "v": this.dto.battle_rewards[22],
-                "gamma": this.dto.battle_rewards[23],
-                "delta": this.dto.battle_rewards[24],
-                "Omega": this.dto.battle_rewards[25],
-                "attackSpeed": this.dto.battle_rewards[26],
-                "gamma_mul": this.dto.battle_rewards[27],
-                "delta_mul": this.dto.battle_rewards[28],
-                "Omega_mul": this.dto.battle_rewards[29],
-                "exp": this.dto.battle_rewards[30],
-                "rare_chance": this.dto.battle_rewards[31],
-                "super_critical": this.dto.battle_rewards[32],
-                "super_criticalDamage": this.dto.battle_rewards[33],
-                "math_skill": this.dto.battle_rewards[34],
-                "other": this.dto.battle_rewards[35],
-                "enemy_hp_reduction": this.dto.battle_rewards[36],
-                "regene_resting": this.dto.battle_rewards[37],
-                "maxlevelup_no_24": this.dto.battle_rewards[38],
-                "unlock": this.dto.battle_rewards[39],
+            class Effect {
+              constructor ( name, target, type, value ) {
+                this.name = name;
+                this.target = target;
+                this.type = type;
+                this.value = value;
               }
-              this.battle_upgrades = {
-                "hp+1%": this.dto.battle_upgrade_levels[0],
-                "atk+1%": this.dto.battle_upgrade_levels[1],
-                "def+1%": this.dto.battle_upgrade_levels[2],
-                "regene+1%": this.dto.battle_upgrade_levels[3],
-                "reward_hp+1": this.dto.battle_upgrade_levels[4],
-                "reward_atk+1": this.dto.battle_upgrade_levels[5],
-                "reward_def+1": this.dto.battle_upgrade_levels[6],
-                "critical+0.1%": this.dto.battle_upgrade_levels[7],
-                "criticalDamage+1%": this.dto.battle_upgrade_levels[8],
-                "reward_exp+1": this.dto.battle_upgrade_levels[9],
-                "enemy_hp-0.1%" : this.dto.battle_upgrade_levels[10],
-                "regene_while_resting+1%": this.dto.battle_upgrade_levels[11],
-                "attack_speed+0.1%": this.dto.battle_upgrade_levels[12],
-                "hp+5%": this.dto.battle_upgrade_levels[13],
-                "atk+5%": this.dto.battle_upgrade_levels[14],
-                "def+5%": this.dto.battle_upgrade_levels[15],
-                "regene+5%": this.dto.battle_upgrade_levels[16],
-                "reward_hp+5%": this.dto.battle_upgrade_levels[17],
-                "reward_atk+5%": this.dto.battle_upgrade_levels[18],
-                "reward_def+5%": this.dto.battle_upgrade_levels[19],
-                "reward_exp+5%": this.dto.battle_upgrade_levels[20],
-                "critical+0.2%": this.dto.battle_upgrade_levels[21],
-                "criticalDamage+5%": this.dto.battle_upgrade_levels[22],
-                "attack_speed+0.5%": this.dto.battle_upgrade_levels[23],
-                "battle_upgrade_max_level+1": this.dto.battle_upgrade_levels[24],
-                "unlock_1" : this.dto.battle_upgrade_levels[25],
-                "unlock_2" : this.dto.battle_upgrade_levels[26],
-                "unlock_3" : this.dto.battle_upgrade_levels[27],
-                "unlock_4" : this.dto.battle_upgrade_levels[28],
-                "atk_and_def_from_pi+1": this.dto.battle_upgrade_levels[29],
-                "exp_from_gamma+1": this.dto.battle_upgrade_levels[30],
-                "s_critical_from_napier+1": this.dto.battle_upgrade_levels[31],
-                "math_skill+100": this.dto.battle_upgrade_levels[32],
-                "hp+10%": this.dto.battle_upgrade_levels[33],
-                "atk+10%": this.dto.battle_upgrade_levels[34],
-                "def+10%": this.dto.battle_upgrade_levels[35],
-                "reward_hp+10%": this.dto.battle_upgrade_levels[36],
-                "reward_atk+10%": this.dto.battle_upgrade_levels[37],
-                "reward_def+10%": this.dto.battle_upgrade_levels[38],
-                "reward_exp+10%": this.dto.battle_upgrade_levels[39],
-                "rare_chance+0.1%": this.dto.battle_upgrade_levels[40],
-                "battle_upgrade_max_level_2+1": this.dto.battle_upgrade_levels[41],
-              };
-              this.lines = 1;
-              this.omegaPrestigeLevel = this.dto.softResetNum;
-              this.reactor_levels = {
-                "r": this.dto.reactor_levels[0],
-                "lineRenderer": this.dto.reactor_levels[1],
-                "equation": this.dto.reactor_levels[2],
-                "battle_stats": this.dto.reactor_levels[3],
-                "crit": this.dto.reactor_levels[4],
-                "s_crit": this.dto.reactor_levels[5],
-              };
-              this.reactor_values = {
-                "r": this.dto.reactor_values[0],
-                "lineRenderer": this.dto.reactor_values[1],
-                "equation": this.dto.reactor_values[2],
-                "battle_stats": this.dto.reactor_values[3],
-                "crit": this.dto.reactor_values[4],
-                "s_crit": this.dto.reactor_values[5],
-              };
-              this.upgradeLevels = {
-                "a": this.dto.upgradeLevels[0],
-                "b": this.dto.upgradeLevels[1],
-                "c": this.dto.upgradeLevels[2],
-                "d": this.dto.upgradeLevels[3],
-                "e": this.dto.upgradeLevels[4],
-                "f": this.dto.upgradeLevels[5],
-                "g": this.dto.upgradeLevels[6],
-                "ae11": this.dto.upgradeLevels[7],
-                "logk": this.dto.upgradeLevels[8],
-                "beMul": this.dto.upgradeLevels[9],
-                "k": this.dto.upgradeLevels[10],
-                "parmA": this.dto.upgradeLevels[11],
-                "parmB": this.dto.upgradeLevels[12],
-                "parmC": this.dto.upgradeLevels[13],
-                "parmD": this.dto.upgradeLevels[14],
-                "parmE": this.dto.upgradeLevels[15],
-                "parmF": this.dto.upgradeLevels[16],
-                "parmG": this.dto.upgradeLevels[17],
-                "parmK": this.dto.upgradeLevels[18],
-                "prestigepoint_denominator": this.dto.upgradeLevels[19],
-                "exponentK": this.dto.upgradeLevels[20],
-                "u": this.dto.upgradeLevels[21],
-                "v": this.dto.upgradeLevels[22],
-                "n": this.dto.upgradeLevels[23],
-                "Omega": this.dto.upgradeLevels[24],
-                "gamma": this.dto.upgradeLevels[25],
-                "delta": this.dto.upgradeLevels[26],
-                "z_multiplier": this.dto.upgradeLevels[27],
-                "a_mul": this.dto.upgradeLevels[28],
-                "b_mul": this.dto.upgradeLevels[29],
-                "c_mul": this.dto.upgradeLevels[30],
-                "d_mul": this.dto.upgradeLevels[31],
-                "e_mul": this.dto.upgradeLevels[32],
-                "f_mul": this.dto.upgradeLevels[33],
-                "g_mul": this.dto.upgradeLevels[34],
-                "rAll": this.dto.upgradeLevels[35],
-                "m": this.dto.upgradeLevels[36],
-                "alpha": this.dto.upgradeLevels[37],
-                "beta": this.dto.upgradeLevels[38],
-              };
-              this.variableUpgradeLevels = {
-                "k": this.dto.variableUpgradeLevels[0],
-                "a": this.dto.variableUpgradeLevels[1],
-                "b": this.dto.variableUpgradeLevels[2],
-                "c": this.dto.variableUpgradeLevels[3],
-                "d": this.dto.variableUpgradeLevels[4],
-                "e": this.dto.variableUpgradeLevels[5],
-                "f": this.dto.variableUpgradeLevels[6],
-                "g": this.dto.variableUpgradeLevels[7],
-                "atk": this.dto.variableUpgradeLevels[8],
-                "def": this.dto.variableUpgradeLevels[9],
-              };
-              this.z = this.dto.z;
             }
-            this.decrypt = function ( text ) {
-              this.kdf = CryptoJS.PBKDF2("kkyyhka", "stkttnsstkttns", {
-                keySize: 8,
-                hasher: CryptoJS.algo.SHA1,
-                iterations: 1000
-              });
-              
-              this.key = CryptoJS.enc.Hex.parse(this.kdf.toString().substring(0, 32));
-              this.iv = CryptoJS.enc.Hex.parse(this.kdf.toString().substring(32, 64));
-
-              return CryptoJS.AES.decrypt({ciphertext: CryptoJS.enc.Base64.parse(text)}, this.key, { iv: this.iv }).toString(CryptoJS.enc.Utf8);
+            
+            const BattleUpgradesKind = {
+              hp_mul_1: 0,
+              atk_mul_1: 1,
+              def_mul_1: 2,
+              regene_mul_1: 3,
+              reward_hp_1: 4,
+              reward_atk_1: 5,
+              reward_def_1: 6,
+              critical_indep_01: 7,
+              criticalDamage_mul_1: 8,
+              reward_exp_1: 9,
+              enemy_hp_reduction_add_1: 10,
+              regene_while_resting_mul_1: 11,
+              attackSpeed_mul_01: 12,
+              hp_mul_5: 13,
+              atk_mul_5: 14,
+              def_mul_5: 15,
+              regene_mul_5: 16,
+              reward_hp_mul_5: 17,
+              reward_atk_mul_5: 18,
+              reward_def_mul_5: 19,
+              reward_exp_mul_5: 20,
+              critical_indep_02: 21,
+              criticalDamage_mul_5: 22,
+              attack_speed_mul_05: 23,
+              maxlevelup_no_24: 24,
+              unlock_khuwarizmi: 25,
+              unlock_omar: 26,
+              unlock_bhaskara: 27,
+              unlock_madhava: 28,
+              atk_and_def_from_pi: 29,
+              exp_from_gamma: 30,
+              s_critical_from_napier: 31,
+              math_skill_100: 32,
+              hp_mul_10: 33,
+              atk_mul_10: 34,
+              def_mul_10: 35,
+              reward_hp_mul_10: 36,
+              reward_atk_mul_10: 37,
+              reward_def_mul_10: 38,
+              reward_exp_mul_10: 39,
+              rare_drop_mul_01: 40,
+              maxlevelup_no_41: 41,
             }
+            const ChallengeKind = {
+              none: 0,
+              basic: 1,
+              SlowSpiral: 2,
+              SinSpiral: 3,
+              StraightLine: 4,
+              drain: 5,
+              poorMath: 6,
+              no_rebirth: 7,
+              drunk: 8,
+              gluttony: 9,
+              sinkhole: 10,
+              sphere: 11,
+              fury: 12,
+              lava: 13,
+              go_back: 14,
+            }
+            const DesignID = {
+              normal_brue: 0,
+              normal_yellow: 1,
+              normal_red: 2,
+              normal_violet: 3,
+              normal_mono: 4,
+              gradation_brue_green: 5,
+              gradation_yellow_red: 6,
+              gradation_red_blue: 7,
+              gradation_violet_pink: 8,
+              gradation_white_cyan: 9,
+              circles_white: 10,
+              circles_green_pink: 11,
+              circles_cyan_red: 12,
+              dottedLine_blue: 13,
+              dottedLine_white: 14,
+              dottedLine_orange_brue: 15,
+              stripe_white: 16,
+              stripe_blue: 17,
+              stripe_yellow: 18,
+              sine_green: 19,
+              sine_white_red: 20,
+              sine_orange_purple: 21,
+              snake: 22,
+              bubble: 23,
+              arrow: 24,
+              pi: 25,
+              rects: 26,
+              rainbow: 27,
+              kanji: 28,
+              rahmen: 29,
+              lazer: 30,
+              spaceShip: 31,
+              seigaiha: 32,
+              sippou: 33,
+              lame: 34,
+            }
+            const EquationKind = {
+              thales: 0,
+              Hypatia: 1,
+              archimedes: 2,
+              pythagoras: 3,
+              euclides: 4,
+              eratos: 5,
+              Aryabhata: 6,
+              brahmagupta: 7,
+              khuwarizmi: 8,
+              omar: 9,
+              bhaskara: 10,
+              madhava: 11,
+            }
+            const UnlockWithTornado = {
+              AutoPrestige: 0,
+              AutoOmegaPrestige: 1,
+              Challenge: 2,
+              Challenge_Drain: 3,
+              Challenge_drunk: 4,
+              Challenge_noRebirth: 5,
+              Challenge_gluttony: 6,
+              Challenge_sinkhole: 7,
+              Enemy_PI: 8,
+              Enemy_Gamma: 9,
+              Enemy_Napier: 10,
+              Challenge_Flower: 11,
+              Exponent_A: 12,
+              Challenge_Slow: 13,
+              Z_boolster: 14,
+              Challenge_Straight: 15,
+              NewSigma: 16,
+              Challenge_Poor: 17,
+              Equation: 18,
+              critical: 19,
+              m: 20,
+              integral: 21,
+              Challenge_sphere: 22,
+              new_battle_upgrade: 23,
+              z_reactor_c: 24,
+              z_reactor_cx: 25,
+              Enemy_penta: 26,
+              Challenge_fury: 27,
+              new_battle_upgrade_2: 28,
+            }
+            const RewardType = {
+              hp: 0,
+              atk: 1,
+              def: 2,
+              a: 3,
+              b: 4,
+              c: 5,
+              d: 6,
+              e: 7,
+              k: 8,
+              regene: 9,
+              critical: 10,
+              criticalDamage: 11,
+              a_mul: 12,
+              b_mul: 13,
+              c_mul: 14,
+              d_mul: 15,
+              e_mul: 16,
+              k_mul: 17,
+              hp_mul: 18,
+              atk_mul: 19,
+              def_mul: 20,
+              n: 21,
+              v: 22,
+              gamma: 23,
+              delta: 24,
+              Omega: 25,
+              attackSpeed: 26,
+              gamma_mul: 27,
+              delta_mul: 28,
+              Omega_mul: 29,
+              exp: 30,
+              rare_chance: 31,
+              super_critical: 32,
+              super_criticalDamage: 33,
+              math_skill: 34,
+              other: 35,
+              enemy_hp_reduction: 36,
+              regene_resting: 37,
+              maxlevelup_no_24: 38,
+              unlock: 39,
+              inspiration: 40,
+              math_core: 41,
+              inverse_core: 42,
+              hp2_mul: 43,
+              atk2_mul: 44,
+              def2_mul: 45,
+            }
+            const ParametersKind = {
 
+            }
             // Rendering
             this.updateFunctions = [];
             this.addUpdateFunction = function ( func ) {
@@ -258,10 +357,10 @@
             
             // Effects
             this.effects = {};
-            this.addEffect = function ( name, target, type, formula, value ) {
+            this.addEffect = function ( name, target, type, value ) {
               if ( this.effects[name] )
                 throw "Effect already exists: " + name;
-              this.effects[name] = new Effect(name, target, type, formula, value);
+              this.effects[name] = new Effect(name, target, type, value);
             }
             this.addBaseValue = function ( name, value ) {
               this.addEffect("Init " + name, name, "base", value, () => value);
@@ -307,6 +406,102 @@
             }
             
             this.init = function ( ) {
+              // Domain / Battle / BattleReward / BattleRewardContainer
+              this.addEffect("Battle reward a", ParametersKind.a, "add", () => this.dto.battle_rewards[RewardType.a]);
+              this.addEffect("Battle reward b", ParametersKind.b, "add", () => this.dto.battle_rewards[RewardType.b]);
+              this.addEffect("Battle reward c", ParametersKind.c, "add", () => this.dto.battle_rewards[RewardType.c]);
+              this.addEffect("Battle reward d", ParametersKind.d, "add", () => this.dto.battle_rewards[RewardType.d]);
+              this.addEffect("Battle reward e", ParametersKind.e, "add", () => this.dto.battle_rewards[RewardType.e]);
+              this.addEffect("Battle reward k", ParametersKind.k, "add", () => this.dto.battle_rewards[RewardType.k]);
+              this.addEffect("Battle reward atk", ParametersKind.atk, "add", () => this.dto.battle_rewards[RewardType.atk]);
+              this.addEffect("Battle reward def", ParametersKind.def, "add", () => this.dto.battle_rewards[RewardType.def]);
+              this.addEffect("Battle reward hp", ParametersKind.hp, "add", () => this.dto.battle_rewards[RewardType.hp]);
+
+              this.addEffect("Battle reward atk2%", ParametersKind.atk, "mul", () => 1 + this.dto.battle_rewards[RewardType.atk2_mul]);
+              this.addEffect("Battle reward def2%", ParametersKind.def, "mul", () => 1 + this.dto.battle_rewards[RewardType.def2_mul]);
+              this.addEffect("Battle reward hp2%", ParametersKind.hp, "mul", () => 1 + this.dto.battle_rewards[RewardType.hp2_mul]);
+
+              this.addEffect("Battle reward regene", ParametersKind.regene, "add", () => this.dto.battle_rewards[RewardType.regene]);
+              this.addEffect("Battle reward critical", ParametersKind.critical, "add", () => this.dto.battle_rewards[RewardType.critical]);
+              this.addEffect("Battle reward criticalDamage", ParametersKind.criticalDamage, "mul", () => 1 + this.dto.battle_rewards[RewardType.criticalDamage]);
+              this.addEffect("Battle reward gamma", ParametersKind.gamma, "add", () => this.dto.battle_rewards[RewardType.gamma]);
+              this.addEffect("Battle reward delta", ParametersKind.delta, "add", () => this.dto.battle_rewards[RewardType.delta]);
+              this.addEffect("Battle reward Omega", ParametersKind.Omega, "add", () => this.dto.battle_rewards[RewardType.Omega]);
+              this.addEffect("Battle reward super_critical", ParametersKind.super_critical, "add", () => this.dto.battle_rewards[RewardType.super_critical]);
+              this.addEffect("Battle reward super_criticalDamage", ParametersKind.super_criticalDamage, "mul", () => 1 + this.dto.battle_rewards[RewardType.super_criticalDamage]);
+              this.addEffect("Battle reward super_critical threshold", ParametersKind.super_critical, "add", () => this.dto.battle_rewards[RewardType.super_criticalDamage] > 5 ? 0.01 : 0);
+              this.addEffect("Battle reward inspiration", ParametersKind.inspiration, "add", () => this.dto.battle_rewards[RewardType.inspiration]);
+
+              this.addEffect("Battle reward a%", ParametersKind.a, "mul", () => 1 + this.dto.battle_rewards[RewardType.a_mul]);
+              this.addEffect("Battle reward b%", ParametersKind.b, "mul", () => 1 + this.dto.battle_rewards[RewardType.b_mul]);
+              this.addEffect("Battle reward c%", ParametersKind.c, "mul", () => 1 + this.dto.battle_rewards[RewardType.c_mul]);
+              this.addEffect("Battle reward d%", ParametersKind.d, "mul", () => 1 + this.dto.battle_rewards[RewardType.d_mul]);
+              this.addEffect("Battle reward e%", ParametersKind.e, "mul", () => 1 + this.dto.battle_rewards[RewardType.e_mul]);
+              this.addEffect("Battle reward k%", ParametersKind.k, "mul", () => 1 + this.dto.battle_rewards[RewardType.k_mul]);
+              this.addEffect("Battle reward hp%", ParametersKind.hp, "mul", () => 1 + this.dto.battle_rewards[RewardType.hp_mul]);
+              this.addEffect("Battle reward atk%", ParametersKind.atk, "mul", () => 1 + this.dto.battle_rewards[RewardType.atk_mul]);
+              this.addEffect("Battle reward def%", ParametersKind.def, "mul", () => 1 + this.dto.battle_rewards[RewardType.def_mul]);
+              this.addEffect("Battle reward gamma%", ParametersKind.gamma, "mul", () => 1 + this.dto.battle_rewards[RewardType.gamma_mul]);
+              this.addEffect("Battle reward delta%", ParametersKind.delta, "mul", () => 1 + this.dto.battle_rewards[RewardType.delta_mul]);
+              this.addEffect("Battle reward Omega%", ParametersKind.Omega, "mul", () => 1 + this.dto.battle_rewards[RewardType.Omega_mul]);
+              this.addEffect("Battle reward attack speed", ParametersKind.attack_speed, "mul", () => diminishedAttackSpeed(this.dto.battle_rewards[RewardType.attackSpeed]));
+              this.addEffect("Battle reward rare drop", ParametersKind.rare_drop, "mul", () => diminishedRareChance(this.dto.battle_rewards[RewardType.rare_chance]));
+              this.addEffect("Battle reward math skill", ParametersKind.math_skill, "add", () => this.dto.battle_rewards[RewardType.math_skill]); 
+              this.addEffect("Battle reward enemy growth reduction", ParametersKind.enemy_growth_reduction, "mul", () => decay(this.dto.battle_rewards[RewardType.math_skill]));
+              
+              // Domain / Battle / BattleUpgrades
+              this.addEffect("Battle upgrade HP +1%", ParametersKind.hp, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.hp_mul_1]);
+              this.addEffect("Battle upgrade ATK +1%", ParametersKind.atk, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.atk_mul_1]);
+              this.addEffect("Battle upgrade DEF +1%", ParametersKind.def, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.def_mul_1]);
+              this.addEffect("Battle upgrade Regenerate +1%", ParametersKind.regene, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.regene_mul_1]);
+              this.addEffect("Battle upgrade Reward HP +1", ParametersKind.reward_hp, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.reward_hp_1]);
+              this.addEffect("Battle upgrade Reward ATK +1", ParametersKind.reward_atk, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.reward_atk_1]);
+              this.addEffect("Battle upgrade Reward DEF +1", ParametersKind.reward_def, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.reward_def_1]);
+              this.addEffect("Battle upgrade Critical +0.1%", ParametersKind.critical, "indep", () => 0.001 * this.dto.battle_upgrades[BattleUpgradesKind.critical_indep_01]);
+              this.addEffect("Battle upgrade Critical Damage +1%", ParametersKind.criticalDamage, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.criticalDamage_mul_1]);
+              this.addEffect("Battle upgrade Reward EXP +1", ParametersKind.reward_exp, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.reward_exp_1]);
+              this.addEffect("Battle upgrade Enemy HP Reduction +1%", ParametersKind.enemy_hp_reduction_add, "add", () => -0.1 * this.dto.battle_upgrades[BattleUpgradesKind.enemy_hp_reduction_add_1]);
+              this.addEffect("Battle upgrade Regenerate While Resting +1%", ParametersKind.regene_while_resting, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.regene_while_resting_mul_1]);
+              this.addEffect("Battle upgrade Attack Speed +0.1%", ParametersKind.attack_speed, "mul", () => 1 + 0.001 * this.dto.battle_upgrades[BattleUpgradesKind.attackSpeed_mul_01]);
+              this.addEffect("Battle upgrade HP +5%", ParametersKind.hp, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.hp_mul_5]);
+              this.addEffect("Battle upgrade ATK +5%", ParametersKind.atk, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.atk_mul_5]);
+              this.addEffect("Battle upgrade DEF +5%", ParametersKind.def, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.def_mul_5]);
+              this.addEffect("Battle upgrade Regenerate +5%", ParametersKind.regene, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.regene_mul_5]);
+              this.addEffect("Battle upgrade Reward HP +5%", ParametersKind.reward_hp, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.reward_hp_mul_5]);
+              this.addEffect("Battle upgrade Reward ATK +5%", ParametersKind.reward_atk, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.reward_atk_mul_5]);
+              this.addEffect("Battle upgrade Reward DEF +5%", ParametersKind.reward_def, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.reward_def_mul_5]);
+              this.addEffect("Battle upgrade Reward EXP +5%", ParametersKind.reward_exp, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.reward_exp_mul_5]);
+              this.addEffect("Battle upgrade Critical +0.2%", ParametersKind.critical, "indep", () => 0.002 * this.dto.battle_upgrades[BattleUpgradesKind.critical_indep_02]);
+              this.addEffect("Battle upgrade Critical Damage +5%", ParametersKind.criticalDamage, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.criticalDamage_mul_5]);
+              this.addEffect("Battle upgrade Attack Speed +0.5%", ParametersKind.attack_speed, "mul", () => 1 + 0.005 * this.dto.battle_upgrades[BattleUpgradesKind.attack_speed_mul_05]);
+              this.addEffect("Battle upgrade Max Level +1", ParametersKind.battle_upgrade_max_level, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.maxlevelup_no_24]);
+
+              // unlock_khuwarizmi
+              // unlock_omar
+              // unlock_bhaskara
+              // unlock_madhava
+
+              this.addEffect("Battle upgrade ATK and DEF from PI", ParametersKind.atk_and_def_from_pi, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.atk_and_def_from_pi]);
+              this.addEffect("Battle upgrade EXP from Gamma", ParametersKind.exp_from_gamma, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.exp_from_gamma]);
+              this.addEffect("Battle upgrade S-Critical Damage from Napier", ParametersKind.s_critical_from_napier, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.s_critical_from_napier]);
+
+              this.addEffect("Battle upgrade Math Skill", ParametersKind.math_skill, "add", () => 100 * this.dto.battle_upgrades[BattleUpgradesKind.math_skill_100]);
+              this.addEffect("Battle upgrade HP +10%", ParametersKind.hp, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.hp_mul_10]);
+              this.addEffect("Battle upgrade ATK +10%", ParametersKind.atk, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.atk_mul_10]);
+              this.addEffect("Battle upgrade DEF +10%", ParametersKind.def, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.def_mul_10]);
+              this.addEffect("Battle upgrade Reward HP +10%", ParametersKind.reward_hp, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.reward_hp_mul_10]);
+              this.addEffect("Battle upgrade Reward ATK +10%", ParametersKind.reward_atk, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.reward_atk_mul_10]);
+              this.addEffect("Battle upgrade Reward DEF +10%", ParametersKind.reward_def, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.reward_def_mul_10]);
+              this.addEffect("Battle upgrade Reward EXP +10%", ParametersKind.reward_exp, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.reward_exp_mul_10]);
+              this.addEffect("Battle upgrade Rare Drop +0.1%", ParametersKind.rare_drop, "mul", () => 1 + 0.001 * this.dto.battle_upgrades[BattleUpgradesKind.rare_drop_mul_01]);
+              this.addEffect("Battle upgrade Max Level 2 +1", ParametersKind.battle_upgrade_max_level_2, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.maxlevelup_no_41]);
+
+
+
+
+
+
+
               // Parameter
               this.addBaseValue("a", 1);
               this.addBaseValue("b", 1);
@@ -498,87 +693,23 @@
               this.addEffect("Store upgrade def", "def", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["def"]);
               
               // BattleReward / BattleRewardContainer
-              this.addEffect("Battle reward a", "a", "add", "battle reward a", () => this.battle_rewards["a"]);
-              this.addEffect("Battle reward b", "b", "add", "battle reward b", () => this.battle_rewards["b"]);
-              this.addEffect("Battle reward c", "c", "add", "battle reward c", () => this.battle_rewards["c"]);
-              this.addEffect("Battle reward d", "d", "add", "battle reward d", () => this.battle_rewards["d"]);
-              this.addEffect("Battle reward e", "e", "add", "battle reward e", () => this.battle_rewards["e"]);
-              this.addEffect("Battle reward k", "k", "add", "battle reward k", () => this.battle_rewards["k"]);
               
-              this.addEffect("Battle reward atk", "atk", "add", "battle reward atk", () => this.battle_rewards["atk"]);
-              this.addEffect("Battle reward def", "def", "add", "battle reward def", () => this.battle_rewards["def"]);
-              this.addEffect("Battle reward hp", "hp", "add", "battle reward hp", () => this.battle_rewards["hp"]);
-              this.addEffect("Battle reward regene", "regene", "add", "battle reward regene", () => this.battle_rewards["regene"]);
-              this.addEffect("Battle reward critical", "critical", "add", "battle reward critical", () => this.battle_rewards["critical"]);
-              this.addEffect("Battle reward criticalDamage", "criticalDamage", "mul", "1 + battle reward criticalDamage", () => 1 + this.battle_rewards["criticalDamage"]);
+              
+              
+              
+              
 
-              this.addEffect("Battle reward gamma", "gamma", "add", "battle reward gamma", () => this.battle_rewards["gamma"]);
-              this.addEffect("Battle reward delta", "delta", "add", "battle reward delta", () => this.battle_rewards["delta"]);
-              this.addEffect("Battle reward Omega", "Omega", "add", "battle reward Omega", () => this.battle_rewards["Omega"]);
+              
+              
 
-              this.addEffect("Battle reward super_critical", "super_critical", "add", "battle reward super_critical", () => this.battle_rewards["super_critical"]);
-              this.addEffect("Battle reward super_critical_damage", "super_critical_damage", "mul", "1 + battle reward super_criticalDamage", () => 1 + this.battle_rewards["super_criticalDamage"]);
-              this.addEffect("Battle reward super_critical threshold", "super_critical", "add", "0.01 if battle reward super_criticalDamage > 5", () => this.battle_rewards["super_criticalDamage"] > 5 ? 0.01 : 0);
+              
 
-              this.addEffect("Battle reward a%", "a", "mul", "1 + battle reward a%", () => 1 + this.battle_rewards["a_mul"]);
-              this.addEffect("Battle reward b%", "b", "mul", "1 + battle reward b%", () => 1 + this.battle_rewards["b_mul"]);
-              this.addEffect("Battle reward c%", "c", "mul", "1 + battle reward c%", () => 1 + this.battle_rewards["c_mul"]);
-              this.addEffect("Battle reward d%", "d", "mul", "1 + battle reward d%", () => 1 + this.battle_rewards["d_mul"]);
-              this.addEffect("Battle reward e%", "e", "mul", "1 + battle reward e%", () => 1 + this.battle_rewards["e_mul"]);
-              this.addEffect("Battle reward k%", "k", "mul", "1 + battle reward k%", () => 1 + this.battle_rewards["k_mul"]);
+              
 
-              this.addEffect("Battle reward hp%", "hp", "mul", "1 + battle reward hp%", () => 1 + this.battle_rewards["hp_mul"]);
-              this.addEffect("Battle reward atk%", "atk", "mul", "1 + battle reward atk%", () => 1 + this.battle_rewards["atk_mul"]);
-              this.addEffect("Battle reward def%", "def", "mul", "1 + battle reward def%", () => 1 + this.battle_rewards["def_mul"]);
-
-              this.addEffect("Battle reward gamma%", "gamma", "mul", "1 + battle reward gamma%", () => 1 + this.battle_rewards["gamma_mul"]);
-              this.addEffect("Battle reward delta%", "delta", "mul", "1 + battle reward delta%", () => 1 + this.battle_rewards["delta_mul"]);
-              this.addEffect("Battle reward Omega%", "Omega", "mul", "1 + battle reward Omega%", () => 1 + this.battle_rewards["Omega_mul"]);
-
-              this.addEffect("Battle reward attack speed", "attack_speed", "mul", "battle reward attack speed", () => diminishedAttackSpeed(this.battle_rewards["attackSpeed"]));
-              this.addEffect("Battle reward rare drop", "rare_drop", "mul", "battle reward rare chance", () => diminishedRareChance(this.battle_rewards["rare_chance"]));
-              this.addEffect("Battle reward math", "math_skill", "add", "battle reward math", () => this.battle_rewards["math_skill"]);
-              this.addEffect("Battle reward enemy growth reduction", "enemy_growth_reduction", "mul", "battle reward enemy growth reduction", () => decay(this.battle_rewards["math_skill"]));
+              
 
               // BattleUpgrades
-              this.addEffect("Battle upgrade HP +1%", "hp", "mul", "1 + battle upgrade HP +1%", () => 1 + 0.01 * this.battle_upgrades["hp+1%"]);
-              this.addEffect("Battle upgrade ATK +1%", "atk", "mul", "1 + battle upgrade ATK +1%", () => 1 + 0.01 * this.battle_upgrades["atk+1%"]);
-              this.addEffect("Battle upgrade DEF +1%", "def", "mul", "1 + battle upgrade DEF +1%", () => 1 + 0.01 * this.battle_upgrades["def+1%"]);
-              this.addEffect("Battle upgrade Regenerate +1%", "regene", "mul", "1 + battle upgrade Regenerate +1%", () => 1 + 0.01 * this.battle_upgrades["regene+1%"]);
-              this.addEffect("Battle upgrade Reward HP +1", "reward_hp", "add", "1 + battle upgrade Reward HP +1", () => this.battle_upgrades["reward_hp+1"]);
-              this.addEffect("Battle upgrade Reward ATK +1", "reward_atk", "add", "1 + battle upgrade Reward ATK +1", () => this.battle_upgrades["reward_atk+1"]);
-              this.addEffect("Battle upgrade Reward DEF +1", "reward_def", "add", "1 + battle upgrade Reward DEF +1", () => this.battle_upgrades["reward_def+1"]);
-              this.addEffect("Battle upgrade Critical +0.1%", "critical", "indep", "1 + battle upgrade Critical +1%", () => 0.001 * this.battle_upgrades["critical+0.1%"]);
-              this.addEffect("Battle upgrade Critical Damage +1%", "criticalDamage", "mul", "1 + battle upgrade Critical Damage +1%", () => 1 + 0.01 * this.battle_upgrades["criticalDamage+1%"]);
-              this.addEffect("Battle upgrade Reward EXP +1", "reward_exp", "add", "1 + battle upgrade Reward EXP +1", () => this.battle_upgrades["reward_exp+1"]);
-              this.addEffect("Battle upgrade Enemy HP Reduction +1%", "enemy_hp_reduction_add", "add", "1 + battle upgrade Enemy HP Reduction +1%", () => -0.1 * this.battle_upgrades["enemy_hp-0.1%"]);
-              this.addEffect("Battle upgrade Regenerate While Resting +1%", "regene_while_resting", "mul", "1 + battle upgrade Regenerate While Resting +1%", () => 1 + 0.01 * this.battle_upgrades["regene_while_resting+1%"]);
-              this.addEffect("Battle upgrade Attack Speed +0.1%", "attack_speed", "mul", "1 + battle upgrade Attack Speed +1%", () => 1 + 0.001 * this.battle_upgrades["attack_speed+0.1%"]);
-              this.addEffect("Battle upgrade HP +5%", "hp", "mul", "1 + battle upgrade HP +5%", () => 1 + 0.05 * this.battle_upgrades["hp+5%"]);
-              this.addEffect("Battle upgrade ATK +5%", "atk", "mul", "1 + battle upgrade ATK +5%", () => 1 + 0.05 * this.battle_upgrades["atk+5%"]);
-              this.addEffect("Battle upgrade DEF +5%", "def", "mul", "1 + battle upgrade DEF +5%", () => 1 + 0.05 * this.battle_upgrades["def+5%"]);
-              this.addEffect("Battle upgrade Regenerate +5%", "regene", "mul", "1 + battle upgrade Regenerate +5%", () => 1 + 0.05 * this.battle_upgrades["regene+5%"]);
-              this.addEffect("Battle upgrade Reward HP +5%", "reward_hp", "mul", "1 + battle upgrade Reward HP +5%", () => 1 + 0.05 * this.battle_upgrades["reward_hp+5%"]);
-              this.addEffect("Battle upgrade Reward ATK +5%", "reward_atk", "mul", "1 + battle upgrade Reward ATK +5%", () => 1 + 0.05 * this.battle_upgrades["reward_atk+5%"]);
-              this.addEffect("Battle upgrade Reward DEF +5%", "reward_def", "mul", "1 + battle upgrade Reward DEF +5%", () => 1 + 0.05 * this.battle_upgrades["reward_def+5%"]);
-              this.addEffect("Battle upgrade Reward EXP +5%", "reward_exp", "mul", "1 + battle upgrade Reward EXP +5%", () => 1 + 0.05 * this.battle_upgrades["reward_exp+5%"]);
-              this.addEffect("Battle upgrade Critical +0.2%", "critical", "indep", "1 + battle upgrade Critical +0.2%", () => 0.002 * this.battle_upgrades["critical+0.2%"]);
-              this.addEffect("Battle upgrade Critical Damage +5%", "criticalDamage", "mul", "1 + battle upgrade Critical Damage +5%", () => 1 + 0.05 * this.battle_upgrades["criticalDamage+5%"]);
-              this.addEffect("Battle upgrade Attack Speed +0.5%", "attack_speed", "mul", "1 + battle upgrade Attack Speed +0.5%", () => 1 + 0.005 * this.battle_upgrades["attack_speed+0.5%"]);
-              this.addEffect("Battle upgrade Max Level +1", "battle_upgrade_max_level", "indep", "1 + battle upgrade Max Level +1", () => this.battle_upgrades["battle_upgrade_max_level+1"]);
-              this.addEffect("Battle upgrade ATK and DEF from PI", "atk_and_def_from_pi", "add", "1 + battle upgrade ATK and DEF from PI", () => this.battle_upgrades["atk_and_def_from_pi+1"]);
-              this.addEffect("Battle upgrade EXP from Gamma", "exp_from_gamma", "add", "1 + battle upgrade EXP from Gamma", () => this.battle_upgrades["exp_from_gamma+1"]);
-              this.addEffect("Battle upgrade Critical Damage from Napier", "s_critical_from_napier", "add", "1 + battle upgrade Critical Damage from Napier", () => this.battle_upgrades["s_critical_from_napier+1"]);
-              this.addEffect("Battle upgrade Math Skill", "math_skill", "add", "1 + battle upgrade Math Skill", () => 100 * this.battle_upgrades["math_skill+100"]);
-              this.addEffect("Battle upgrade HP +10%", "hp", "mul", "1 + battle upgrade HP +10%", () => 1 + 0.1 * this.battle_upgrades["hp+10%"]);
-              this.addEffect("Battle upgrade ATK +10%", "atk", "mul", "1 + battle upgrade ATK +10%", () => 1 + 0.1 * this.battle_upgrades["atk+10%"]);
-              this.addEffect("Battle upgrade DEF +10%", "def", "mul", "1 + battle upgrade DEF +10%", () => 1 + 0.1 * this.battle_upgrades["def+10%"]);
-              this.addEffect("Battle upgrade Reward HP +10%", "reward_hp", "mul", "1 + battle upgrade Reward HP +10%", () => 1 + 0.1 * this.battle_upgrades["reward_hp+10%"]);
-              this.addEffect("Battle upgrade Reward ATK +10%", "reward_atk", "mul", "1 + battle upgrade Reward ATK +10%", () => 1 + 0.1 * this.battle_upgrades["reward_atk+10%"]);
-              this.addEffect("Battle upgrade Reward DEF +10%", "reward_def", "mul", "1 + battle upgrade Reward DEF +10%", () => 1 + 0.1 * this.battle_upgrades["reward_def+10%"]);
-              this.addEffect("Battle upgrade Reward EXP +10%", "reward_exp", "mul", "1 + battle upgrade Reward EXP +10%", () => 1 + 0.1 * this.battle_upgrades["reward_exp+10%"]);
-              this.addEffect("Battle upgrade Rare Drop +0.1%", "rare_drop", "mul", "1 + battle upgrade Rare Drop +0.1%", () => 1 + 0.001 * this.battle_upgrades["rare_chance+0.1%"]);
-              this.addEffect("Battle upgrade Max Level 2", "battle_upgrade_max_level_2", "add", "1 + battle upgrade Max Level 2", () => this.battle_upgrades["battle_upgrade_max_level_2+1"]);
+              
             
               // SpiralEquipmentContainer
               this.addEffect("Spiral Equation thales", "hp", "mul", "spiral equation thales", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.thales] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.thales] - 1000));
@@ -825,106 +956,8 @@
 
           idlespiral.init();
 
-          const ChallengeKind = {
-            none: 0,
-            basic: 1,
-            SlowSpiral: 2,
-            SinSpiral: 3,
-            StraightLine: 4,
-            drain: 5,
-            poorMath: 6,
-            no_rebirth: 7,
-            drunk: 8,
-            gluttony: 9,
-            sinkhole: 10,
-            sphere: 11,
-            fury: 12,
-            lava: 13,
-            go_back: 14,
-          }
-          const DesignID = {
-            normal_brue: 0,
-            normal_yellow: 1,
-            normal_red: 2,
-            normal_violet: 3,
-            normal_mono: 4,
-            gradation_brue_green: 5,
-            gradation_yellow_red: 6,
-            gradation_red_blue: 7,
-            gradation_violet_pink: 8,
-            gradation_white_cyan: 9,
-            circles_white: 10,
-            circles_green_pink: 11,
-            circles_cyan_red: 12,
-            dottedLine_blue: 13,
-            dottedLine_white: 14,
-            dottedLine_orange_brue: 15,
-            stripe_white: 16,
-            stripe_blue: 17,
-            stripe_yellow: 18,
-            sine_green: 19,
-            sine_white_red: 20,
-            sine_orange_purple: 21,
-            snake: 22,
-            bubble: 23,
-            arrow: 24,
-            pi: 25,
-            rects: 26,
-            rainbow: 27,
-            kanji: 28,
-            rahmen: 29,
-            lazer: 30,
-            spaceShip: 31,
-            seigaiha: 32,
-            sippou: 33,
-            lame: 34,
-          }
-          const EquationKind = {
-	          thales: 0,
-            Hypatia: 1,
-            archimedes: 2,
-            pythagoras: 3,
-            euclides: 4,
-            eratos: 5,
-            Aryabhata: 6,
-            brahmagupta: 7,
-            khuwarizmi: 8,
-            omar: 9,
-            bhaskara: 10,
-            madhava: 11,
-          }
           
-          const UnlockWithTornado = {
-            AutoPrestige: 0,
-            AutoOmegaPrestige: 1,
-            Challenge: 2,
-            Challenge_Drain: 3,
-            Challenge_drunk: 4,
-            Challenge_noRebirth: 5,
-            Challenge_gluttony: 6,
-            Challenge_sinkhole: 7,
-            Enemy_PI: 8,
-            Enemy_Gamma: 9,
-            Enemy_Napier: 10,
-            Challenge_Flower: 11,
-            Exponent_A: 12,
-            Challenge_Slow: 13,
-            Z_boolster: 14,
-            Challenge_Straight: 15,
-            NewSigma: 16,
-            Challenge_Poor: 17,
-            Equation: 18,
-            critical: 19,
-            m: 20,
-            integral: 21,
-            Challenge_sphere: 22,
-            new_battle_upgrade: 23,
-            z_reactor_c: 24,
-            z_reactor_cx: 25,
-            Enemy_penta: 26,
-            Challenge_fury: 27,
-            new_battle_upgrade_2: 28,
-          }
+          
           
           function diminishedAttackSpeed ( pure_attack_speed ) {
             if ( pure_attack_speed < 4 )
@@ -956,15 +989,6 @@
               r += 1 / Math.sqrt(i + 1);
             return r;
           }
-
-          async function onChooseFile ( event ) {
-            const file = event.target.files.item(0)
-            const text = await file.text();
-            
-            idlespiral.loadSave(text);
-            idlespiral.debug();
-            idlespiral.update();
-          }
         </script>
     </head>
     <body>
@@ -973,7 +997,7 @@
 
       v0.2207211129<br/>
 
-      <input type='file' onchange='onChooseFile(event)' />
+      <input type="file" onchange="loadSave(event)" />
 
       <div class="navbar marked" style="position: relative; width: 1500px; height: 60px">
         <div class="nav-button marked explainable explain_r_upgrades" style="left: 268px">r</div>
@@ -994,11 +1018,12 @@
         <div class="nav-button marked explainable explain_theorems unavailable" style="left: 1328px">T</div>
       </div>
       <div class="navbar marked" style="position: relative; width: 1500px; height: 60px">
-        <div class="nav-button marked explainable explain_story" style="left: 216px">S</div>
-        <div class="nav-button marked explainable explain_changelog" style="left: 472px">c</div>
-        <div class="nav-button marked explainable explain_meta_changelog" style="left: 728px">m</div>
-        <div class="nav-button marked explainable explain_bugs" style="left: 984px"><i class="fa-solid fa-bug"></i></div>
-        <div class="nav-button marked explainable explain_faq" style="left: 1240px">faq</div>
+        <div class="nav-button marked explainable explain_story" style="left: 180px">S</div>
+        <div class="nav-button marked explainable explain_changelog" style="left: 400px">c</div>
+        <div class="nav-button marked explainable explain_meta_changelog" style="left: 620px">m</div>
+        <div class="nav-button marked explainable explain_bugs" style="left: 840px"><i class="fa-solid fa-bug"></i></div>
+        <div class="nav-button marked explainable explain_faq" style="left: 1060px">faq</div>
+        <div class="nav-button marked explainable explain_dev" style="left: 1280px">d</div>
       </div>
       <div class="marked" style="position: absolute; width: 1500px; height: 1000px">
         <div class="marked" style="position: absolute; width: 420px; height: 500px">
@@ -1544,6 +1569,15 @@
             unlocked upon reaching the second $\omega$ tier for the first time. This is currently by far the most important part of the game.<br>
 
             There are currently 8 tiers of normal enemies and 3 raid bosses.<br>
+            <br>
+            $\text{HP} = \text{base HP} * \text{Enemy HP Reduction Add} / 100 * (1 + 5\% * \text{Decay})^{\text{difficulty}}$<br>
+            $\text{ATK} = \text{base ATK} * (1 + 3\% * \text{Decay})^{\text{difficulty}}$<br>
+            $\text{DEF} = \text{base DEF} * (1 + 1\% * \text{Decay})^{\text{difficulty}}$<br>
+            <br>
+            In the Fury Challenge, this is changed to:<br>
+            $\text{ATK} = \text{base ATK} * (1 + 50\% * \text{Decay})^{\text{difficulty}}$<br>
+            $\text{Attack Speed} = \text{Attack Speed} * \min(1 + 1.5\% * \text{Fury})^{\text{difficulty}}, 7.5)$<br>
+            <br>
 
             <div class="entry">
               <h3>Training</h3>
@@ -1551,6 +1585,157 @@
               <b>Base ATK:</b> $3$<br>
               <b>Base DEF:</b> $1$<br>
               <b>Attack Speed:</b> $0.3$<br>
+            </div>
+            <div class="entry">
+              <h3>Kappa</h3>
+              <b>Base HP:</b> $7000$<br>
+              <b>Base ATK:</b> $50$<br>
+              <b>Base DEF:</b> $30$<br>
+              <b>Attack Speed:</b> $0.5$<br>
+            </div>
+            <div class="entry">
+              <h3>Alpha</h3>
+              <b>Base HP:</b> $10^5$<br>
+              <b>Base ATK:</b> $1000$<br>
+              <b>Base DEF:</b> $200$<br>
+              <b>Attack Speed:</b> $0.5$<br>
+              15 rewards
+            </div>
+            <div class="entry">
+              <h3>Beta</h3>
+              <b>Base HP:</b> $10^8$<br>
+              <b>Base ATK:</b> $10^5$<br>
+              <b>Base DEF:</b> $1000$<br>
+              <b>Attack Speed:</b> $0.1$<br>
+            </div>
+            <div class="entry">
+              <h3>Pi</h3>
+              <b>Base HP:</b> $10^{11}$<br>
+              <b>Base ATK:</b> $10^5$<br>
+              <b>Base DEF:</b> $10^4$<br>
+              <b>Attack Speed:</b> $0.05$<br>
+            </div>
+            <div class="entry">
+              <h3>Gamma</h3>
+              <b>Base HP:</b> 5*10^{14}<br>
+              <b>Base ATK:</b> $10^6$<br>
+              <b>Base DEF:</b> $10^5$<br>
+              <b>Attack Speed:</b> $0.03$<br>
+            </div>
+            <div class="entry">
+              <h3>Napier</h3>
+              <b>Base HP:</b> $2.718*10^{18}$<br>
+              <b>Base ATK:</b> $2.718*10^8$<br>
+              <b>Base DEF:</b> $2.718*10^8$<br>
+              <b>Attack Speed:</b> $0.027$<br>
+            </div>
+            <div class="entry">
+              <h3>Penta</h3>
+              <b>Base HP:</b> $5.55*10^{23}$<br>
+              <b>Base ATK:</b> $5.55*10^{15}$<br>
+              <b>Base DEF:</b> $5.55*10^{15}$<br>
+              <b>Attack Speed:</b> $0.5$<br>
+            </div>
+            <div class="entry unavailable">
+              <h3>Spiral Tower</h3>
+              <b>Base HP:</b> $10^{36}$<br>
+              <b>Base ATK:</b> $10^{21}$<br>
+              <b>Base Damage Cut Rate:</b> $0.5$<br>
+              <b>Attack Speed:</b> $0.3$<br>
+            </div>
+            <div class="entry unavailable">
+              <h3>Math Tower</h3>
+              <b>Base HP:</b> $3.33*10^{40}$<br>
+              <b>Base ATK:</b> $5*10^{28}$<br>
+              <b>Base Damage Cut Rate:</b> $0.9$<br>
+              <b>Attack Speed:</b> $0.02$<br>
+              <b>Raid Damage Bonus:</b> $600 * timerMultiplier$<br>
+              <b>Restriction:</b> $\text{Max HP}$ and $\text{Attack Speed}$ are reduced by a factor of $\min(1, \text{Math Skill} / 10^7)$<br>
+            </div>
+            <div class="entry unavailable">
+              <h3>Inverse Tower</h3>
+              <b>Base HP:</b> $7*10^{55}$<br>
+              <b>Base ATK:</b> $0$<br>
+              <b>Base Damage Cut Rate:</b> $0.95$<br>
+              <b>Attack Speed:</b> $0.02$<br>
+              <b>Raid Damage Bonus:</b> $1800 * timerMultiplier$<br>
+              <b>Restriction:</b> $\text{ATK}$ and $\text{DEF}$ are swapped<br>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_battle_upgrades" style="display: none">
+            <div class="title">Battle Upgrades</div>
+            WIP
+
+            <div class="entry">
+              <b>Upgrade of Parameters</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td> 1</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                      </td></tr>
+                <tr><td> 2</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                     </td></tr>
+                <tr><td> 3</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                     </td></tr>
+                <tr><td> 4</td><td>$\text{Regenerate} \mathrel{{*}{=}} 1 + 1\% * \text{level}$              </td></tr>
+                <tr><td> 8</td><td>$\text{Critical Rate}\ \mathrel{{+}{=}}^*\ 0.1\% * \text{level}$         </td></tr>
+                <tr><td> 9</td><td>$\text{Critical Damage} \mathrel{{*}{=}} 1 + 1\% * \text{level}$         </td></tr>
+                <tr><td>11</td><td>$\text{Enemy HP Reduction Add} \mathrel{{-}{=}} 0.1 * \text{level}$      </td></tr>
+                <tr><td>12</td><td>$\text{Regenerate while resting} \mathrel{{*}{=}} 1 + 1\% * \text{level}$</td></tr>
+                <tr><td>13</td><td>$\text{Attack Speed} \mathrel{{*}{=}} 1 + 0.1\% * \text{level}$          </td></tr>
+                <tr><td>14</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                      </td></tr>
+                <tr><td>15</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                     </td></tr>
+                <tr><td>16</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                     </td></tr>
+                <tr><td>17</td><td>$\text{Regenerate} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>22</td><td>$\text{Critical Rate} \mathrel{{+}{=}}^* 0.2\% * \text{level}$           </td></tr>
+                <tr><td>23</td><td>$\text{Critical Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$         </td></tr>
+                <tr><td>24</td><td>$\text{Attack Speed} \mathrel{{*}{=}} 1 + 0.5\% * \text{level}$          </td></tr>
+                <tr><td>34</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                     </td></tr>
+                <tr><td>35</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                    </td></tr>
+                <tr><td>36</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                    </td></tr>
+                <tr><td>41</td><td>$\text{Rare Drop Chance} \mathrel{{*}{=}} 1 + 0.1\% * \text{level}$      </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Upgrade of Rewards</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td> 5</td><td>$\text{HP Reward} \mathrel{{+}{=}} \text{level}$                         </td></tr>
+                <tr><td> 6</td><td>$\text{ATK Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td> 7</td><td>$\text{DEF Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td>10</td><td>$\text{EXP Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td>18</td><td>$\text{HP Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$               </td></tr>
+                <tr><td>19</td><td>$\text{ATK Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>20</td><td>$\text{DEF Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>21</td><td>$\text{EXP Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>30</td><td>Increase the $\text{ATK}$ and $\text{DEF}$ rolls for $\text{PI}$         </td></tr>
+                <tr><td>31</td><td>Increase the $\text{EXP}$ rolls for $\text{Gamma}$                       </td></tr>
+                <tr><td>32</td><td>Increase the $\text{S-Critical Damage}$ rolls for $\text{Napier}$        </td></tr>
+                <tr><td>37</td><td>$\text{HP Reward} \mathrel{{*}{=}} 1 + 10\% * \text{level}$              </td></tr>
+                <tr><td>38</td><td>$\text{ATK Reward} \mathrel{{*}{=}} 1 + 10\% * \text{level}$             </td></tr>
+                <tr><td>39</td><td>$\text{DEF Reward} \mathrel{{*}{=}} 1 + 10\% * \text{level}$             </td></tr>
+                <tr><td>40</td><td>$\text{EXP Reward} \mathrel{{*}{=}} 1 + 10\% * \text{level}$             </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Unlock</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td>26</td><td>Unlock the spiral equation $\text{khuwarizmi}$                           </td></tr>
+                <tr><td>27</td><td>Unlock the spiral equation $\text{omar}$                                 </td></tr>
+                <tr><td>28</td><td>Unlock the spiral equation $\text{bhaskara}$                             </td></tr>
+                <tr><td>29</td><td>Unlock the spiral equation $\text{madhava}$                              </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Others</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td>25</td><td>Increase the maximum level of upgrades 1 through 24 by 1                 </td></tr>
+                <tr><td>33</td><td>$\text{Math Skill} +100$                                                 </td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_battle_reward_candidates" style="display: none">
+            <div class="title">Battle Rewards</div>
+            <div class="entry">
+              <h3>Training</h3>
               10 rewards
               <table>
                 <tr>                        <th>Reward                            </th><th>Weight</th></tr>
@@ -1570,10 +1755,6 @@
             </div>
             <div class="entry">
               <h3>Kappa</h3>
-              <b>Base HP:</b> $7000$<br>
-              <b>Base ATK:</b> $50$<br>
-              <b>Base DEF:</b> $30$<br>
-              <b>Attack Speed:</b> $0.5$<br>
               10 rewards
               <table>
                 <tr>                        <th>Reward                             </th><th>Weight</th></tr>
@@ -1593,10 +1774,6 @@
             </div>
             <div class="entry">
               <h3>Alpha</h3>
-              <b>Base HP:</b> $10^5$<br>
-              <b>Base ATK:</b> $1000$<br>
-              <b>Base DEF:</b> $200$<br>
-              <b>Attack Speed:</b> $0.5$<br>
               15 rewards
               <table>
                 <tr>                        <th>Reward                                 </th><th>Weight</th></tr>
@@ -1616,10 +1793,6 @@
             </div>
             <div class="entry">
               <h3>Beta</h3>
-              <b>Base HP:</b> $10^8$<br>
-              <b>Base ATK:</b> $10^5$<br>
-              <b>Base DEF:</b> $1000$<br>
-              <b>Attack Speed:</b> $0.1$<br>
               20 rewards
               <table>
                 <tr>                        <th>Reward                                 </th><th> Weight</th></tr>
@@ -1645,10 +1818,6 @@
             </div>
             <div class="entry">
               <h3>Pi</h3>
-              <b>Base HP:</b> $10^{11}$<br>
-              <b>Base ATK:</b> $10^5$<br>
-              <b>Base DEF:</b> $10^4$<br>
-              <b>Attack Speed:</b> $0.05$<br>
               10 rewards
               <table>
                 <tr>                       <th>Reward                                               </th><th> Weight</th></tr>
@@ -1666,10 +1835,6 @@
             </div>
             <div class="entry">
               <h3>Gamma</h3>
-              <b>Base HP:</b> 5*10^{14}<br>
-              <b>Base ATK:</b> $10^6$<br>
-              <b>Base DEF:</b> $10^5$<br>
-              <b>Attack Speed:</b> $0.03$<br>
               10 rewards
               <table>
                 <tr>                        <th>Reward                                       </th><th>Weight</th></tr>
@@ -1689,10 +1854,6 @@
             </div>
             <div class="entry">
               <h3>Napier</h3>
-              <b>Base HP:</b> $2.718*10^{18}$<br>
-              <b>Base ATK:</b> $2.718*10^8$<br>
-              <b>Base DEF:</b> $2.718*10^8$<br>
-              <b>Attack Speed:</b> $0.027$<br>
               15 rewards
               <table>
                 <tr>                        <th>Reward                                                          </th><th> Weight</th></tr>
@@ -1711,10 +1872,6 @@
             </div>
             <div class="entry">
               <h3>Penta</h3>
-              <b>Base HP:</b> $5.55*10^{23}$<br>
-              <b>Base ATK:</b> $5.55*10^{15}$<br>
-              <b>Base DEF:</b> $5.55*10^{15}$<br>
-              <b>Attack Speed:</b> $0.5$<br>
               5 rewards
               <table>
                 <tr>                        <th>Reward                                   </th><th>Weight</th></tr>
@@ -1731,10 +1888,6 @@
             </div>
             <div class="entry unavailable">
               <h3>Spiral Tower</h3>
-              <b>Base HP:</b> $10^{36}$<br>
-              <b>Base ATK:</b> $10^{21}$<br>
-              <b>Base Damage Cut Rate:</b> $0.5$<br>
-              <b>Attack Speed:</b> $0.3$<br>
               2 rewards
               <table>
                 <tr>                       <th>Reward                  </th><th>Weight</th></tr>
@@ -1745,12 +1898,6 @@
             </div>
             <div class="entry unavailable">
               <h3>Math Tower</h3>
-              <b>Base HP:</b> $3.33*10^{40}$<br>
-              <b>Base ATK:</b> $5*10^{28}$<br>
-              <b>Base Damage Cut Rate:</b> $0.9$<br>
-              <b>Attack Speed:</b> $0.02$<br>
-              <b>Raid Damage Bonus:</b> $600 * timerMultiplier$<br>
-              <b>Restriction:</b> $\text{Max HP}$ and $\text{Attack Speed}$ are reduced by a factor of $\min(1, \text{Math Skill} / 10^7)$<br>
               <table>
                 <tr>                        <th>Reward                          </th></tr>
                 <tr class="reward-uncommon"><td>$\text{ATK}_2 + 10\%$           </td></tr>
@@ -1763,12 +1910,6 @@
             </div>
             <div class="entry unavailable">
               <h3>Inverse Tower</h3>
-              <b>Base HP:</b> $7*10^{55}$<br>
-              <b>Base ATK:</b> $0$<br>
-              <b>Base Damage Cut Rate:</b> $0.95$<br>
-              <b>Attack Speed:</b> $0.02$<br>
-              <b>Raid Damage Bonus:</b> $1800 * timerMultiplier$<br>
-              <b>Restriction:</b> $\text{ATK}$ and $\text{DEF}$ are swapped<br>
               <table>
                 <tr>                        <th>Reward                                                    </th></tr>
                 <tr class="reward-uncommon"><td>$\text{Crit Rate} + 0.005\ /\ \text{Critical Damage} + 15$</td></tr>
@@ -1779,56 +1920,6 @@
                 <tr>                        <td>                                                          </td></tr>
               </table>
             </div>
-          </div>
-          <div class="explanation" id="explanation_battle_upgrades" style="display: none">
-            <div class="title">Battle Upgrades</div>
-            WIP
-
-            <div class="entry">
-              <b>Upgrade of Parameters</b><br>
-              <table>
-                <tr><th># </th><th>Effect                                                                   </th></tr>
-                <tr><td> 1</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                      </td></tr>
-                <tr><td> 2</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                     </td></tr>
-                <tr><td> 3</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                     </td></tr>
-                <tr><td> 4</td><td>$\text{Regenerate} \mathrel{{*}{=}} 1 + 1\% * \text{level}$              </td></tr>
-                <tr><td> 8</td><td>$\text{Critical Rate} \mathrel{{+}{=}} 0.1\% * \text{level}$             </td></tr>
-                <tr><td> 9</td><td>$\text{Critical Damage} \mathrel{{*}{=}} 1 + 1\% * \text{level}$         </td></tr>
-                <tr><td>11</td><td>$\text{Enemy HP Reduction Add} \mathrel{{-}{=}} 0.1 * \text{level}$      </td></tr>
-                <tr><td>12</td><td>$\text{Regenerate while resting} \mathrel{{*}{=}} 1 + 1\% * \text{level}$</td></tr>
-                <tr><td>13</td><td>$\text{Attack Speed} \mathrel{{*}{=}} 1 + 0.1\% * \text{level}$          </td></tr>
-                <tr><td>14</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                      </td></tr>
-                <tr><td>15</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                     </td></tr>
-                <tr><td>16</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                     </td></tr>
-                <tr><td>17</td><td>$\text{Regenerate} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
-                <tr><td>22</td><td>$\text{Critical Rate} \mathrel{{+}{=}} 0.2\% * \text{level}$             </td></tr>
-                <tr><td>23</td><td>$\text{Critical Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$         </td></tr>
-                <tr><td>24</td><td>$\text{Attack Speed} \mathrel{{*}{=}} 1 + 0.5\% * \text{level}$          </td></tr>
-                <tr><td>34</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                     </td></tr>
-                <tr><td>35</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                    </td></tr>
-                <tr><td>36</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                    </td></tr>
-                <tr><td>41</td><td>$\text{Rare Drop Chance} \mathrel{{*}{=}} 1 + 0.1\% * \text{level}$      </td></tr>
-              </table>
-            </div>
-            <div class="entry">
-              <b>Upgrade of Parameters</b><br>
-              <table>
-                <tr><th># </th><th>Effect                                                                   </th></tr>
-                <tr><td> 5</td><td>$\text{HP Reward} \mathrel{{+}{=}} \text{level}$                         </td></tr>
-                <tr><td> 6</td><td>$\text{ATK Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
-                <tr><td> 7</td><td>$\text{DEF Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
-                <tr><td>10</td><td>$\text{EXP Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
-                <tr><td>18</td><td>$\text{HP Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$               </td></tr>
-                <tr><td>19</td><td>$\text{ATK Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
-                <tr><td>20</td><td>$\text{DEF Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
-                <tr><td>21</td><td>$\text{EXP Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
-                <tr><td>30</td><td></td>
-              </table>
-            </div>
-          </div>
-          <div class="explanation" id="explanation_battle_reward_candidates" style="display: none">
-            <div class="title">Battle Rewards</div>
-            WIP: move the rewards here
           </div>
           <div class="explanation" id="explanation_spiral_equations" style="display: none">
             <div class="title">Spiral Equations</div>
@@ -2874,22 +2965,22 @@ length: 5
           </div>
           <div class="explanation" id="explanation_math_skill" style="display: none">
             <div class="title">Math Skill</div>
-            <p>math_skill contributes to the enemy_growth_reduction following the formula;</p>
+            <p>$\text{Math Skill}$ contributes to the $\text{Enemy Growth Reduction}$ following the formula;</p>
             <div class="formula" style="height: 75px">
-              <div class="explainable explain_enemy_growth_reduction">$enemy\_growth\_reduction$</div>
+              <div class="explainable explain_enemy_growth_reduction">$\text{Enemy Growth Reduction}$</div>
               <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
               <div>$$\begin{cases}
-                1 - 0.5 * math\_skill / 50000,& \text{if } math\_skill \lt 50000 \\
-                1 - (0.9 - 1 / 1.000018326 ^ {math\_skill}),& \text{otherwise}
+                1 - 0.5 * \text{Math Skill} / 50000,& \text{if } \text{Math Skill} \lt 50000 \\
+                1 - (0.9 - 1 / 1.000018326 ^ {\text{Math Skill}}),& \text{otherwise}
               \end{cases}$$</div>
             </div>
 
-            <p>This enemy_growth_reduction is currently only displayed, the actual Decay follows the formula;</p>
+            <p>This $\text{Enemy Growth Reduction}$ is currently only displayed, the actual $\text{Decay}$ used to determine enemy stats follows the formula;</p>
             <div class="formula" style="height: 50px">
               <div>
                 $$\begin{cases}
-                  1 - 0.5 * math\_skill / 5000,& \text{if } math\_skill \lt 5000 \\
-                  1 - (0.9 - 1 / 1.000183 ^ {math\_skill}),& \text{otherwise}
+                  1 - 0.5 * \text{Math Skill} / 5000,& \text{if } \text{Math Skill} \lt 5000 \\
+                  1 - (0.9 - 1 / 1.000183 ^ {\text{Math Skill}}),& \text{otherwise}
                 \end{cases}$$
               </div>
             </div>
@@ -2901,6 +2992,18 @@ length: 5
           <div class="explanation" id="explanation_inspiration" style="display: none">
             <div class="title">Inspiration</div>
             Explanation inspiration
+          </div>
+          <div class="explanation" id="explanation_dev" style="display: none">
+            <div class="title">Dev</div>
+            Stuff you should not look too much into.
+            <div class="entry">
+              <b>Raw savefile:</b><br>
+              <textarea id="savefile-input" style="width: 100%; height: 200px" readonly="readonly"></textarea>
+            </div>
+            <div class="entry">
+              <b>Decrypted savefile:</b><br>
+              <textarea id="savefile-decrypted" style="width: 100%; height: 200px" readonly="readonly"></textarea>
+            </div>
           </div>
         </div>
 
