@@ -1083,7 +1083,7 @@
 
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
-      v0.2207281837<br/>
+      v0.2207291428<br/>
 
       <!--<input type="file" onchange="loadSave(event)" />-->
 
@@ -1656,7 +1656,7 @@
             <div class="title">Battle Spiral</div>
             unlocked upon reaching the second $\omega$ tier for the first time. This is currently by far the most important part of the game.<br>
 
-            There are currently 8 tiers of normal enemies and 3 raid bosses.<br>
+            There are currently 8 tiers of normal enemies;<br>
             <br>
             $\text{HP} = \text{base HP} * \text{Enemy HP Reduction Add} / 100 * (1 + 5\% * \text{Decay})^{\text{difficulty}}$<br>
             $\text{ATK} = \text{base ATK} * (1 + 3\% * \text{Decay})^{\text{difficulty}}$<br>
@@ -1724,6 +1724,13 @@
               <b>Base DEF:</b> $5.55*10^{15}$<br>
               <b>Attack Speed:</b> $0.5$<br>
             </div>
+
+            Currently without unlock condition; after the normal enemies, you unlock the 3 raid enemies;<br>
+            <br>
+            $\text{HP} = \text{base HP} * \text{Enemy HP Reduction Add} / 100 * (1 + 250\% * \text{Decay})^{\text{difficulty}} * \text{towerGrowthReduction}$<br>
+            $\text{ATK} = \text{base ATK} * (1 + 250\% * \text{Decay})^{\text{difficulty}} * \text{towerGrowthReduction}$<br>
+            $\text{DEF} = \text{base DEF} * (1 + 250\% * \text{Decay})^{\text{difficulty}} * \text{towerGrowthReduction}$<br>
+
             <div class="entry unavailable">
               <h3>Spiral Tower</h3>
               <b>Base HP:</b> $10^{36}$<br>
@@ -1823,6 +1830,11 @@
           </div>
           <div class="explanation" id="explanation_battle_reward_candidates" style="display: none">
             <div class="title">Battle Rewards</div>
+
+            The rewards shown are still subject to the special reward improvements.<br>
+            All but the last tile rewards also increase with the $\text{Reward Multiplier};$<br>
+            $\text{Reward Multiplier} = 0.98 + 2 / (1 + 99 / e ^ {1.9956 * \text{difficulty} / 200})$
+
             <div class="entry">
               <h3>Training</h3>
               10 rewards
@@ -1977,23 +1989,27 @@
             </div>
             <div class="entry unavailable">
               <h3>Spiral Tower</h3>
-              2 rewards
+              20 rewards
               <table>
                 <tr>                       <th>Reward                  </th><th>Weight</th></tr>
                 <tr class="reward-common"> <td>$\text{Inspiration} + 1$</td><td>$1000$</td></tr>
-                <tr class="reward-onetime"><td>$\text{Exp} + 10*[1,9]$</td><td>      </td></tr>
-                <tr>                       <td>                        </td><td>$1000$</td></tr>
+                <tr class="reward-common"> <td>$\text{Exp} + 10*[1,9]$ </td><td>$1000$</td></tr>
+                <tr class="reward-onetime"><td>$$\begin{cases}
+                  \text{Random Theory Soul} + 2 + \log_{10}(\text{difficulty}), & \text{if difficulty is a multiple of 10}\\
+                  \text{Exp} + 50*[1,9]$, & \text{otherwise}
+                \end{cases}$$</td><td></td></tr>
+                <tr>                       <td>                        </td><td>$2000$</td></tr>
               </table>
             </div>
             <div class="entry unavailable">
               <h3>Math Tower</h3>
               <table>
                 <tr>                        <th>Reward                          </th></tr>
-                <tr class="reward-uncommon"><td>$\text{ATK}_2 + 10\%$           </td></tr>
-                <tr class="reward-uncommon"><td>$\text{ATK}_2 + 20\%$           </td></tr>
-                <tr class="reward-uncommon"><td>$\text{DEF}_2 + 25\%$           </td></tr>
-                <tr class="reward-uncommon"><td>$\text{HP}_2 + 25\%$            </td></tr>
-                <tr class="reward-rare">    <td>$\text{The Soul of Laplace} + 1$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{ATK}_2 + 1\%$           </td></tr>
+                <tr class="reward-uncommon"><td>$\text{ATK}_2 + 1.5\%$           </td></tr>
+                <tr class="reward-uncommon"><td>$\text{DEF}_2 + 2\%$           </td></tr>
+                <tr class="reward-uncommon"><td>$\text{HP}_2 + 2.5\%$            </td></tr>
+                <tr class="reward-rare">    <td>$\text{The Soul of Fourier} + 1$</td></tr>
                 <tr>                        <td>                                </td></tr>
               </table>
             </div>
@@ -2001,11 +2017,17 @@
               <h3>Inverse Tower</h3>
               <table>
                 <tr>                        <th>Reward                                                    </th></tr>
-                <tr class="reward-uncommon"><td>$\text{Crit Rate} + 0.005\ /\ \text{Critical Damage} + 15$</td></tr>
+                <tr class="reward-uncommon"><td>$$\begin{cases}
+                  \text{Crit Rate} + 0.005, & \text{Crit Rate from battle rewards} \lt 10\%\\
+                  \text{Critical Damage} + 15, & \text{otherwise}
+                \end{cases}$$</td></tr>
                 <tr class="reward-uncommon"><td>$\text{EXP} + 20000$                                      </td></tr>
-                <tr class="reward-uncommon"><td>$\text{S-Critical Damage} + 0.005$                        </td></tr>
+                <tr class="reward-uncommon"><td>$$\begin{cases}
+                  \text{S-Crit Rate} + 0.05, & \text{S-Crit Rate from battle rewards} \lt 5\%\\
+                  \text{S-Critical Damage} + 10, & \text{otherwise}
+                \end{cases}$$</td></tr>
                 <tr class="reward-uncommon"><td>$\text{Math Skill} + 1000$                                </td></tr>
-                <tr class="reward-rare">    <td>$\text{The Soul of Fourier} + 1$                          </td></tr>
+                <tr class="reward-rare">    <td>$\text{The Soul of Laplace} + 1$                          </td></tr>
                 <tr>                        <td>                                                          </td></tr>
               </table>
             </div>
@@ -2097,6 +2119,9 @@
           </div>
           <div class="explanation" id="explanation_challenges" style="display: none">
             <div class="title">Challenges</div>
+            
+            First group:
+
             <div class="challenge">
               I: Basic Challenge<br>
               Goal: $9.99 * 10^{14} * 10^{\text{level}}$<br>
@@ -2235,8 +2260,11 @@
               Complete Bonus: Get +2 Multiattack<br>
               Reward: $enemy\_growth\_reduction \mathrel{{*}{=}} 0.95^{\text{level}}$
             </div>
+
+            Second group:
+
             <div class="challenge unavailable">
-              Lava Challenge<br>
+              I: Lava Challenge<br>
               Goal: $10^{86} * (10^3)^{\text{level}}$<br>
               Adds a variable $t$ that represents your time in the challenge in seconds<br>
               $\text{radius} = t * (1.05 + 0.01 * \text{level})^t$<br>
@@ -2373,93 +2401,85 @@
           </div>
           <div class="explanation unavailable" id="explanation_theorems" style="display: none">
             <div class="title">Theorems</div>
-            Something something theorems
+            Every theorem costs one of their respective Souls, obtained from Tower enemies.
 
             <div class="entry">
               <b>Formula:</b> $a^2 + b^2 = c^2$<br>
               <b>Name:</b> Pythagorean theorem<br>
-              <b>Cost:</b> $100*5^{\text{level}}$ inspiration<br>
               <b>Time:</b> $10*1.5^{\text{level}}$<br>
-              $a \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 10\% * \text{level}$
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{HP}_2 \mathrel{{*}{=}} 1 + 1\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
             </div>
             <div class="entry">
               <b>Formula:</b> $\displaystyle \sum_{k=0}^n k^2 = \frac{1}{6}n(n+1)(2n+1)$<br>
               <b>Name:</b> Square sum formula<br>
-              <b>Cost:</b> $500*5^{\text{level}}$ inspiration<br>
               <b>Time:</b> $30*1.5^{\text{level}}$<br>
-              $b \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 10\% * \text{level}$
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{ATK}_2 \mathrel{{*}{=}} 1 + 1\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
             </div>
             <div class="entry">
-              <b>Formula:</b> $\sin(\alpha+\beta) = \sin \alpha \cos \beta + \sin \beta \cos \alpha$<br>
-              <b>Name:</b> Addition Theorem 1<br>
-              <b>Cost:</b> $1000*5^{\text{level}}$ inspiration<br>
+              <b>Formula:</b> $F = G \frac{Mm}{r^2}$<br>
+              <b>Name:</b> Universal Gravitation<br>
               <b>Time:</b> $50*1.5^{\text{level}}$<br>
-              $c \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 10\% * \text{level}$
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{DEF}_2 \mathrel{{*}{=}} 1 + 1\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
             </div>
             <div class="entry">
-              <b>Formula:</b> $\cos(\alpha+\beta) = \cos \alpha \cos \beta - \sin \alpha \sin \beta$<br>
-              <b>Name:</b> Addition Theorem 2<br>
-              <b>Cost:</b> $2000*5^{\text{level}}$ inspiration<br>
+              <b>Formula:</b> $i^2 = -1$<br>
+              <b>Name:</b> Complex Number<br>
               <b>Time:</b> $100*1.5^{\text{level}}$<br>
-              $d \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 10\% * \text{level}$
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
             </div>
             <div class="entry">
               <b>Formula:</b> $\displaystyle  \int_{-\infty}^{\infty} \exp{(-x^2)} dx = \sqrt{\pi}$<br>
               <b>Name:</b> Gausian Integral<br>
-              <b>Cost:</b> $3000*5^{\text{level}}$ inspiration<br>
               <b>Time:</b> $150*1.5^{\text{level}}$<br>
-              $e \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 10\% * \text{level}$
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Tower Enemy Growth} \mathrel{{*}{=}} \max(0.01, 0.99^{\text{level}}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
             </div>
             <div class="entry">
               <b>Formula:</b> $n! = \displaystyle \int_0^{\infty} t^n e^{-t}dt$<br>
               <b>Name:</b> Gamma Function<br>
-              <b>Cost:</b> $4000*5^{\text{level}}$ inspiration<br>
               <b>Time:</b> $200*1.5^{\text{level}}$<br>
-              $f \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 10\% * \text{level}$
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Reward Inspiration} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
             </div>
             <div class="entry">
               <b>Formula:</b> $e^{\pi i} = -1$<br>
               <b>Name:</b> Euler's identity<br>
-              <b>Cost:</b> $5000*5^{\text{level}}$ inspiration<br>
               <b>Time:</b> $300*1.5^{\text{level}}$<br>
-              $g \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 10\% * \text{level}$
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Inspiration Cost} \mathrel{{*}{=}} \max(0.01, 0.99^{\text{level}}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
             </div>
             <div class="entry">
               <b>Formula:</b> $\phi = 2\cos{36}^{\circ}$<br>
               <b>Name:</b> Fibonacci Series<br>
-              <b>Cost:</b> $10000*5^{\text{level}}$ inspiration<br>
               <b>Time:</b> $500*1.5^{\text{level}}$<br>
-              $\text{Math Skill} \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 10\% * \text{level}$
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Study Progress} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
             </div>
             <div class="entry">
               <b>Formula:</b> $F(s) = \displaystyle \int_0^{\infty} f(t) e^{-st}dt$<br>
               <b>Name:</b> Laplace transform<br>
-              <b>Cost:</b> $2^{\text{level}}$ The Soul of Laplace<br>
               <b>Time:</b> $1000*1.5^{\text{level}}$<br>
-              $\text{Raid Boss Damage} \mathrel{{*}{=}} 1 + \text{level}$
+              <b>Cost:</b> $1000*1.1^{\text{level}}$ inspiration<br>
+              Unlocks $\text{Tower Damage} \mathrel{{*}{=}} \min(50, 1 + 1\% * \text{Math Skill} / 10^6)$
             </div>
             <div class="entry">
               <b>Formula:</b> $f(t) = \frac{1}{\sqrt{2\pi}} \displaystyle \int_{-\infty}^{\infty} F(\omega)e^{j\omega t} d\omega$<br>
               <b>Name:</b> Fourier Inverse Transform<br>
               <b>Cost:</b> $2^{\text{level}}$ The Soul of Fourier<br>
               <b>Time:</b> $1000*1.5^{\text{level}}$<br>
-              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 25\% * \text{level}$
+              Unlocks $\text{Tower Damage} \mathrel{{*}{=}} \min(50, 1 + 1\% * \text{Enemies Defeated} / 10^6)$
             </div>
           </div>
           <div class="explanation" id="explanation_story" style="display: none">
@@ -2842,28 +2862,47 @@
           <div class="explanation" id="explanation_bugs" style="display: none">
             <div class="title">Bugs</div>
             <div class="entry">
+              <b>Enemy Growth Reduction:</b><br>
               Instead of using the 50000 threshold and enemy growth reduction from other sources like the fury challenge; the decay used to scale enemy stats incorrectly uses just the 5000 threshold math skill formula.
             </div>
             <div class="entry">
+              <b>Rare Chance:</b><br>
+              The rare chance diminishment function has incorrect bounds, making your chance jump at the second threshold.
+            <div class="entry">
+              <b>Block:</b><br>
               The unused block mechanic still gives the ally spiral a 0.01% chance to ignore damage.
             </div>
             <div class="entry">
+              <b>UI:</b><br>
+              The center of the spiral on the main screen blocks interaction, blocking the 6th and 10th upgrades a bit.<br>
+              At some resolutions, the sides of the screen that include menu buttons becomes blocked.<br>
+              Number representations are incredibly inconsistent.<br>
+
+            </div>
+            <div class="entry">
+              <b>Notation:</b><br>
               Letter notation accidentally merged two orders of magnitude at "UQig, DQig", meaning everything after is off by one order of magnitude.
             </div>
             <div class="entry">
+              <b>Battle Upgrades:</b><br>
               The Max Upgrade option for Battle Upgrades doesn't take cost reduction into account; causing it to occasionally take exp without leveling up.
             </div>
             <div class="entry">
+              <b>Fury Challenge:</b><br>
               The Fury Challenge no longer resets progress when started, making it trivial to cheese.
             </div>
             <div class="entry">
-              Getting the $k$ upgrade to level 10000 costs more $r$ than the game can handle, making the achievement for it impossible.
-            </div>
-            <div class="entry">
+              <b>Achievements:</b><br>
+              Getting the $k$ upgrade to level 10000 costs more $r$ than the game can handle, making the achievement for it impossible.<br>
               The cumulative upgrade achievements are impossible.
             </div>
             <div class="entry unavailable">
-              The Math Tower enemy doesn't gain difficulty levels when defeated.
+              <b>Raid Enemies:</b><br>
+              The Spiral Tower enemy's exp tiles lose their reward exp effect after the first board.<br>
+              The Math Tower and Inverse Tower exclusive Souls are available in the Spiral Tower.<br>
+              The Math Tower enemy doesn't gain difficulty levels when defeated.<br>
+              The Inverse Tower enemy's s-critical rate reward tile doesn't render text.<br>
+              The Math Tower and Inverse Tower exclusive Souls are swapped.
             </div>
 
           </div>
