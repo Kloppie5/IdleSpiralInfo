@@ -409,6 +409,64 @@
 
               delta_r: "delta_r",
             }
+            const UpgradeKind = {
+              a: 0,
+              b: 1,
+              c: 2,
+              d: 3,
+              e: 4,
+              f: 5,
+              g: 6,
+              ae11: 7,
+              logk: 8,
+              beMul: 9,
+              k: 10,
+
+              parmA: 11,
+              parmB: 12,
+              parmC: 13,
+              parmD: 14,
+              parmE: 15,
+              parmF: 16,
+              parmG: 17,
+              parmK: 18,
+              prestigepoint_denominator: 19,
+              exponentK: 20,
+              u: 21,
+              v: 22,
+              n: 23,
+              // omegaUpgradeIncrement
+              // doubleA
+              Omega: 24,
+              gamma: 25,
+              delta: 26,
+
+              z_multiplier: 27,
+              a_mul: 28,
+              b_mul: 29,
+              c_mul: 30,
+              d_mul: 31,
+              e_mul: 32,
+              f_mul: 33,
+              g_mul: 34,
+              rAll: 35,
+              m: 36,
+              alpha: 37,
+              beta: 38,
+            }
+            const VariableUpgradeKind = {
+              k: 0,
+              a: 1,
+              b: 2,
+              c: 3,
+              d: 4,
+              e: 5,
+              f: 6,
+              g: 7,
+              atk: 8,
+              def: 9,
+            }
+
             // Rendering
             this.updateFunctions = [];
             this.addUpdateFunction = function ( func ) {
@@ -425,7 +483,7 @@
                   }
                   if ( classes[i].indexOf('battle_reward_') == 0 ) {
                     var name = classes[i].substring(14);
-                    $(this).text(idlespiral.battle_rewards[name]);
+                    $(this).text(idlespiral.dto.battle_rewards[RewardType[name]]);
                     break;
                   }
                 }
@@ -443,7 +501,7 @@
               this.effects[name] = new Effect(name, target, type, value);
             }
             this.addBaseValue = function ( name, value ) {
-              this.addEffect("Init " + name, name, "base", value, () => value);
+              this.addEffect("Init " + name, name, "base", () => value);
             }
             this.getEffects = function ( name, prefix = "" ) {
               var effects = {
@@ -481,102 +539,153 @@
               for ( var effect of effects["exp"] )
                 value **= effect.value();
               
+              if ( value != value ) {
+                console.log(`${name} is NaN`);
+                console.log(effects);
+              }
+
               this.cache[name] = value;
+              return value;
+            }
+            this.debug_evaluate = function ( name ) {
+              var effects = this.getEffects(name);
+              console.log(`Evaluating ${name}`);
+              console.log(effects);
+
+              var value = 0;
+              if ( effects["base"].length > 1 )
+                throw "Multiple base effects for " + name;
+              if ( effects["base"].length == 1 ) {
+                console.log("Base effect;");
+                console.log(effects["base"][0]);
+                value = effects["base"][0].value();
+                console.log(value);
+              }
+              for ( var effect of effects["add"] ) {
+                console.log("Add effect;");
+                console.log(effect);
+                value += effect.value();
+                console.log(value);
+              }
+              for ( var effect of effects["mul"] ) {
+                console.log("Mul effect;");
+                console.log(effect);
+                value *= effect.value();
+                console.log(value);
+              }
+              for ( var effect of effects["indep"] ) {
+                console.log("Indep effect;");
+                console.log(effect);
+                value += effect.value();
+                console.log(value);
+              }
+              for ( var effect of effects["exp"] ) {
+                console.log("Exp effect;");
+                console.log(effect);
+                value **= effect.value();
+                console.log(value);
+              }
+              
+              if ( value != value ) {
+                console.log(`${name} is NaN`);
+                console.log(effects);
+              }
               return value;
             }
             
             this.init = function ( dto ) {
               this.dto = dto;
+              console.log(dto)
 
               // Domain / Battle / BattleReward / BattleRewardContainer
-              this.addEffect("Battle reward a", ParametersKind.a, "add", () => this.dto.battle_rewards[RewardType.a]);
-              this.addEffect("Battle reward b", ParametersKind.b, "add", () => this.dto.battle_rewards[RewardType.b]);
-              this.addEffect("Battle reward c", ParametersKind.c, "add", () => this.dto.battle_rewards[RewardType.c]);
-              this.addEffect("Battle reward d", ParametersKind.d, "add", () => this.dto.battle_rewards[RewardType.d]);
-              this.addEffect("Battle reward e", ParametersKind.e, "add", () => this.dto.battle_rewards[RewardType.e]);
-              this.addEffect("Battle reward k", ParametersKind.k, "add", () => this.dto.battle_rewards[RewardType.k]);
-              this.addEffect("Battle reward atk", ParametersKind.atk, "add", () => this.dto.battle_rewards[RewardType.atk]);
-              this.addEffect("Battle reward def", ParametersKind.def, "add", () => this.dto.battle_rewards[RewardType.def]);
-              this.addEffect("Battle reward hp", ParametersKind.hp, "add", () => this.dto.battle_rewards[RewardType.hp]);
+              this.addEffect("Battle reward a", ParametersKind.a, "add", () => this.dto.battle_rewards[RewardType.a] ?? 0);
+              this.addEffect("Battle reward b", ParametersKind.b, "add", () => this.dto.battle_rewards[RewardType.b] ?? 0);
+              this.addEffect("Battle reward c", ParametersKind.c, "add", () => this.dto.battle_rewards[RewardType.c] ?? 0);
+              this.addEffect("Battle reward d", ParametersKind.d, "add", () => this.dto.battle_rewards[RewardType.d] ?? 0);
+              this.addEffect("Battle reward e", ParametersKind.e, "add", () => this.dto.battle_rewards[RewardType.e] ?? 0);
+              this.addEffect("Battle reward k", ParametersKind.k, "add", () => this.dto.battle_rewards[RewardType.k] ?? 0);
+              this.addEffect("Battle reward atk", ParametersKind.atk, "add", () => this.dto.battle_rewards[RewardType.atk] ?? 0);
+              this.addEffect("Battle reward def", ParametersKind.def, "add", () => this.dto.battle_rewards[RewardType.def] ?? 0);
+              this.addEffect("Battle reward hp", ParametersKind.hp, "add", () => this.dto.battle_rewards[RewardType.hp] ?? 0);
 
-              this.addEffect("Battle reward atk2%", ParametersKind.atk, "mul", () => 1 + this.dto.battle_rewards[RewardType.atk2_mul]);
-              this.addEffect("Battle reward def2%", ParametersKind.def, "mul", () => 1 + this.dto.battle_rewards[RewardType.def2_mul]);
-              this.addEffect("Battle reward hp2%", ParametersKind.hp, "mul", () => 1 + this.dto.battle_rewards[RewardType.hp2_mul]);
+              this.addEffect("Battle reward atk2%", ParametersKind.atk, "mul", () => 1 + (this.dto.battle_rewards[RewardType.atk2_mul] ?? 0));
+              this.addEffect("Battle reward def2%", ParametersKind.def, "mul", () => 1 + (this.dto.battle_rewards[RewardType.def2_mul] ?? 0));
+              this.addEffect("Battle reward hp2%", ParametersKind.hp, "mul", () => 1 + (this.dto.battle_rewards[RewardType.hp2_mul] ?? 0));
 
-              this.addEffect("Battle reward regene", ParametersKind.regene, "add", () => this.dto.battle_rewards[RewardType.regene]);
-              this.addEffect("Battle reward critical", ParametersKind.critical, "add", () => this.dto.battle_rewards[RewardType.critical]);
-              this.addEffect("Battle reward criticalDamage", ParametersKind.criticalDamage, "mul", () => 1 + this.dto.battle_rewards[RewardType.criticalDamage]);
-              this.addEffect("Battle reward gamma", ParametersKind.gamma, "add", () => this.dto.battle_rewards[RewardType.gamma]);
-              this.addEffect("Battle reward delta", ParametersKind.delta, "add", () => this.dto.battle_rewards[RewardType.delta]);
-              this.addEffect("Battle reward Omega", ParametersKind.Omega, "add", () => this.dto.battle_rewards[RewardType.Omega]);
-              this.addEffect("Battle reward super_critical", ParametersKind.super_critical, "add", () => this.dto.battle_rewards[RewardType.super_critical]);
-              this.addEffect("Battle reward super_criticalDamage", ParametersKind.super_criticalDamage, "mul", () => 1 + this.dto.battle_rewards[RewardType.super_criticalDamage]);
-              this.addEffect("Battle reward super_critical threshold", ParametersKind.super_critical, "add", () => this.dto.battle_rewards[RewardType.super_criticalDamage] > 5 ? 0.01 : 0);
-              this.addEffect("Battle reward inspiration", ParametersKind.inspiration, "add", () => this.dto.battle_rewards[RewardType.inspiration]);
+              this.addEffect("Battle reward regene", ParametersKind.regene, "add", () => this.dto.battle_rewards[RewardType.regene] ?? 0);
+              this.addEffect("Battle reward critical", ParametersKind.critical, "add", () => this.dto.battle_rewards[RewardType.critical] ?? 0);
+              this.addEffect("Battle reward criticalDamage", ParametersKind.criticalDamage, "mul", () => 1 + (this.dto.battle_rewards[RewardType.criticalDamage] ?? 0));
+              this.addEffect("Battle reward gamma", ParametersKind.gamma, "add", () => this.dto.battle_rewards[RewardType.gamma] ?? 0);
+              this.addEffect("Battle reward delta", ParametersKind.delta, "add", () => this.dto.battle_rewards[RewardType.delta] ?? 0);
+              this.addEffect("Battle reward Omega", ParametersKind.Omega, "add", () => this.dto.battle_rewards[RewardType.Omega] ?? 0);
+              this.addEffect("Battle reward super_critical", ParametersKind.super_critical, "add", () => this.dto.battle_rewards[RewardType.super_critical] ?? 0);
+              this.addEffect("Battle reward super_criticalDamage", ParametersKind.super_criticalDamage, "mul", () => 1 + (this.dto.battle_rewards[RewardType.super_criticalDamage] ?? 0));
+              this.addEffect("Battle reward super_critical threshold", ParametersKind.super_critical, "add", () => (this.dto.battle_rewards[RewardType.super_criticalDamage] ?? 0) > 5 ? 0.01 : 0);
+              this.addEffect("Battle reward inspiration", ParametersKind.inspiration, "add", () => this.dto.battle_rewards[RewardType.inspiration] ?? 0);
 
-              this.addEffect("Battle reward a%", ParametersKind.a, "mul", () => 1 + this.dto.battle_rewards[RewardType.a_mul]);
-              this.addEffect("Battle reward b%", ParametersKind.b, "mul", () => 1 + this.dto.battle_rewards[RewardType.b_mul]);
-              this.addEffect("Battle reward c%", ParametersKind.c, "mul", () => 1 + this.dto.battle_rewards[RewardType.c_mul]);
-              this.addEffect("Battle reward d%", ParametersKind.d, "mul", () => 1 + this.dto.battle_rewards[RewardType.d_mul]);
-              this.addEffect("Battle reward e%", ParametersKind.e, "mul", () => 1 + this.dto.battle_rewards[RewardType.e_mul]);
-              this.addEffect("Battle reward k%", ParametersKind.k, "mul", () => 1 + this.dto.battle_rewards[RewardType.k_mul]);
-              this.addEffect("Battle reward hp%", ParametersKind.hp, "mul", () => 1 + this.dto.battle_rewards[RewardType.hp_mul]);
-              this.addEffect("Battle reward atk%", ParametersKind.atk, "mul", () => 1 + this.dto.battle_rewards[RewardType.atk_mul]);
-              this.addEffect("Battle reward def%", ParametersKind.def, "mul", () => 1 + this.dto.battle_rewards[RewardType.def_mul]);
-              this.addEffect("Battle reward gamma%", ParametersKind.gamma, "mul", () => 1 + this.dto.battle_rewards[RewardType.gamma_mul]);
-              this.addEffect("Battle reward delta%", ParametersKind.delta, "mul", () => 1 + this.dto.battle_rewards[RewardType.delta_mul]);
-              this.addEffect("Battle reward Omega%", ParametersKind.Omega, "mul", () => 1 + this.dto.battle_rewards[RewardType.Omega_mul]);
-              this.addEffect("Battle reward attack speed", ParametersKind.attack_speed, "mul", () => diminishedAttackSpeed(this.dto.battle_rewards[RewardType.attackSpeed]));
-              this.addEffect("Battle reward rare drop", ParametersKind.rare_drop, "mul", () => diminishedRareChance(this.dto.battle_rewards[RewardType.rare_chance]));
-              this.addEffect("Battle reward math skill", ParametersKind.math, "add", () => this.dto.battle_rewards[RewardType.math_skill]); 
-              this.addEffect("Battle reward enemy growth reduction", ParametersKind.enemy_growth_reduction, "mul", () => decay(this.dto.battle_rewards[RewardType.math_skill]));
+              this.addEffect("Battle reward a%", ParametersKind.a, "mul", () => 1 + (this.dto.battle_rewards[RewardType.a_mul] ?? 0));
+              this.addEffect("Battle reward b%", ParametersKind.b, "mul", () => 1 + (this.dto.battle_rewards[RewardType.b_mul] ?? 0));
+              this.addEffect("Battle reward c%", ParametersKind.c, "mul", () => 1 + (this.dto.battle_rewards[RewardType.c_mul] ?? 0));
+              this.addEffect("Battle reward d%", ParametersKind.d, "mul", () => 1 + (this.dto.battle_rewards[RewardType.d_mul] ?? 0));
+              this.addEffect("Battle reward e%", ParametersKind.e, "mul", () => 1 + (this.dto.battle_rewards[RewardType.e_mul] ?? 0));
+              this.addEffect("Battle reward k%", ParametersKind.k, "mul", () => 1 + (this.dto.battle_rewards[RewardType.k_mul] ?? 0));
+              this.addEffect("Battle reward hp%", ParametersKind.hp, "mul", () => 1 + (this.dto.battle_rewards[RewardType.hp_mul] ?? 0));
+              this.addEffect("Battle reward atk%", ParametersKind.atk, "mul", () => 1 + (this.dto.battle_rewards[RewardType.atk_mul] ?? 0));
+              this.addEffect("Battle reward def%", ParametersKind.def, "mul", () => 1 + (this.dto.battle_rewards[RewardType.def_mul] ?? 0));
+              this.addEffect("Battle reward gamma%", ParametersKind.gamma, "mul", () => 1 + (this.dto.battle_rewards[RewardType.gamma_mul] ?? 0));
+              this.addEffect("Battle reward delta%", ParametersKind.delta, "mul", () => 1 + (this.dto.battle_rewards[RewardType.delta_mul] ?? 0));
+              this.addEffect("Battle reward Omega%", ParametersKind.Omega, "mul", () => 1 + (this.dto.battle_rewards[RewardType.Omega_mul] ?? 0));
+              this.addEffect("Battle reward attack speed", ParametersKind.attack_speed, "mul", () => diminishedAttackSpeed((this.dto.battle_rewards[RewardType.attackSpeed] ?? 0)));
+              this.addEffect("Battle reward rare drop", ParametersKind.rare_drop, "mul", () => diminishedRareChance((this.dto.battle_rewards[RewardType.rare_chance] ?? 0)));
+              this.addEffect("Battle reward math skill", ParametersKind.math, "add", () => this.dto.battle_rewards[RewardType.math_skill] ?? 0); 
+              this.addEffect("Battle reward enemy growth reduction", ParametersKind.enemy_growth_reduction, "mul", () => decay(this.dto.battle_rewards[RewardType.math_skill] ?? 0));
               
               // Domain / Battle / BattleUpgrades
-              this.addEffect("Battle upgrade HP +1%", ParametersKind.hp, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.hp_mul_1]);
-              this.addEffect("Battle upgrade ATK +1%", ParametersKind.atk, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.atk_mul_1]);
-              this.addEffect("Battle upgrade DEF +1%", ParametersKind.def, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.def_mul_1]);
-              this.addEffect("Battle upgrade Regenerate +1%", ParametersKind.regene, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.regene_mul_1]);
-              this.addEffect("Battle upgrade Reward HP +1", ParametersKind.reward_hp, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.reward_hp_1]);
-              this.addEffect("Battle upgrade Reward ATK +1", ParametersKind.reward_atk, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.reward_atk_1]);
-              this.addEffect("Battle upgrade Reward DEF +1", ParametersKind.reward_def, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.reward_def_1]);
-              this.addEffect("Battle upgrade Critical +0.1%", ParametersKind.critical, "indep", () => 0.001 * this.dto.battle_upgrades[BattleUpgradesKind.critical_indep_01]);
-              this.addEffect("Battle upgrade Critical Damage +1%", ParametersKind.criticalDamage, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.criticalDamage_mul_1]);
-              this.addEffect("Battle upgrade Reward EXP +1", ParametersKind.reward_exp, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.reward_exp_1]);
-              this.addEffect("Battle upgrade Enemy HP Reduction +1%", ParametersKind.enemy_hp_reduction_add, "add", () => -0.1 * this.dto.battle_upgrades[BattleUpgradesKind.enemy_hp_reduction_add_1]);
-              this.addEffect("Battle upgrade Regenerate While Resting +1%", ParametersKind.regene_while_resting, "mul", () => 1 + 0.01 * this.dto.battle_upgrades[BattleUpgradesKind.regene_while_resting_mul_1]);
-              this.addEffect("Battle upgrade Attack Speed +0.1%", ParametersKind.attack_speed, "mul", () => 1 + 0.001 * this.dto.battle_upgrades[BattleUpgradesKind.attackSpeed_mul_01]);
-              this.addEffect("Battle upgrade HP +5%", ParametersKind.hp, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.hp_mul_5]);
-              this.addEffect("Battle upgrade ATK +5%", ParametersKind.atk, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.atk_mul_5]);
-              this.addEffect("Battle upgrade DEF +5%", ParametersKind.def, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.def_mul_5]);
-              this.addEffect("Battle upgrade Regenerate +5%", ParametersKind.regene, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.regene_mul_5]);
-              this.addEffect("Battle upgrade Reward HP +5%", ParametersKind.reward_hp, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.reward_hp_mul_5]);
-              this.addEffect("Battle upgrade Reward ATK +5%", ParametersKind.reward_atk, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.reward_atk_mul_5]);
-              this.addEffect("Battle upgrade Reward DEF +5%", ParametersKind.reward_def, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.reward_def_mul_5]);
-              this.addEffect("Battle upgrade Reward EXP +5%", ParametersKind.reward_exp, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.reward_exp_mul_5]);
-              this.addEffect("Battle upgrade Critical +0.2%", ParametersKind.critical, "indep", () => 0.002 * this.dto.battle_upgrades[BattleUpgradesKind.critical_indep_02]);
-              this.addEffect("Battle upgrade Critical Damage +5%", ParametersKind.criticalDamage, "mul", () => 1 + 0.05 * this.dto.battle_upgrades[BattleUpgradesKind.criticalDamage_mul_5]);
-              this.addEffect("Battle upgrade Attack Speed +0.5%", ParametersKind.attack_speed, "mul", () => 1 + 0.005 * this.dto.battle_upgrades[BattleUpgradesKind.attack_speed_mul_05]);
-              this.addEffect("Battle upgrade Max Level +1", ParametersKind.battle_upgrade_max_level, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.maxlevelup_no_24]);
+              this.addEffect("Battle upgrade HP +1%", ParametersKind.hp, "mul", () => 1 + 0.01 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.hp_mul_1] ?? 0));
+              this.addEffect("Battle upgrade ATK +1%", ParametersKind.atk, "mul", () => 1 + 0.01 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.atk_mul_1] ?? 0));
+              this.addEffect("Battle upgrade DEF +1%", ParametersKind.def, "mul", () => 1 + 0.01 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.def_mul_1] ?? 0));
+              this.addEffect("Battle upgrade Regenerate +1%", ParametersKind.regene, "mul", () => 1 + 0.01 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.regene_mul_1] ?? 0));
+              this.addEffect("Battle upgrade Reward HP +1", ParametersKind.reward_hp, "add", () => (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_hp_1] ?? 0));
+              this.addEffect("Battle upgrade Reward ATK +1", ParametersKind.reward_atk, "add", () => (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_atk_1] ?? 0));
+              this.addEffect("Battle upgrade Reward DEF +1", ParametersKind.reward_def, "add", () => (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_def_1] ?? 0));
+              this.addEffect("Battle upgrade Critical +0.1%", ParametersKind.critical, "indep", () => 0.001 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.critical_indep_01] ?? 0));
+              this.addEffect("Battle upgrade Critical Damage +1%", ParametersKind.criticalDamage, "mul", () => 1 + 0.01 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.criticalDamage_mul_1] ?? 0));
+              this.addEffect("Battle upgrade Reward EXP +1", ParametersKind.reward_exp, "add", () => this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_exp_1] ?? 0);
+              this.addEffect("Battle upgrade Enemy HP Reduction +1%", ParametersKind.enemy_hp_reduction_add, "add", () => -0.1 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.enemy_hp_reduction_add_1] ?? 0));
+              this.addEffect("Battle upgrade Regenerate While Resting +1%", ParametersKind.regene_while_resting, "mul", () => 1 + 0.01 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.regene_while_resting_mul_1] ?? 0));
+              this.addEffect("Battle upgrade Attack Speed +0.1%", ParametersKind.attack_speed, "mul", () => 1 + 0.001 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.attackSpeed_mul_01] ?? 0));
+              this.addEffect("Battle upgrade HP +5%", ParametersKind.hp, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.hp_mul_5] ?? 0));
+              this.addEffect("Battle upgrade ATK +5%", ParametersKind.atk, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.atk_mul_5] ?? 0));
+              this.addEffect("Battle upgrade DEF +5%", ParametersKind.def, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.def_mul_5] ?? 0));
+              this.addEffect("Battle upgrade Regenerate +5%", ParametersKind.regene, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.regene_mul_5] ?? 0));
+              this.addEffect("Battle upgrade Reward HP +5%", ParametersKind.reward_hp, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_hp_mul_5] ?? 0));
+              this.addEffect("Battle upgrade Reward ATK +5%", ParametersKind.reward_atk, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_atk_mul_5] ?? 0));
+              this.addEffect("Battle upgrade Reward DEF +5%", ParametersKind.reward_def, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_def_mul_5] ?? 0));
+              this.addEffect("Battle upgrade Reward EXP +5%", ParametersKind.reward_exp, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_exp_mul_5] ?? 0));
+              this.addEffect("Battle upgrade Critical +0.2%", ParametersKind.critical, "indep", () => 0.002 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.critical_indep_02] ?? 0));
+              this.addEffect("Battle upgrade Critical Damage +5%", ParametersKind.criticalDamage, "mul", () => 1 + 0.05 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.criticalDamage_mul_5] ?? 0));
+              this.addEffect("Battle upgrade Attack Speed +0.5%", ParametersKind.attack_speed, "mul", () => 1 + 0.005 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.attack_speed_mul_05] ?? 0));
+              this.addEffect("Battle upgrade Max Level +1", ParametersKind.battle_upgrade_max_level, "add", () => this.dto.battle_upgrade_levels[BattleUpgradesKind.maxlevelup_no_24] ?? 0);
 
               // unlock_khuwarizmi
               // unlock_omar
               // unlock_bhaskara
               // unlock_madhava
 
-              this.addEffect("Battle upgrade ATK and DEF from PI", ParametersKind.atk_and_def_from_pi, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.atk_and_def_from_pi]);
-              this.addEffect("Battle upgrade EXP from Gamma", ParametersKind.exp_from_gamma, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.exp_from_gamma]);
-              this.addEffect("Battle upgrade S-Critical Damage from Napier", ParametersKind.s_critical_from_napier, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.s_critical_from_napier]);
+              this.addEffect("Battle upgrade ATK and DEF from PI", ParametersKind.atk_and_def_from_pi, "add", () => this.dto.battle_upgrade_levels[BattleUpgradesKind.atk_and_def_from_pi] ?? 0);
+              this.addEffect("Battle upgrade EXP from Gamma", ParametersKind.exp_from_gamma, "add", () => this.dto.battle_upgrade_levels[BattleUpgradesKind.exp_from_gamma] ?? 0);
+              this.addEffect("Battle upgrade S-Critical Damage from Napier", ParametersKind.s_critical_from_napier, "add", () => this.dto.battle_upgrade_levels[BattleUpgradesKind.s_critical_from_napier] ?? 0);
 
-              this.addEffect("Battle upgrade Math Skill", ParametersKind.math, "add", () => 100 * this.dto.battle_upgrades[BattleUpgradesKind.math_skill_100]);
-              this.addEffect("Battle upgrade HP +10%", ParametersKind.hp, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.hp_mul_10]);
-              this.addEffect("Battle upgrade ATK +10%", ParametersKind.atk, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.atk_mul_10]);
-              this.addEffect("Battle upgrade DEF +10%", ParametersKind.def, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.def_mul_10]);
-              this.addEffect("Battle upgrade Reward HP +10%", ParametersKind.reward_hp, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.reward_hp_mul_10]);
-              this.addEffect("Battle upgrade Reward ATK +10%", ParametersKind.reward_atk, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.reward_atk_mul_10]);
-              this.addEffect("Battle upgrade Reward DEF +10%", ParametersKind.reward_def, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.reward_def_mul_10]);
-              this.addEffect("Battle upgrade Reward EXP +10%", ParametersKind.reward_exp, "mul", () => 1 + 0.1 * this.dto.battle_upgrades[BattleUpgradesKind.reward_exp_mul_10]);
-              this.addEffect("Battle upgrade Rare Drop +0.1%", ParametersKind.rare_drop, "mul", () => 1 + 0.001 * this.dto.battle_upgrades[BattleUpgradesKind.rare_drop_mul_01]);
-              this.addEffect("Battle upgrade Max Level 2 +1", ParametersKind.battle_upgrade_max_level_2, "add", () => this.dto.battle_upgrades[BattleUpgradesKind.maxlevelup_no_41]);
+              this.addEffect("Battle upgrade Math Skill", ParametersKind.math, "add", () => 100 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.math_skill_100] ?? 0));
+              this.addEffect("Battle upgrade HP +10%", ParametersKind.hp, "mul", () => 1 + 0.1 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.hp_mul_10] ?? 0));
+              this.addEffect("Battle upgrade ATK +10%", ParametersKind.atk, "mul", () => 1 + 0.1 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.atk_mul_10] ?? 0));
+              this.addEffect("Battle upgrade DEF +10%", ParametersKind.def, "mul", () => 1 + 0.1 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.def_mul_10] ?? 0));
+              this.addEffect("Battle upgrade Reward HP +10%", ParametersKind.reward_hp, "mul", () => 1 + 0.1 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_hp_mul_10] ?? 0));
+              this.addEffect("Battle upgrade Reward ATK +10%", ParametersKind.reward_atk, "mul", () => 1 + 0.1 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_atk_mul_10] ?? 0));
+              this.addEffect("Battle upgrade Reward DEF +10%", ParametersKind.reward_def, "mul", () => 1 + 0.1 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_def_mul_10] ?? 0));
+              this.addEffect("Battle upgrade Reward EXP +10%", ParametersKind.reward_exp, "mul", () => 1 + 0.1 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.reward_exp_mul_10] ?? 0));
+              this.addEffect("Battle upgrade Rare Drop +0.1%", ParametersKind.rare_drop, "mul", () => 1 + 0.001 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.rare_drop_mul_01] ?? 0));
+              this.addEffect("Battle upgrade Max Level 2 +1", ParametersKind.battle_upgrade_max_level_2, "add", () => this.dto.battle_upgrade_levels[BattleUpgradesKind.maxlevelup_no_41] ?? 0);
 
               // Domain / Theory / TheoryContainer
 
@@ -584,111 +693,111 @@
 
               // Domain / Z_reactor / ReactorContainer
 
-              this.addEffect("Reactor r active", ParametersKind.delta_r, "mul", () => 1 + 0.01 * this.reactor_values[ReactorKind.r]);
+              this.addEffect("Reactor r active", ParametersKind.delta_r, "mul", () => 1 + 0.01 * (this.dto.reactor_values[ReactorKind.r] ?? 0));
               this.addEffect("Reactor r passive", ParametersKind.delta_r, "mul", () => {
-                if ( this.reactor_levels[ReactorKind.r] >= 1000 )
-                  return 1 + 0.005 * this.reactor_levels[ReactorKind.r] + 0.00005 * (this.reactor_levels[ReactorKind.r] - 1000);
+                if ( (this.dto.reactor_levels[ReactorKind.r] ?? 0) >= 1000 )
+                  return 1 + 0.005 * (this.dto.reactor_levels[ReactorKind.r] ?? 0) + 0.00005 * ((this.dto.reactor_levels[ReactorKind.r] ?? 0) - 1000);
                 else
-                  return 1 + 0.005 * this.reactor_levels[ReactorKind.r];
+                  return 1 + 0.005 * (this.dto.reactor_levels[ReactorKind.r] ?? 0);
               });
 
-              this.addEffect("Reactor lineRenderer active", ParametersKind.line_number_multiplier, "mul", () => 1 + 0.01 * (this.reactor_values[ReactorKind.lineRenderer] ** 1.8) / 25000);
+              this.addEffect("Reactor lineRenderer active", ParametersKind.line_number_multiplier, "mul", () => 1 + 0.01 * ((this.dto.reactor_values[ReactorKind.lineRenderer] ?? 0) ** 1.8) / 25000);
               this.addEffect("Reactor lineRenderer passive", ParametersKind.line_number_multiplier, "mul", () => {
-                if ( this.reactor_levels[ReactorKind.lineRenderer] >= 1000 )
-                  return 1 + 0.005 * this.reactor_levels[ReactorKind.lineRenderer] + 0.0005 * (this.reactor_levels[ReactorKind.lineRenderer] - 1000);
+                if ( (this.dto.reactor_levels[ReactorKind.lineRenderer] ?? 0) >= 1000 )
+                  return 1 + 0.005 * (this.dto.reactor_levels[ReactorKind.lineRenderer] ?? 0) + 0.0005 * ((this.dto.reactor_levels[ReactorKind.lineRenderer] ?? 0) - 1000);
                 else
-                  return 1 + 0.05 * this.reactor_levels[ReactorKind.lineRenderer];
+                  return 1 + 0.05 * (this.dto.reactor_levels[ReactorKind.lineRenderer] ?? 0);
               });
 
-              this.addEffect("Reactor equation active", ParametersKind.equation_speed, "mul", () => 1 + 0.01 * (this.reactor_values[ReactorKind.equation] ** 1.5) / 20000);
+              this.addEffect("Reactor equation active", ParametersKind.equation_speed, "mul", () => 1 + 0.01 * ((this.dto.reactor_values[ReactorKind.equation] ?? 0) ** 1.5) / 20000);
               this.addEffect("Reactor equation passive", ParametersKind.equation_speed, "mul", () => {
-                if ( this.reactor_levels[ReactorKind.equation] >= 1000 )
-                  return 1 + 0.005 * this.reactor_levels[ReactorKind.equation] + 0.00025 * (this.reactor_levels[ReactorKind.equation] - 1000);
+                if ( (this.dto.reactor_levels[ReactorKind.equation] ?? 0) >= 1000 )
+                  return 1 + 0.005 * (this.dto.reactor_levels[ReactorKind.equation] ?? 0) + 0.00025 * ((this.dto.reactor_levels[ReactorKind.equation] ?? 0) - 1000);
                 else
-                  return 1 + 0.025 * this.reactor_levels[ReactorKind.equation];
+                  return 1 + 0.025 * (this.dto.reactor_levels[ReactorKind.equation] ?? 0);
               });
 
-              this.addEffect("Reactor battle_stats active hp", ParametersKind.hp, "mul", () => 1 + 0.01 * (this.reactor_values[ReactorKind.battle_stats] ** 3) / 1e14);
-              this.addEffect("Reactor battle_stats active atk", ParametersKind.atk, "mul", () => 1 + 0.01 * (this.reactor_values[ReactorKind.battle_stats] ** 3) / 1e14);
-              this.addEffect("Reactor battle_stats active def", ParametersKind.def, "mul", () => 1 + 0.01 * (this.reactor_values[ReactorKind.battle_stats] ** 3) / 1e14);
+              this.addEffect("Reactor battle_stats active hp", ParametersKind.hp, "mul", () => 1 + 0.01 * ((this.dto.reactor_values[ReactorKind.battle_stats] ?? 0) ** 3) / 1e14);
+              this.addEffect("Reactor battle_stats active atk", ParametersKind.atk, "mul", () => 1 + 0.01 * ((this.dto.reactor_values[ReactorKind.battle_stats] ?? 0) ** 3) / 1e14);
+              this.addEffect("Reactor battle_stats active def", ParametersKind.def, "mul", () => 1 + 0.01 * ((this.dto.reactor_values[ReactorKind.battle_stats] ?? 0) ** 3) / 1e14);
               this.addEffect("Reactor battle_stats passive hp", ParametersKind.hp, "mul", () => {
-                if ( this.reactor_levels[ReactorKind.battle_stats] >= 1000 )
-                  return 1 + 0.005 * this.reactor_levels[ReactorKind.battle_stats] + 0.0005 * (this.reactor_levels[ReactorKind.battle_stats] - 1000);
+                if ( (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) >= 1000 )
+                  return 1 + 0.005 * (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) + 0.0005 * ((this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) - 1000);
                 else
-                  return 1 + 0.05 * this.reactor_levels[ReactorKind.battle_stats];
+                  return 1 + 0.05 * (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0);
               });
               this.addEffect("Reactor battle_stats passive atk", ParametersKind.atk, "mul", () => {
-                if ( this.reactor_levels[ReactorKind.battle_stats] >= 1000 )
-                  return 1 + 0.005 * this.reactor_levels[ReactorKind.battle_stats] + 0.0005 * (this.reactor_levels[ReactorKind.battle_stats] - 1000);
+                if ( (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) >= 1000 )
+                  return 1 + 0.005 * (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) + 0.0005 * ((this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) - 1000);
                 else
-                  return 1 + 0.05 * this.reactor_levels[ReactorKind.battle_stats];
+                  return 1 + 0.05 * (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0);
               });
               this.addEffect("Reactor battle_stats passive def", ParametersKind.def, "mul", () => {
-                if ( this.reactor_levels[ReactorKind.battle_stats] >= 1000 )
-                  return 1 + 0.005 * this.reactor_levels[ReactorKind.battle_stats] + 0.0005 * (this.reactor_levels[ReactorKind.battle_stats] - 1000);
+                if ( (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) >= 1000 )
+                  return 1 + 0.005 * (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) + 0.0005 * ((this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0) - 1000);
                 else
-                  return 1 + 0.05 * this.reactor_levels[ReactorKind.battle_stats];
+                  return 1 + 0.05 * (this.dto.reactor_levels[ReactorKind.battle_stats] ?? 0);
               });
 
-              this.addEffect("Reactor crit active", ParametersKind.critical, "indep", () => 0.01 * SigmaSum(Math.floor(this.reactor_values[ReactorKind.crit] / 1e9)));
+              this.addEffect("Reactor crit active", ParametersKind.critical, "indep", () => 0.01 * SigmaSum(Math.floor((this.dto.reactor_values[ReactorKind.crit] ?? 0) / 1e9)));
               this.addEffect("Reactor crit passive", ParametersKind.critical, "indep", () => {
-                if ( this.reactor_levels[ReactorKind.crit] >= 1000 )
-                  return 0.000005 * this.reactor_levels[ReactorKind.crit] + 0.00005 * this.reactor_levels[ReactorKind.crit];
+                if ( (this.dto.reactor_levels[ReactorKind.crit] ?? 0) >= 1000 )
+                  return 0.000005 * (this.dto.reactor_levels[ReactorKind.crit] ?? 0) + 0.00005 * (this.dto.reactor_levels[ReactorKind.crit] ?? 0);
                 else
-                  return 0.00005 * this.reactor_levels[ReactorKind.crit];
+                  return 0.00005 * (this.dto.reactor_levels[ReactorKind.crit] ?? 0);
               });
 
-              this.addEffect("Reactor super_critical active", ParametersKind.super_critical, "indep", () => 0.01 * Math.floor(this.reactor_values[ReactorKind.s_crit] / 2e16));
+              this.addEffect("Reactor super_critical active", ParametersKind.super_critical, "indep", () => 0.01 * Math.floor((this.dto.reactor_values[ReactorKind.s_crit] ?? 0) / 2e16));
               this.addEffect("Reactor super_critical passive", ParametersKind.super_critical, "indep", () => {
-                if ( this.reactor_levels[ReactorKind.s_crit] >= 1000 )
-                  return 0.000005 * this.reactor_levels[ReactorKind.s_crit] + 0.00005 * this.reactor_levels[ReactorKind.s_crit];
+                if ( (this.dto.reactor_levels[ReactorKind.s_crit] ?? 0) >= 1000 )
+                  return 0.000005 * (this.dto.reactor_levels[ReactorKind.s_crit] ?? 0) + 0.00005 * (this.dto.reactor_levels[ReactorKind.s_crit] ?? 0);
                 else
-                  return 0.00005 * this.reactor_levels[ReactorKind.s_crit];
+                  return 0.00005 * (this.dto.reactor_levels[ReactorKind.s_crit] ?? 0);
               });
 
               // Domain / Challenge / ChallengeContainer
-              this.addEffect("Challenge SlowSpiral First Clear Reward", "softPrestigeSkip", "add", "1 if challenge SlowSpiral Reward", () => this.dto.challengeLevels[ChallengeKind.SlowSpiral] >= 1 ? 1 : 0);
-              this.addEffect("Challenge SinSpiral First Clear Reward", "softPrestigeSkip", "add", "1 if challenge SinSpiral Reward", () => this.dto.challengeLevels[ChallengeKind.SinSpiral] >= 1 ? 1 : 0);
-              this.addEffect("Challenge StraightLine First Clear Reward", "softPrestigeSkip", "add", "1 if challenge StraightLine Reward", () => this.dto.challengeLevels[ChallengeKind.StraightLine] >= 1 ? 1 : 0);
-              this.addEffect("Challenge drain First Clear Reward", "softPrestigeSkip", "add", "1 if challenge drain Reward", () => this.dto.challengeLevels[ChallengeKind.drain] >= 1 ? 1 : 0);
-              this.addEffect("Challenge poorMath First Clear Reward", "softPrestigeSkip", "add", "1 if challenge poorMath Reward", () => this.dto.challengeLevels[ChallengeKind.poorMath] >= 1 ? 1 : 0);
+              this.addEffect("Challenge SlowSpiral First Clear Reward", "softPrestigeSkip", "add", () => (this.dto.challengeLevels[ChallengeKind.SlowSpiral] ?? 0) >= 1 ? 1 : 0);
+              this.addEffect("Challenge SinSpiral First Clear Reward", "softPrestigeSkip", "add", () => (this.dto.challengeLevels[ChallengeKind.SinSpiral] ?? 0) >= 1 ? 1 : 0);
+              this.addEffect("Challenge StraightLine First Clear Reward", "softPrestigeSkip", "add", () => (this.dto.challengeLevels[ChallengeKind.StraightLine] ?? 0) >= 1 ? 1 : 0);
+              this.addEffect("Challenge drain First Clear Reward", "softPrestigeSkip", "add", () => (this.dto.challengeLevels[ChallengeKind.drain] ?? 0) >= 1 ? 1 : 0);
+              this.addEffect("Challenge poorMath First Clear Reward", "softPrestigeSkip", "add", () => (this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 1 ? 1 : 0);
               
-              this.addEffect("Challenge basic Reward", "delta_r", "mul", "1 + 0.5 * challenge basic Reward", () => 1 + 0.5 * this.dto.challengeLevels[ChallengeKind.basic]);
-              this.addEffect("Challenge SlowSpiral Reward", "omega", "mul", "1 + 0.1 * challenge SlowSpiral Reward", () => 1 + 0.1 * this.dto.challengeLevels[ChallengeKind.SlowSpiral]);
-              this.addEffect("Challenge SinSpiral Reward", "prestige_level_limit", "add", "challenge SinSpiral Reward", () => this.dto.challengeLevels[ChallengeKind.SinSpiral]);
-              this.addEffect("Challenge StraightLine Reward", "k", "mul", "1 + challenge StraightLine Reward", () => 1 + this.dto.challengeLevels[ChallengeKind.StraightLine]);
-              this.addEffect("Challenge drain Reward", "tornado_cost_reduction", "add", "-0.1 * challenge drain Reward", () => -0.1 * this.dto.challengeLevels[ChallengeKind.drain]);
+              this.addEffect("Challenge basic Reward", "delta_r", "mul", () => 1 + 0.5 * (this.dto.challengeLevels[ChallengeKind.basic] ?? 0));
+              this.addEffect("Challenge SlowSpiral Reward", "omega", "mul", () => 1 + 0.1 * (this.dto.challengeLevels[ChallengeKind.SlowSpiral] ?? 0));
+              this.addEffect("Challenge SinSpiral Reward", "prestige_level_limit", "add", () => this.dto.challengeLevels[ChallengeKind.SinSpiral] ?? 0);
+              this.addEffect("Challenge StraightLine Reward", "k", "mul", () => 1 + (this.dto.challengeLevels[ChallengeKind.StraightLine] ?? 0));
+              this.addEffect("Challenge drain Reward", "tornado_cost_reduction", "add", () => -0.1 * (this.dto.challengeLevels[ChallengeKind.drain] ?? 0));
               
-              this.addEffect("Challenge poorMath Reward", "delta_r", "mul", "challenge poorMath Reward", () => {
+              this.addEffect("Challenge poorMath Reward", "delta_r", "mul", () => {
                 var value = 1;
-                if (this.dto.challengeLevels[ChallengeKind.poorMath] >= 1) {
+                if ((this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 1) {
                   value *= this.evaluate("a");
                   value *= this.evaluate("b");
                   value *= this.evaluate("c");
                 }
-                if (this.dto.challengeLevels[ChallengeKind.poorMath] >= 2)
+                if ((this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 2)
                   value *= this.evaluate("d");
-                if (this.dto.challengeLevels[ChallengeKind.poorMath] >= 3)
+                if ((this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 3)
                   value *= this.evaluate("e");
-                if (this.dto.challengeLevels[ChallengeKind.poorMath] >= 4)
+                if ((this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 4)
                   value *= this.evaluate("f");
-                if (this.dto.challengeLevels[ChallengeKind.poorMath] >= 5)
+                if ((this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 5)
                   value *= this.evaluate("g");
                 
                 return value ** (1/11);
               });
-              this.addEffect("Challenge no_rebirth Reward", ParametersKind.automation_interval, "mul", () => 0.5 ** this.dto.challengeLevels[ChallengeKind.no_rebirth]);
-              this.addEffect("Challenge drunk Reward", ParametersKind.omegaExponent, "add", () => 0.1 * this.dto.challengeLevels[ChallengeKind.drunk]);
-              this.addEffect("Challenge gluttony Reward atk", ParametersKind.atk, "mul", () => 1 + 0.2 * this.dto.challengeLevels[ChallengeKind.gluttony]);
-              this.addEffect("Challenge gluttony Reward hp", ParametersKind.hp, "mul", () => 1 + 0.2 * this.dto.challengeLevels[ChallengeKind.gluttony]);
-              this.addEffect("Challenge gluttony Reward def", ParametersKind.def, "mul", () => 1 + 0.2 * this.dto.challengeLevels[ChallengeKind.gluttony]);
-              this.addEffect("Challenge sinkhole Reward", ParametersKind.delta_r, "mul", () => 1 + Math.log(this.dto.timeSinceOmegaPrestige / 13 + 1) / Math.log(10 - this.dto.challengeLevels[ChallengeKind.sinkhole]));
-              this.addEffect("Challenge sphere Reward z_reactor_exp", ParametersKind.z_reactor_exp, "mul", () => 1 + (this.dto.challengeLevels[ChallengeKind.sphere] >= 1));
-              this.addEffect("Challenge sphere Reward z_reactor_cap", ParametersKind.z_reactor_cap, "mul", () => 1 + 0.05 * this.dto.challengeLevels[ChallengeKind.sphere]);
-              this.addEffect("Challenge fury Reward enemy_growth_reduction", ParametersKind.enemy_growth_reduction, "mul", () => 0.95 ** this.dto.challengeLevels[ChallengeKind.fury]);
-              this.addEffect("Challenge fury Reward multiattack", ParametersKind.multiattack, "add", () => this.dto.challengeLevels[ChallengeKind.fury] >= 6 ? 2 : 0);
-              this.addEffect("Challenge lava Reward equation_slot", ParametersKind.equation_slot, "add", () => this.dto.challengeLevels[ChallengeKind.lava] >= 1 ? 1 : 0);
-              this.addEffect("Challenge lava Reward raid_boss_damage", ParametersKind.raid_boss_damage, "mul", () => 1 + 0.25 * this.dto.challengeLevels[ChallengeKind.lava]);
+              this.addEffect("Challenge no_rebirth Reward", ParametersKind.automation_interval, "mul", () => 0.5 ** (this.dto.challengeLevels[ChallengeKind.no_rebirth] ?? 0));
+              this.addEffect("Challenge drunk Reward", ParametersKind.omegaExponent, "add", () => 0.1 * (this.dto.challengeLevels[ChallengeKind.drunk] ?? 0));
+              this.addEffect("Challenge gluttony Reward atk", ParametersKind.atk, "mul", () => 1 + 0.2 * (this.dto.challengeLevels[ChallengeKind.gluttony] ?? 0));
+              this.addEffect("Challenge gluttony Reward hp", ParametersKind.hp, "mul", () => 1 + 0.2 * (this.dto.challengeLevels[ChallengeKind.gluttony] ?? 0));
+              this.addEffect("Challenge gluttony Reward def", ParametersKind.def, "mul", () => 1 + 0.2 * (this.dto.challengeLevels[ChallengeKind.gluttony] ?? 0));
+              this.addEffect("Challenge sinkhole Reward", ParametersKind.delta_r, "mul", () => 1 + Math.log((this.dto.timeSinceOmegaPrestige ?? 0) / 13 + 1) / Math.log(10 - (this.dto.challengeLevels[ChallengeKind.sinkhole] ?? 0)));
+              this.addEffect("Challenge sphere Reward z_reactor_exp", ParametersKind.z_reactor_exp, "mul", () => 1 + ((this.dto.challengeLevels[ChallengeKind.sphere] ?? 0) >= 1));
+              this.addEffect("Challenge sphere Reward z_reactor_cap", ParametersKind.z_reactor_cap, "mul", () => 1 + 0.05 * (this.dto.challengeLevels[ChallengeKind.sphere] ?? 0));
+              this.addEffect("Challenge fury Reward enemy_growth_reduction", ParametersKind.enemy_growth_reduction, "mul", () => 0.95 ** (this.dto.challengeLevels[ChallengeKind.fury] ?? 0));
+              this.addEffect("Challenge fury Reward multiattack", ParametersKind.multiattack, "add", () => (this.dto.challengeLevels[ChallengeKind.fury] ?? 0) >= 6 ? 2 : 0);
+              this.addEffect("Challenge lava Reward equation_slot", ParametersKind.equation_slot, "add", () => (this.dto.challengeLevels[ChallengeKind.lava] ?? 0) >= 1 ? 1 : 0);
+              this.addEffect("Challenge lava Reward raid_boss_damage", ParametersKind.raid_boss_damage, "mul", () => 1 + 0.25 * (this.dto.challengeLevels[ChallengeKind.lava] ?? 0));
 
 
 
@@ -742,13 +851,13 @@
               this.addBaseValue("spiralPointFromTornadoPrestige", 1);
 
               // Currency / ReccurenceMultiplier
-              this.addEffect("Formula integral", "integral", "base", "$\frac{2\alpha^{\beta+1}}{\beta+1}$", () => {
+              this.addEffect("Formula integral", "integral", "base", () => {
                 var alpha = this.evaluate("alpha");
                 var beta = this.evaluate("beta");
                 var integral = 2 * alpha ** (beta + 1) / (beta + 1);
                 return integral;
               });
-              this.addEffect("Base sigmaA", "sigmaA", "base", "$\displaystyle\sum\limits_{l=1}^n A_l$", () => {
+              this.addEffect("Base sigmaA", "sigmaA", "base", () => {
                 var u = this.evaluate("u");
                 var v = this.evaluate("v");
                 var n = this.evaluate("n");
@@ -769,7 +878,7 @@
               });
 
               // Currency / DistanceMultiplier
-              this.addEffect("Base largeA", "largeA", "base", "$a \times b \times c \times d \times e \times f \times g$", () => {
+              this.addEffect("Base largeA", "largeA", "base", () => {
                 var a = this.evaluate("a");
                 var b = this.evaluate("b");
                 var c = this.evaluate("c");
@@ -783,7 +892,7 @@
                   return a * b * c * d * e * f * g;
               });
 
-              this.addEffect("Base delta_r", "delta_r", "base", "$m sigmaA \omega^{omegaExponent}$", () => {
+              this.addEffect("Base delta_r", "delta_r", "base", () => {
                 var m = this.evaluate("m");
                 var sigmaA = this.evaluate("sigmaA");
                 var omega = this.evaluate("omega");
@@ -792,99 +901,99 @@
                 return m * sigmaA * omega ** omegaExponent + k;
               });
               
-              this.addEffect("Line Number Multiplier", "delta_r", "mul", "1 + (lines - 1) * 0.1 * line_number_multiplier", () => 1 + (this.lines - 1) * 0.1 * this.evaluate("line_number_multiplier"));
+              this.addEffect("Line Number Multiplier", "delta_r", "mul", () => 1 + ((5 /*lines*/) - 1) * 0.1 * this.evaluate("line_number_multiplier"));
             
               // SoftPrestige
-              this.addEffect("omega Prestige omegaExponent", "omegaExponent", "add", "\omega prestige", () => this.omegaPrestigeLevel);
-              this.addEffect("Base omega", "omega", "base", "1.25^{\omega prestige}", () => 1.25 ** this.omegaPrestigeLevel);
+              this.addEffect("omega Prestige omegaExponent", "omegaExponent", "add", () => (this.omegaPrestigeLevel ?? 0));
+              this.addEffect("Base omega", "omega", "base", () => 1.25 ** (this.omegaPrestigeLevel ?? 0));
               
               // UpgradeContainer
-              this.addEffect("r upgrade k", "k", "add", "level", () => this.upgradeLevels["k"]);
-              this.addEffect("r upgrade a", "a", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["a"]);
-              this.addEffect("r upgrade b", "b", "add", "0.01 * level", () => 0.01 * this.upgradeLevels["b"]);
-              this.addEffect("r upgrade c", "c", "add", "0.01 * level", () => 0.01 * this.upgradeLevels["c"]);
-              this.addEffect("r upgrade d", "d", "add", "0.01 * level", () => 0.01 * this.upgradeLevels["d"]);
-              this.addEffect("r upgrade e", "e", "add", "0.01 * level", () => 0.01 * this.upgradeLevels["e"]);
-              this.addEffect("r upgrade ae11 a", "a", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.upgradeLevels["ae11"]);
-              this.addEffect("r upgrade ae11 b", "b", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.upgradeLevels["ae11"]);
-              this.addEffect("r upgrade ae11 c", "c", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.upgradeLevels["ae11"]);
-              this.addEffect("r upgrade ae11 d", "d", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.upgradeLevels["ae11"]);
-              this.addEffect("r upgrade ae11 e", "e", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.upgradeLevels["ae11"]);
-              this.addEffect("r upgrade logk", "a", "mul", "1 + 0.1 * level * log_10(k + 1)", () => 1 + 0.1 * this.upgradeLevels["logk"] * Math.log10(this.evaluate("k") + 1));
-              this.addEffect("r upgrade f", "f", "add", "level", () => 0.01 * this.upgradeLevels["f"]);
-              this.addEffect("r upgrade g", "g", "add", "level", () => 0.01 * this.upgradeLevels["g"]);
-              this.addEffect("r upgrade beMul passive", "a", "mul", "$\frac{b+c+d+e+f+g}{6}$", () => (this.evaluate("b") + this.evaluate("c") + this.evaluate("d") + this.evaluate("e") + this.evaluate("f") + this.evaluate("g")) / 6.0);
-              this.addEffect("r upgrade beMul active", "a", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["beMul"]);
-              this.addEffect("r upgrade rAll passive", "delta_r", "mul", "rAll passive", () => 1 + (this.upgradeLevels["k"] + this.upgradeLevels["a"] + this.upgradeLevels["b"] + this.upgradeLevels["c"] + this.upgradeLevels["d"] + this.upgradeLevels["e"] + this.upgradeLevels["ae11"] + this.upgradeLevels["logk"] + this.upgradeLevels["f"] + this.upgradeLevels["g"] + this.upgradeLevels["beMul"] + this.upgradeLevels["rAll"]) / 10000);
-              this.addEffect("r upgrade rAll active", "delta_r", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["rAll"]);
+              this.addEffect("r upgrade k", "k", "add", () => (this.dto.upgradeLevels[UpgradeKind.k] ?? 0));
+              this.addEffect("r upgrade a", "a", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.a]);
+              this.addEffect("r upgrade b", "b", "add", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.b]);
+              this.addEffect("r upgrade c", "c", "add", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.c]);
+              this.addEffect("r upgrade d", "d", "add", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.d]);
+              this.addEffect("r upgrade e", "e", "add", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.e]);
+              this.addEffect("r upgrade ae11 a", "a", "mul", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.addEffect("r upgrade ae11 b", "b", "mul", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.addEffect("r upgrade ae11 c", "c", "mul", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.addEffect("r upgrade ae11 d", "d", "mul", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.addEffect("r upgrade ae11 e", "e", "mul", () => 1 + 0.01 * this.dto.upgradeLevels[UpgradeKind.ae11]);
+              this.addEffect("r upgrade logk", "a", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.logk] * Math.log10(this.evaluate("k") + 1));
+              this.addEffect("r upgrade f", "f", "add", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.f]);
+              this.addEffect("r upgrade g", "g", "add", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.g]);
+              this.addEffect("r upgrade beMul passive", "a", "mul", () => (this.evaluate("b") + this.evaluate("c") + this.evaluate("d") + this.evaluate("e") + this.evaluate("f") + this.evaluate("g")) / 6.0);
+              this.addEffect("r upgrade beMul active", "a", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.beMul]);
+              this.addEffect("r upgrade rAll passive", "delta_r", "mul", () => 1 + (this.dto.upgradeLevels[UpgradeKind.k] + this.dto.upgradeLevels[UpgradeKind.a] + this.dto.upgradeLevels[UpgradeKind.b] + this.dto.upgradeLevels[UpgradeKind.c] + this.dto.upgradeLevels[UpgradeKind.d] + this.dto.upgradeLevels[UpgradeKind.e] + this.dto.upgradeLevels[UpgradeKind.ae11] + this.dto.upgradeLevels[UpgradeKind.logk] + this.dto.upgradeLevels[UpgradeKind.f] + this.dto.upgradeLevels[UpgradeKind.g] + this.dto.upgradeLevels[UpgradeKind.beMul] + this.dto.upgradeLevels[UpgradeKind.rAll]) / 10000);
+              this.addEffect("r upgrade rAll active", "delta_r", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.rAll]);
 
-              this.addEffect("p upgrade n", "n", "add", "level", () => this.upgradeLevels["n"]);
-              this.addEffect("p upgrade v", "v", "add", "10 * level", () => 10 * this.upgradeLevels["v"]);
-              this.addEffect("p upgrade u", "u", "add", "level", () => this.upgradeLevels["u"]);
-              this.addEffect("p upgrade parmA", "a", "add", "level", () => this.upgradeLevels["parmA"]);
-              this.addEffect("p upgrade parmK", "k", "add", "10 * level", () => 10 * this.upgradeLevels["parmK"]);
-              this.addEffect("p upgrade parmB", "b", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["parmB"]);
-              this.addEffect("p upgrade parmC", "c", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["parmC"]);
-              this.addEffect("p upgrade parmD", "d", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["parmD"]);
-              this.addEffect("p upgrade parmE", "e", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["parmE"]);
-              this.addEffect("p upgrade parmF", "f", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["parmF"]);
-              this.addEffect("p upgrade parmG", "g", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["parmG"]);
-              this.addEffect("p upgrade prestigePoint_demoninator", "prestigePoint_demoninator", "mul", "0.95 ** level", () => 0.95 ** this.upgradeLevels["prestigepoint_denominator"]);
-              this.addEffect("p upgrade exponentK", "k", "exp", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["exponentK"]);
-              this.addEffect("p upgrade alpha", "alpha", "add", "0.01 * level", () => 0.01 * this.upgradeLevels["alpha"]);
-              this.addEffect("p upgrade beta", "beta", "add", "0.01 * level", () => 0.01 * this.upgradeLevels["beta"]);
+              this.addEffect("p upgrade n", "n", "add", () => this.dto.upgradeLevels[UpgradeKind.n]);
+              this.addEffect("p upgrade v", "v", "add", () => 10 * this.dto.upgradeLevels[UpgradeKind.v]);
+              this.addEffect("p upgrade u", "u", "add", () => this.dto.upgradeLevels[UpgradeKind.u]);
+              this.addEffect("p upgrade parmA", "a", "add", () => this.dto.upgradeLevels[UpgradeKind.parmA]);
+              this.addEffect("p upgrade parmK", "k", "add", () => 10 * this.dto.upgradeLevels[UpgradeKind.parmK]);
+              this.addEffect("p upgrade parmB", "b", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmB]);
+              this.addEffect("p upgrade parmC", "c", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmC]);
+              this.addEffect("p upgrade parmD", "d", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmD]);
+              this.addEffect("p upgrade parmE", "e", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmE]);
+              this.addEffect("p upgrade parmF", "f", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmF]);
+              this.addEffect("p upgrade parmG", "g", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.parmG]);
+              this.addEffect("p upgrade prestigePoint_demoninator", "prestigePoint_demoninator", "mul", () => 0.95 ** this.dto.upgradeLevels[UpgradeKind.prestigepoint_denominator]);
+              this.addEffect("p upgrade exponentK", "k", "exp", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.exponentK]);
+              this.addEffect("p upgrade alpha", "alpha", "add", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.alpha]);
+              this.addEffect("p upgrade beta", "beta", "add", () => 0.01 * this.dto.upgradeLevels[UpgradeKind.beta]);
 
-              this.addEffect("z upgrade z_multiplier", "delta_r", "mul", "1 + (((level > 0) ? 1 : 0) + 0.1 * level) * log10(z + 1) / 5", () => 1 + (((this.upgradeLevels["z_multiplier"] > 0) ? 1 : 0) + 0.1 * this.upgradeLevels["z_multiplier"]) * Math.log10(this.z + 1) / 5);
-              this.addEffect("z upgrade Omega", "Omega", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["Omega"]);
-              this.addEffect("z upgrade gamma", "gamma", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["gamma"]);
-              this.addEffect("z upgrade delta", "delta", "add", "0.1 * level", () => 0.1 * this.upgradeLevels["delta"]);
-              this.addEffect("z upgrade a_mul", "a", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["a_mul"]);
-              this.addEffect("z upgrade b_mul", "b", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["b_mul"]);
-              this.addEffect("z upgrade c_mul", "c", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["c_mul"]);
-              this.addEffect("z upgrade d_mul", "d", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["d_mul"]);
-              this.addEffect("z upgrade e_mul", "e", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["e_mul"]);
-              this.addEffect("z upgrade f_mul", "f", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["f_mul"]);
-              this.addEffect("z upgrade g_mul", "g", "mul", "1 + 0.1 * level", () => 1 + 0.1 * this.upgradeLevels["g_mul"]);
-              this.addEffect("z upgrade m", "m", "add", "level", () => this.upgradeLevels["m"]);
+              this.addEffect("z upgrade z_multiplier", "delta_r", "mul", () => 1 + (((this.dto.upgradeLevels[UpgradeKind.z_multiplier] > 0) ? 1 : 0) + 0.1 * this.dto.upgradeLevels[UpgradeKind.z_multiplier]) * Math.log10(this.dto.z + 1) / 5);
+              this.addEffect("z upgrade Omega", "Omega", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.Omega]);
+              this.addEffect("z upgrade gamma", "gamma", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.gamma]);
+              this.addEffect("z upgrade delta", "delta", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.delta]);
+              this.addEffect("z upgrade a_mul", "a", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.a_mul]);
+              this.addEffect("z upgrade b_mul", "b", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.b_mul]);
+              this.addEffect("z upgrade c_mul", "c", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.c_mul]);
+              this.addEffect("z upgrade d_mul", "d", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.d_mul]);
+              this.addEffect("z upgrade e_mul", "e", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.e_mul]);
+              this.addEffect("z upgrade f_mul", "f", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.f_mul]);
+              this.addEffect("z upgrade g_mul", "g", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.g_mul]);
+              this.addEffect("z upgrade m", "m", "add", () => this.dto.upgradeLevels[UpgradeKind.m]);
               
               // Currency / ZMultiplier
-              this.addEffect("Omega unlock", "Omega", "add", "0.1 if tornadoPrestigeTier >= 1", () => this.dto.tornadoPrestigeTier >= 1 ? 0.1 : 0);
-              this.addEffect("Base delta_z", "delta_z", "base", "$\gamma$ * $\Omega$ + $\delta$", () => this.evaluate("gamma") * this.evaluate("Omega") + this.evaluate("delta"));
+              this.addEffect("Omega unlock", "Omega", "add", () => this.dto.tornadoPrestigeTier >= 1 ? 0.1 : 0);
+              this.addEffect("Base delta_z", "delta_z", "base", () => this.evaluate("gamma") * this.evaluate("Omega") + this.evaluate("delta"));
 
               // Prestige / TornadoPrestige
-              this.addEffect("Tornado bonus delta r tier factor", "delta_r", "mul", "1 + 0.5 * tornadoPrestigeTier", () => 1 + 0.5 * this.dto.tornadoPrestigeTier);
-              this.addEffect("Tornado bonus delta r playtime factor", "delta_r", "mul", "1 + HourFactor(AccumulatedHour)", () => 1 + HourFactor(this.dto.AccumulatedHour));
-              this.addEffect("Tornado bonus delta r max P factor", "delta_r", "mul", "1 + 0.1 * log10(AccumulatedMaxP + 1)", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
+              this.addEffect("Tornado bonus delta r tier factor", "delta_r", "mul", () => 1 + 0.5 * this.dto.tornadoPrestigeTier);
+              this.addEffect("Tornado bonus delta r playtime factor", "delta_r", "mul", () => 1 + HourFactor(this.dto.AccumulatedHour));
+              this.addEffect("Tornado bonus delta r max P factor", "delta_r", "mul", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
 
-              this.addEffect("Tornado bonus delta z tier factor", "delta_z", "mul", "1 + 0.5 * tornadoPrestigeTier", () => 1 + 0.5 * this.dto.tornadoPrestigeTier);
-              this.addEffect("Tornado bonus delta z playtime factor", "delta_z", "mul", "1 + HourFactor(AccumulatedHour)", () => 1 + HourFactor(this.dto.AccumulatedHour));
-              this.addEffect("Tornado bonus delta z max P factor", "delta_z", "mul", "1 + 0.1 * log10(AccumulatedMaxP + 1)", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
+              this.addEffect("Tornado bonus delta z tier factor", "delta_z", "mul", () => 1 + 0.5 * this.dto.tornadoPrestigeTier);
+              this.addEffect("Tornado bonus delta z playtime factor", "delta_z", "mul", () => 1 + HourFactor(this.dto.AccumulatedHour));
+              this.addEffect("Tornado bonus delta z max P factor", "delta_z", "mul", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
 
-              this.addEffect("Tornado bonus regene_while_resting tier factor", "regene_while_resting", "mul", "1 + 0.1 * tornadoPrestigeTier", () => 1 + 0.1 * this.dto.tornadoPrestigeTier);
-              this.addEffect("Tornado bonus regene_while_resting playtime factor", "regene_while_resting", "mul", "1 + HourFactor(AccumulatedHour)", () => 1 + HourFactor(this.dto.AccumulatedHour));
-              this.addEffect("Tornado bonus regene_while_resting max P factor", "regene_while_resting", "mul", "1 + 0.1 * log10(AccumulatedMaxP + 1)", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
+              this.addEffect("Tornado bonus regene_while_resting tier factor", "regene_while_resting", "mul", () => 1 + 0.1 * this.dto.tornadoPrestigeTier);
+              this.addEffect("Tornado bonus regene_while_resting playtime factor", "regene_while_resting", "mul", () => 1 + HourFactor(this.dto.AccumulatedHour));
+              this.addEffect("Tornado bonus regene_while_resting max P factor", "regene_while_resting", "mul", () => 1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1));
 
-              this.addEffect("Tornado bonus a", "a", "add", "tornado_a", () => 0.2 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1)));
-              this.addEffect("Tornado bonus b", "b", "add", "tornado_b", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
-              this.addEffect("Tornado bonus c", "c", "add", "tornado_c", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
-              this.addEffect("Tornado bonus d", "d", "add", "tornado_d", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
-              this.addEffect("Tornado bonus e", "e", "add", "tornado_e", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
+              this.addEffect("Tornado bonus a", "a", "add", () => 0.2 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.1 * Math.log10(this.dto.AccumulatedMaxP + 1)));
+              this.addEffect("Tornado bonus b", "b", "add", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
+              this.addEffect("Tornado bonus c", "c", "add", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
+              this.addEffect("Tornado bonus d", "d", "add", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
+              this.addEffect("Tornado bonus e", "e", "add", () => 0.02 * this.dto.tornadoPrestigeTier * HourFactor(this.dto.AccumulatedHour) * (1 + 0.01 * Math.log10(this.dto.AccumulatedMaxP + 1)));
 
-              this.addEffect("Tornado unlock NewSigma", "m", "add", "1 if tornadoPrestigeTier >= 13", () => this.dto.tornadoPrestigeTier >= 13 ? 1 : 0);
-              this.addEffect("Tornado unlock critical", "critical", "indep", "0.1 if tornadoPrestigeTier >= 17", () => this.dto.tornadoPrestigeTier >= 17 ? 0.1 : 0);
-              this.addEffect("Tornado unlock criticalDamage", "criticalDamage", "mul", "2 if tornadoPrestigeTier >= 17", () => this.dto.tornadoPrestigeTier >= 17 ? 2 : 0);
+              this.addEffect("Tornado unlock NewSigma", "m", "add", () => this.dto.tornadoPrestigeTier >= 13 ? 1 : 0);
+              this.addEffect("Tornado unlock critical", "critical", "indep", () => this.dto.tornadoPrestigeTier >= 17 ? 0.1 : 0);
+              this.addEffect("Tornado unlock criticalDamage", "criticalDamage", "mul", () => this.dto.tornadoPrestigeTier >= 17 ? 2 : 0);
               
               // InfiniteSpiralDomain
-              this.addEffect("Store upgrade k", "k", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["k"]);
-              this.addEffect("Store upgrade a", "a", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["a"]);
-              this.addEffect("Store upgrade b", "b", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["b"]);
-              this.addEffect("Store upgrade c", "c", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["c"]);
-              this.addEffect("Store upgrade d", "d", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["d"]);
-              this.addEffect("Store upgrade e", "e", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["e"]);
-              this.addEffect("Store upgrade f", "f", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["f"]);
-              this.addEffect("Store upgrade g", "g", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["g"]);
-              this.addEffect("Store upgrade atk", "atk", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["atk"]);
-              this.addEffect("Store upgrade def", "def", "mul", "1 + 0.01 * level", () => 1 + 0.01 * this.variableUpgradeLevels["def"]);
+              this.addEffect("Store upgrade k", "k", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.k]);
+              this.addEffect("Store upgrade a", "a", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.a]);
+              this.addEffect("Store upgrade b", "b", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.b]);
+              this.addEffect("Store upgrade c", "c", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.c]);
+              this.addEffect("Store upgrade d", "d", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.d]);
+              this.addEffect("Store upgrade e", "e", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.e]);
+              this.addEffect("Store upgrade f", "f", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.f]);
+              this.addEffect("Store upgrade g", "g", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.g]);
+              this.addEffect("Store upgrade atk", "atk", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.atk]);
+              this.addEffect("Store upgrade def", "def", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.def]);
               
               // BattleReward / BattleRewardContainer
               
@@ -906,129 +1015,129 @@
               
             
               // SpiralEquipmentContainer
-              this.addEffect("Spiral Equation thales", "hp", "mul", "spiral equation thales", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.thales] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.thales] - 1000));
-              this.addEffect("Spiral Equation Hypatia", "def", "mul", "spiral equation Hypatia", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.Hypatia] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.Hypatia] - 1000));
-              this.addEffect("Spiral Equation archimedes", "atk", "mul", "spiral equation archimedes", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.archimedes] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.archimedes] - 1000));
-              this.addEffect("Spiral Equation pythagoras", "criticalDamage", "mul", "spiral equation pythagoras", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.pythagoras] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.pythagoras] - 1000));
-              this.addEffect("Spiral Equation euclides", "critical", "mul", "spiral equation euclides", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.euclides] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.euclides] - 50));
-              this.addEffect("Spiral Equation eratos", "attack_speed", "mul", "spiral equation eratos", () => 1 + 0.01 * Math.log10(this.dto.spiralEquipment_level[EquationKind.eratos] + 1));
-              this.addEffect("Spiral Equation Aryabhata", "super_critical", "add", "spiral equation Aryabhata", () => 0.01 * Math.log10(this.dto.spiralEquipment_level[EquationKind.Aryabhata] + 1));
-              this.addEffect("Spiral Equation brahmagupta", "equation_speed", "mul", "spiral equation brahmagupta", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.brahmagupta] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.brahmagupta] - 1000));
-              this.addEffect("Spiral Equation khuwarizmi", "reward_hp_mul", "mul", "spiral equation khuwarizmi", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.khuwarizmi] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.khuwarizmi] - 1000));
-              this.addEffect("Spiral Equation omar", "reward_atk_mul", "mul", "spiral equation omar", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.omar] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.omar] - 1000));
-              this.addEffect("Spiral Equation bhaskara", "reward_def_mul", "mul", "spiral equation bhaskara", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.bhaskara] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.bhaskara] - 1000));
-              this.addEffect("Spiral Equation madhava", "reward_exp_mul", "mul", "spiral equation madhava", () => 1 + 0.0005 * this.dto.spiralEquipment_level[EquationKind.madhava] + 0.00005 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.madhava] - 1000));
+              this.addEffect("Spiral Equation thales", "hp", "mul", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.thales] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.thales] - 1000));
+              this.addEffect("Spiral Equation Hypatia", "def", "mul", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.Hypatia] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.Hypatia] - 1000));
+              this.addEffect("Spiral Equation archimedes", "atk", "mul", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.archimedes] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.archimedes] - 1000));
+              this.addEffect("Spiral Equation pythagoras", "criticalDamage", "mul", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.pythagoras] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.pythagoras] - 1000));
+              this.addEffect("Spiral Equation euclides", "critical", "mul", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.euclides] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.euclides] - 50));
+              this.addEffect("Spiral Equation eratos", "attack_speed", "mul", () => 1 + 0.01 * Math.log10(this.dto.spiralEquipment_level[EquationKind.eratos] + 1));
+              this.addEffect("Spiral Equation Aryabhata", "super_critical", "add", () => 0.01 * Math.log10(this.dto.spiralEquipment_level[EquationKind.Aryabhata] + 1));
+              this.addEffect("Spiral Equation brahmagupta", "equation_speed", "mul", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.brahmagupta] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.brahmagupta] - 1000));
+              this.addEffect("Spiral Equation khuwarizmi", "reward_hp_mul", "mul", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.khuwarizmi] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.khuwarizmi] - 1000));
+              this.addEffect("Spiral Equation omar", "reward_atk_mul", "mul", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.omar] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.omar] - 1000));
+              this.addEffect("Spiral Equation bhaskara", "reward_def_mul", "mul", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.bhaskara] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.bhaskara] - 1000));
+              this.addEffect("Spiral Equation madhava", "reward_exp_mul", "mul", () => 1 + 0.0005 * this.dto.spiralEquipment_level[EquationKind.madhava] + 0.00005 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.madhava] - 1000));
             
               // SpiralDesignEffect
-              this.addEffect("Spiral Design normal_brue active", "a", "mul", "1.1 if Spiral Design normal_brue active", () => this.dto.currentDesign == DesignID.normal_brue ? 1.1 : 1);
-              this.addEffect("Spiral Design normal_yellow active", "b", "mul", "1.1 if Spiral Design normal_yellow active", () => this.dto.currentDesign == DesignID.normal_yellow ? 1.1 : 1);
-              this.addEffect("Spiral Design normal_red active", "c", "mul", "1.1 if Spiral Design normal_red active", () => this.dto.currentDesign == DesignID.normal_red ? 1.1 : 1);
-              this.addEffect("Spiral Design normal_violet active", "d", "mul", "1.1 if Spiral Design normal_violet active", () => this.dto.currentDesign == DesignID.normal_violet ? 1.1 : 1);
-              this.addEffect("Spiral Design normal_mono active", "e", "mul", "1.1 if Spiral Design normal_mono active", () => this.dto.currentDesign == DesignID.normal_mono ? 1.1 : 1);
+              this.addEffect("Spiral Design normal_brue active", "a", "mul", () => this.dto.currentDesign == DesignID.normal_brue ? 1.1 : 1);
+              this.addEffect("Spiral Design normal_yellow active", "b", "mul", () => this.dto.currentDesign == DesignID.normal_yellow ? 1.1 : 1);
+              this.addEffect("Spiral Design normal_red active", "c", "mul", () => this.dto.currentDesign == DesignID.normal_red ? 1.1 : 1);
+              this.addEffect("Spiral Design normal_violet active", "d", "mul", () => this.dto.currentDesign == DesignID.normal_violet ? 1.1 : 1);
+              this.addEffect("Spiral Design normal_mono active", "e", "mul", () => this.dto.currentDesign == DesignID.normal_mono ? 1.1 : 1);
               
-              this.addEffect("Spiral Design gradation_brue_green active", "hp", "mul", "1.5 if Spiral Design gradation_brue_green active", () => this.dto.currentDesign == DesignID.gradation_brue_green ? 1.5 : 1);
-              this.addEffect("Spiral Design gradation_brue_green passive", "hp", "mul", "1.1 if Spiral Design gradation_brue_green passive", () => this.dto.design_isUnlocked[DesignID.gradation_brue_green] ? 1.1 : 1);
+              this.addEffect("Spiral Design gradation_brue_green active", "hp", "mul", () => this.dto.currentDesign == DesignID.gradation_brue_green ? 1.5 : 1);
+              this.addEffect("Spiral Design gradation_brue_green passive", "hp", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_brue_green] ? 1.1 : 1);
               
-              this.addEffect("Spiral Design gradation_yellow_red active", "atk", "mul", "1.5 if Spiral Design gradation_yellow_red active", () => this.dto.currentDesign == DesignID.gradation_yellow_red ? 1.5 : 1);
-              this.addEffect("Spiral Design gradation_yellow_red passive", "atk", "mul", "1.1 if Spiral Design gradation_yellow_red passive", () => this.dto.design_isUnlocked[DesignID.gradation_yellow_red] ? 1.1 : 1);
+              this.addEffect("Spiral Design gradation_yellow_red active", "atk", "mul", () => this.dto.currentDesign == DesignID.gradation_yellow_red ? 1.5 : 1);
+              this.addEffect("Spiral Design gradation_yellow_red passive", "atk", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_yellow_red] ? 1.1 : 1);
 
-              this.addEffect("Spiral Design gradation_red_blue active", "def", "mul", "1.5 if Spiral Design gradation_red_blue active", () => this.dto.currentDesign == DesignID.gradation_red_blue ? 1.5 : 1);
-              this.addEffect("Spiral Design gradation_red_blue passive", "def", "mul", "1.1 if Spiral Design gradation_red_blue passive", () => this.dto.design_isUnlocked[DesignID.gradation_red_blue] ? 1.1 : 1);
+              this.addEffect("Spiral Design gradation_red_blue active", "def", "mul", () => this.dto.currentDesign == DesignID.gradation_red_blue ? 1.5 : 1);
+              this.addEffect("Spiral Design gradation_red_blue passive", "def", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_red_blue] ? 1.1 : 1);
               
-              this.addEffect("Spiral Design gradation_violet_pink active", "critical", "mul", "1.05 if Spiral Design gradation_violet_pink active", () => this.dto.currentDesign == DesignID.gradation_violet_pink ? 1.05 : 1);
-              this.addEffect("Spiral Design gradation_violet_pink passive", "critical", "mul", "1.01 if Spiral Design gradation_violet_pink passive", () => this.dto.design_isUnlocked[DesignID.gradation_violet_pink] ? 1.01 : 1);
+              this.addEffect("Spiral Design gradation_violet_pink active", "critical", "mul", () => this.dto.currentDesign == DesignID.gradation_violet_pink ? 1.05 : 1);
+              this.addEffect("Spiral Design gradation_violet_pink passive", "critical", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_violet_pink] ? 1.01 : 1);
 
-              this.addEffect("Spiral Design gradation_white_cyan active", "criticalDamage", "mul", "1.2 if Spiral Design gradation_white_cyan active", () => this.dto.currentDesign == DesignID.gradation_white_cyan ? 1.2 : 1);
-              this.addEffect("Spiral Design gradation_white_cyan passive", "criticalDamage", "mul", "1.01 if Spiral Design gradation_white_cyan passive", () => this.dto.design_isUnlocked[DesignID.gradation_white_cyan] ? 1.01 : 1);
+              this.addEffect("Spiral Design gradation_white_cyan active", "criticalDamage", "mul", () => this.dto.currentDesign == DesignID.gradation_white_cyan ? 1.2 : 1);
+              this.addEffect("Spiral Design gradation_white_cyan passive", "criticalDamage", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_white_cyan] ? 1.01 : 1);
 
-              this.addEffect("Spiral Design circles_white active", "regene_while_resting", "mul", "3 if Spiral Design circles_white active", () => this.dto.currentDesign == DesignID.circles_white ? 3 : 1);
-              this.addEffect("Spiral Design circles_white passive", "regene_while_resting", "mul", "1.5 if Spiral Design circles_white passive", () => this.dto.design_isUnlocked[DesignID.circles_white] ? 1.5 : 1);
+              this.addEffect("Spiral Design circles_white active", "regene_while_resting", "mul", () => this.dto.currentDesign == DesignID.circles_white ? 3 : 1);
+              this.addEffect("Spiral Design circles_white passive", "regene_while_resting", "mul", () => this.dto.design_isUnlocked[DesignID.circles_white] ? 1.5 : 1);
 
-              this.addEffect("Spiral Design circles_green_pink active regene_while_resting", "regene_while_resting", "mul", "1.5 if Spiral Design circles_green_pink active", () => this.dto.currentDesign == DesignID.circles_green_pink ? 1.5 : 1);
-              this.addEffect("Spiral Design circles_green_pink active def", "def", "mul", "1.3 if Spiral Design circles_green_pink active", () => this.dto.currentDesign == DesignID.circles_green_pink ? 1.3 : 1);
-              this.addEffect("Spiral Design circles_green_pink passive regene_while_resting", "regene_while_resting", "mul", "1.1 if Spiral Design circles_green_pink passive", () => this.dto.design_isUnlocked[DesignID.circles_green_pink] ? 1.1 : 1);
-              this.addEffect("Spiral Design circles_green_pink passive def", "def", "mul", "1.05 if Spiral Design circles_green_pink passive", () => this.dto.design_isUnlocked[DesignID.circles_green_pink] ? 1.05 : 1);
+              this.addEffect("Spiral Design circles_green_pink active regene_while_resting", "regene_while_resting", "mul", () => this.dto.currentDesign == DesignID.circles_green_pink ? 1.5 : 1);
+              this.addEffect("Spiral Design circles_green_pink active def", "def", "mul", () => this.dto.currentDesign == DesignID.circles_green_pink ? 1.3 : 1);
+              this.addEffect("Spiral Design circles_green_pink passive regene_while_resting", "regene_while_resting", "mul", () => this.dto.design_isUnlocked[DesignID.circles_green_pink] ? 1.1 : 1);
+              this.addEffect("Spiral Design circles_green_pink passive def", "def", "mul", () => this.dto.design_isUnlocked[DesignID.circles_green_pink] ? 1.05 : 1);
               
-              this.addEffect("Spiral Design circles_cyan_red active regene_while_resting", "regene_while_resting", "mul", "1.5 if Spiral Design circles_cyan_red active", () => this.dto.currentDesign == DesignID.circles_cyan_red ? 1.5 : 1);
-              this.addEffect("Spiral Design circles_cyan_red active atk", "atk", "mul", "1.3 if Spiral Design circles_cyan_red active", () => this.dto.currentDesign == DesignID.circles_cyan_red ? 1.3 : 1);
-              this.addEffect("Spiral Design circles_cyan_red passive regene_while_resting", "regene_while_resting", "mul", "1.1 if Spiral Design circles_cyan_red passive", () => this.dto.design_isUnlocked[DesignID.circles_cyan_red] ? 1.1 : 1);
-              this.addEffect("Spiral Design circles_cyan_red passive atk", "atk", "mul", "1.05 if Spiral Design circles_cyan_red passive", () => this.dto.design_isUnlocked[DesignID.circles_cyan_red] ? 1.05 : 1);
+              this.addEffect("Spiral Design circles_cyan_red active regene_while_resting", "regene_while_resting", "mul", () => this.dto.currentDesign == DesignID.circles_cyan_red ? 1.5 : 1);
+              this.addEffect("Spiral Design circles_cyan_red active atk", "atk", "mul", () => this.dto.currentDesign == DesignID.circles_cyan_red ? 1.3 : 1);
+              this.addEffect("Spiral Design circles_cyan_red passive regene_while_resting", "regene_while_resting", "mul", () => this.dto.design_isUnlocked[DesignID.circles_cyan_red] ? 1.1 : 1);
+              this.addEffect("Spiral Design circles_cyan_red passive atk", "atk", "mul", () => this.dto.design_isUnlocked[DesignID.circles_cyan_red] ? 1.05 : 1);
 
-              this.addEffect("Spiral Design dottedLine_blue active", "line_number_multiplier", "mul", "2 if Spiral Design dottedLine_blue active", () => this.dto.currentDesign == DesignID.dottedLine_blue ? 2 : 1);
-              this.addEffect("Spiral Design dottedLine_blue passive", "line_number_multiplier", "mul", "1.25 if Spiral Design dottedLine_blue passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_blue] ? 1.25 : 1);
+              this.addEffect("Spiral Design dottedLine_blue active", "line_number_multiplier", "mul", () => this.dto.currentDesign == DesignID.dottedLine_blue ? 2 : 1);
+              this.addEffect("Spiral Design dottedLine_blue passive", "line_number_multiplier", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_blue] ? 1.25 : 1);
               
-              this.addEffect("Spiral Design dottedLine_white active", "line_number_multiplier", "mul", "1.25 if Spiral Design dottedLine_white active", () => this.dto.currentDesign == DesignID.dottedLine_white ? 1.25 : 1);
-              this.addEffect("Spiral Design dottedLine_white passive line_number_multiplier", "line_number_multiplier", "mul", "1.1 if Spiral Design dottedLine_white passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.1 : 1);
-              this.addEffect("Spiral Design dottedLine_white passive a", "a", "mul", "1.05 if Spiral Design dottedLine_white passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.05 : 1);
-              this.addEffect("Spiral Design dottedLine_white passive b", "b", "mul", "1.05 if Spiral Design dottedLine_white passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.05 : 1);
-              this.addEffect("Spiral Design dottedLine_white passive c", "c", "mul", "1.05 if Spiral Design dottedLine_white passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.05 : 1);
+              this.addEffect("Spiral Design dottedLine_white active", "line_number_multiplier", "mul", () => this.dto.currentDesign == DesignID.dottedLine_white ? 1.25 : 1);
+              this.addEffect("Spiral Design dottedLine_white passive line_number_multiplier", "line_number_multiplier", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.1 : 1);
+              this.addEffect("Spiral Design dottedLine_white passive a", "a", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.05 : 1);
+              this.addEffect("Spiral Design dottedLine_white passive b", "b", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.05 : 1);
+              this.addEffect("Spiral Design dottedLine_white passive c", "c", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.05 : 1);
 
-              this.addEffect("Spiral Design dottedLine_orange_brue active", "line_number_multiplier", "mul", "1.25 if Spiral Design dottedLine_orange_brue active", () => this.dto.currentDesign == DesignID.dottedLine_orange_brue ? 1.25 : 1);
-              this.addEffect("Spiral Design dottedLine_orange_brue passive line_number_multiplier", "line_number_multiplier", "mul", "1.1 if Spiral Design dottedLine_orange_brue passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_orange_brue] ? 1.1 : 1);
-              this.addEffect("Spiral Design dottedLine_orange_brue passive d", "d", "mul", "1.05 if Spiral Design dottedLine_orange_brue passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_orange_brue] ? 1.05 : 1);
-              this.addEffect("Spiral Design dottedLine_orange_brue passive e", "e", "mul", "1.05 if Spiral Design dottedLine_orange_brue passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_orange_brue] ? 1.05 : 1);
-              this.addEffect("Spiral Design dottedLine_orange_brue passive f", "f", "mul", "1.05 if Spiral Design dottedLine_orange_brue passive", () => this.dto.design_isUnlocked[DesignID.dottedLine_orange_brue] ? 1.05 : 1);
+              this.addEffect("Spiral Design dottedLine_orange_brue active", "line_number_multiplier", "mul", () => this.dto.currentDesign == DesignID.dottedLine_orange_brue ? 1.25 : 1);
+              this.addEffect("Spiral Design dottedLine_orange_brue passive line_number_multiplier", "line_number_multiplier", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_orange_brue] ? 1.1 : 1);
+              this.addEffect("Spiral Design dottedLine_orange_brue passive d", "d", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_orange_brue] ? 1.05 : 1);
+              this.addEffect("Spiral Design dottedLine_orange_brue passive e", "e", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_orange_brue] ? 1.05 : 1);
+              this.addEffect("Spiral Design dottedLine_orange_brue passive f", "f", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_orange_brue] ? 1.05 : 1);
 
-              this.addEffect("Spiral Design stripe_white active", "v", "add", "5 if Spiral Design stripe_white active", () => this.dto.currentDesign == DesignID.stripe_white ? 5 : 0);
-              this.addEffect("Spiral Design stripe_white passive", "v", "add", "2 if Spiral Design stripe_white passive", () => this.dto.design_isUnlocked[DesignID.stripe_white] ? 2 : 0);
+              this.addEffect("Spiral Design stripe_white active", "v", "add", () => this.dto.currentDesign == DesignID.stripe_white ? 5 : 0);
+              this.addEffect("Spiral Design stripe_white passive", "v", "add", () => this.dto.design_isUnlocked[DesignID.stripe_white] ? 2 : 0);
               
-              this.addEffect("Spiral Design stripe_blue active", "reward_atk", "add", "5 if Spiral Design stripe_blue active", () => this.dto.currentDesign == DesignID.stripe_blue ? 5 : 0);
-              this.addEffect("Spiral Design stripe_blue passive", "reward_atk", "add", "2 if Spiral Design stripe_blue passive", () => this.dto.design_isUnlocked[DesignID.stripe_blue] ? 2 : 0);
+              this.addEffect("Spiral Design stripe_blue active", "reward_atk", "add", () => this.dto.currentDesign == DesignID.stripe_blue ? 5 : 0);
+              this.addEffect("Spiral Design stripe_blue passive", "reward_atk", "add", () => this.dto.design_isUnlocked[DesignID.stripe_blue] ? 2 : 0);
 
-              this.addEffect("Spiral Design stripe_yellow active", "reward_def", "add", "5 if Spiral Design stripe_yellow active", () => this.dto.currentDesign == DesignID.stripe_yellow ? 5 : 0);
-              this.addEffect("Spiral Design stripe_yellow passive", "reward_def", "add", "2 if Spiral Design stripe_yellow passive", () => this.dto.design_isUnlocked[DesignID.stripe_yellow] ? 2 : 0);
+              this.addEffect("Spiral Design stripe_yellow active", "reward_def", "add", () => this.dto.currentDesign == DesignID.stripe_yellow ? 5 : 0);
+              this.addEffect("Spiral Design stripe_yellow passive", "reward_def", "add", () => this.dto.design_isUnlocked[DesignID.stripe_yellow] ? 2 : 0);
 
-              this.addEffect("Spiral Design sine_green active", "reward_exp", "add", "3 if Spiral Design sine_green active", () => this.dto.currentDesign == DesignID.sine_green ? 3 : 0);
-              this.addEffect("Spiral Design sine_green passive", "reward_exp", "add", "1 if Spiral Design sine_green passive", () => this.dto.design_isUnlocked[DesignID.sine_green] ? 1 : 0);
+              this.addEffect("Spiral Design sine_green active", "reward_exp", "add", () => this.dto.currentDesign == DesignID.sine_green ? 3 : 0);
+              this.addEffect("Spiral Design sine_green passive", "reward_exp", "add", () => this.dto.design_isUnlocked[DesignID.sine_green] ? 1 : 0);
 
-              this.addEffect("Spiral Design sine_white_red active", "reward_exp_mul", "mul", "1.1 if Spiral Design sine_white_red active", () => this.dto.currentDesign == DesignID.sine_white_red ? 1.1 : 1);
-              this.addEffect("Spiral Design sine_white_red passive", "reward_exp_mul", "mul", "1.03 if Spiral Design sine_white_red passive", () => this.dto.design_isUnlocked[DesignID.sine_white_red] ? 1.03 : 1);
+              this.addEffect("Spiral Design sine_white_red active", "reward_exp_mul", "mul", () => this.dto.currentDesign == DesignID.sine_white_red ? 1.1 : 1);
+              this.addEffect("Spiral Design sine_white_red passive", "reward_exp_mul", "mul", () => this.dto.design_isUnlocked[DesignID.sine_white_red] ? 1.03 : 1);
 
-              this.addEffect("Spiral Design sine_orange_purple active hp", "hp", "mul", "2 if Spiral Design sine_orange_purple active", () => this.dto.currentDesign == DesignID.sine_orange_purple ? 2 : 1);
-              this.addEffect("Spiral Design sine_orange_purple active atk", "atk", "mul", "2 if Spiral Design sine_orange_purple active", () => this.dto.currentDesign == DesignID.sine_orange_purple ? 2 : 1);
-              this.addEffect("Spiral Design sine_orange_purple active def", "def", "mul", "2 if Spiral Design sine_orange_purple active", () => this.dto.currentDesign == DesignID.sine_orange_purple ? 2 : 1);
-              this.addEffect("Spiral Design sine_orange_purple passive hp", "hp", "mul", "1.3 if Spiral Design sine_orange_purple passive", () => this.dto.design_isUnlocked[DesignID.sine_orange_purple] ? 1.3 : 1);
-              this.addEffect("Spiral Design sine_orange_purple passive atk", "atk", "mul", "1.3 if Spiral Design sine_orange_purple passive", () => this.dto.design_isUnlocked[DesignID.sine_orange_purple] ? 1.3 : 1);
-              this.addEffect("Spiral Design sine_orange_purple passive def", "def", "mul", "1.3 if Spiral Design sine_orange_purple passive", () => this.dto.design_isUnlocked[DesignID.sine_orange_purple] ? 1.3 : 1);
+              this.addEffect("Spiral Design sine_orange_purple active hp", "hp", "mul", () => this.dto.currentDesign == DesignID.sine_orange_purple ? 2 : 1);
+              this.addEffect("Spiral Design sine_orange_purple active atk", "atk", "mul", () => this.dto.currentDesign == DesignID.sine_orange_purple ? 2 : 1);
+              this.addEffect("Spiral Design sine_orange_purple active def", "def", "mul", () => this.dto.currentDesign == DesignID.sine_orange_purple ? 2 : 1);
+              this.addEffect("Spiral Design sine_orange_purple passive hp", "hp", "mul", () => this.dto.design_isUnlocked[DesignID.sine_orange_purple] ? 1.3 : 1);
+              this.addEffect("Spiral Design sine_orange_purple passive atk", "atk", "mul", () => this.dto.design_isUnlocked[DesignID.sine_orange_purple] ? 1.3 : 1);
+              this.addEffect("Spiral Design sine_orange_purple passive def", "def", "mul", () => this.dto.design_isUnlocked[DesignID.sine_orange_purple] ? 1.3 : 1);
 
-              this.addEffect("Spiral Design snake active", "super_critical", "add", "0.1 if Spiral Design snake active", () => this.dto.currentDesign == DesignID.snake ? 0.1 : 0);
-              this.addEffect("Spiral Design snake passive", "super_critical", "add", "0.03 if Spiral Design snake passive", () => this.dto.design_isUnlocked[DesignID.snake] ? 0.03 : 0);
+              this.addEffect("Spiral Design snake active", "super_critical", "add", () => this.dto.currentDesign == DesignID.snake ? 0.1 : 0);
+              this.addEffect("Spiral Design snake passive", "super_critical", "add", () => this.dto.design_isUnlocked[DesignID.snake] ? 0.03 : 0);
 
-              this.addEffect("Spiral Design bubble active", "rare_drop", "mul", "1.2 if Spiral Design bubble active", () => this.dto.currentDesign == DesignID.bubble ? 1.2 : 1);
-              this.addEffect("Spiral Design bubble passive", "rare_drop", "mul", "1.05 if Spiral Design bubble passive", () => this.dto.design_isUnlocked[DesignID.bubble] ? 1.05 : 1);
+              this.addEffect("Spiral Design bubble active", "rare_drop", "mul", () => this.dto.currentDesign == DesignID.bubble ? 1.2 : 1);
+              this.addEffect("Spiral Design bubble passive", "rare_drop", "mul", () => this.dto.design_isUnlocked[DesignID.bubble] ? 1.05 : 1);
 
-              this.addEffect("Spiral Design arrow active", "attack_speed", "mul", "1.2 if Spiral Design arrow active", () => this.dto.currentDesign == DesignID.arrow ? 1.2 : 1);
-              this.addEffect("Spiral Design arrow passive", "attack_speed", "mul", "1.05 if Spiral Design arrow passive", () => this.dto.design_isUnlocked[DesignID.arrow] ? 1.05 : 1);
+              this.addEffect("Spiral Design arrow active", "attack_speed", "mul", () => this.dto.currentDesign == DesignID.arrow ? 1.2 : 1);
+              this.addEffect("Spiral Design arrow passive", "attack_speed", "mul", () => this.dto.design_isUnlocked[DesignID.arrow] ? 1.05 : 1);
 
-              this.addEffect("Spiral Design pi active", "Omega", "mul", "1.5 if Spiral Design pi active", () => this.dto.currentDesign == DesignID.pi ? 1.5 : 1);
-              this.addEffect("Spiral Design pi passive", "Omega", "mul", "1.2 if Spiral Design pi passive", () => this.dto.design_isUnlocked[DesignID.pi] ? 1.2 : 1);
+              this.addEffect("Spiral Design pi active", "Omega", "mul", () => this.dto.currentDesign == DesignID.pi ? 1.5 : 1);
+              this.addEffect("Spiral Design pi passive", "Omega", "mul", () => this.dto.design_isUnlocked[DesignID.pi] ? 1.2 : 1);
 
-              this.addEffect("Spiral Design rects active", "reward_exp_mul", "mul", "1.05 if Spiral Design rects active", () => this.dto.currentDesign == DesignID.rects ? 1.05 : 1);
-              this.addEffect("Spiral Design rects passive", "battle_upgrade_cost", "mul", "0.95 if Spiral Design rects passive", () => this.dto.design_isUnlocked[DesignID.rects] ? 0.95 : 1);
+              this.addEffect("Spiral Design rects active", "reward_exp_mul", "mul", () => this.dto.currentDesign == DesignID.rects ? 1.05 : 1);
+              this.addEffect("Spiral Design rects passive", "battle_upgrade_cost", "mul", () => this.dto.design_isUnlocked[DesignID.rects] ? 0.95 : 1);
               
-              this.addEffect("Spiral Design rainbow active", "equation_speed", "mul", "2 if Spiral Design rainbow active", () => this.dto.currentDesign == DesignID.rainbow ? 2 : 1);
-              this.addEffect("Spiral Design rainbow passive", "equation_speed", "mul", "1.5 if Spiral Design rainbow passive", () => this.dto.design_isUnlocked[DesignID.rainbow] ? 1.5 : 1);
+              this.addEffect("Spiral Design rainbow active", "equation_speed", "mul", () => this.dto.currentDesign == DesignID.rainbow ? 2 : 1);
+              this.addEffect("Spiral Design rainbow passive", "equation_speed", "mul", () => this.dto.design_isUnlocked[DesignID.rainbow] ? 1.5 : 1);
 
-              this.addEffect("Spiral Design kanji active", "delta", "mul", "2 if Spiral Design kanji active", () => this.dto.currentDesign == DesignID.kanji ? 2 : 1);
-              this.addEffect("Spiral Design kanji passive", "equation_slot", "add", "1 if Spiral Design kanji passive", () => this.dto.design_isUnlocked[DesignID.kanji] ? 1 : 0);
+              this.addEffect("Spiral Design kanji active", "delta", "mul", () => this.dto.currentDesign == DesignID.kanji ? 2 : 1);
+              this.addEffect("Spiral Design kanji passive", "equation_slot", "add", () => this.dto.design_isUnlocked[DesignID.kanji] ? 1 : 0);
 
-              this.addEffect("Spiral Design rahmen active", "gamma", "mul", "1.5 if Spiral Design rahmen active", () => this.dto.currentDesign == DesignID.rahmen ? 1.5 : 1);
-              this.addEffect("Spiral Design rahmen passive", "gamma", "mul", "1.2 if Spiral Design rahmen passive", () => this.dto.design_isUnlocked[DesignID.rahmen] ? 1.2 : 0);
+              this.addEffect("Spiral Design rahmen active", "gamma", "mul", () => this.dto.currentDesign == DesignID.rahmen ? 1.5 : 1);
+              this.addEffect("Spiral Design rahmen passive", "gamma", "mul", () => this.dto.design_isUnlocked[DesignID.rahmen] ? 1.2 : 0);
 
-              this.addEffect("Spiral Design lazer active", "z_reactor_exp", "mul", "1.5 if Spiral Design lazer active", () => this.dto.currentDesign == DesignID.lazer ? 1.5 : 1);
-              this.addEffect("Spiral Design lazer passive", "z_reactor_exp", "mul", "1.2 if Spiral Design lazer passive", () => this.dto.design_isUnlocked[DesignID.lazer] ? 1.2 : 0);
+              this.addEffect("Spiral Design lazer active", "z_reactor_exp", "mul", () => this.dto.currentDesign == DesignID.lazer ? 1.5 : 1);
+              this.addEffect("Spiral Design lazer passive", "z_reactor_exp", "mul", () => this.dto.design_isUnlocked[DesignID.lazer] ? 1.2 : 0);
 
-              this.addEffect("Spiral Design spaceShip active", "omega", "mul", "1.1 if Spiral Design spaceShip active", () => this.dto.currentDesign == DesignID.spaceShip ? 1.1 : 1);
-              this.addEffect("Spiral Design spaceShip passive", "omega", "mul", "1.1 if Spiral Design spaceShip passive", () => this.dto.design_isUnlocked[DesignID.spaceShip] ? 1.1 : 1);
+              this.addEffect("Spiral Design spaceShip active", "omega", "mul", () => this.dto.currentDesign == DesignID.spaceShip ? 1.1 : 1);
+              this.addEffect("Spiral Design spaceShip passive", "omega", "mul", () => this.dto.design_isUnlocked[DesignID.spaceShip] ? 1.1 : 1);
               
-              this.addEffect("Spiral Design seigaiha active", "alpha", "add", "0.025 if Spiral Design seigaiha active", () => this.dto.currentDesign == DesignID.seigaiha ? 0.025 : 0);
-              this.addEffect("Spiral Design seigaiha passive", "alpha", "add", "0.01 if Spiral Design seigaiha passive", () => this.dto.design_isUnlocked[DesignID.seigaiha] ? 0.01 : 0);
+              this.addEffect("Spiral Design seigaiha active", "alpha", "add", () => this.dto.currentDesign == DesignID.seigaiha ? 0.025 : 0);
+              this.addEffect("Spiral Design seigaiha passive", "alpha", "add", () => this.dto.design_isUnlocked[DesignID.seigaiha] ? 0.01 : 0);
 
-              this.addEffect("Spiral Design sippou active", "beta", "add", "0.025 if Spiral Design sippou active", () => this.dto.currentDesign == DesignID.sippou ? 0.025 : 0);
-              this.addEffect("Spiral Design sippou passive", "beta", "add", "0.01 if Spiral Design sippou passive", () => this.dto.design_isUnlocked[DesignID.sippou] ? 0.01 : 0);
+              this.addEffect("Spiral Design sippou active", "beta", "add", () => this.dto.currentDesign == DesignID.sippou ? 0.025 : 0);
+              this.addEffect("Spiral Design sippou passive", "beta", "add", () => this.dto.design_isUnlocked[DesignID.sippou] ? 0.01 : 0);
 
-              this.addEffect("Spiral Design lame active", "math", "add", "1000 if Spiral Design lame active", () => this.dto.currentDesign == DesignID.lame ? 1000 : 0);
-              this.addEffect("Spiral Design lame passive", "math", "add", "200 if Spiral Design lame passive", () => this.dto.design_isUnlocked[DesignID.lame] ? 200 : 0);
+              this.addEffect("Spiral Design lame active", "math", "add", () => this.dto.currentDesign == DesignID.lame ? 1000 : 0);
+              this.addEffect("Spiral Design lame passive", "math", "add", () => this.dto.design_isUnlocked[DesignID.lame] ? 200 : 0);
               
               // ReactorContainer
               
@@ -1038,7 +1147,6 @@
               console.log(this);
               for ( var effect in this.effects ) {
                 var value = this.effects[effect].value();
-                console.log(effect + ": " + value);
                 if ( value != value ) {
                   console.log(this.effects[effect].value);
                   throw "NaN";
@@ -1085,9 +1193,9 @@
 
       Last public update: 2022/07/02 12:05<br>
       Last test update: 2022/07/29 10:19<br>
-      Last site update: 2022/08/15 21:18<br/>
+      Last site update: 2022/08/16 17:24<br/>
 
-      <!--<input type="file" onchange="loadSave(event)" />-->
+      <input type="file" onchange="loadSave(event)" />
 
       <div class="navbar" style="position: relative; width: 1500px; height: 60px">
         <div class="nav-button explainable explain_r_upgrades" style="left: 238px; width: 100px">r Upgrades</div>
@@ -3077,8 +3185,7 @@ length: 5
             -->
             <script>
               idlespiral.addUpdateFunction(function() {
-                var effects = idlespiral.getEffects("critical");
-                console.log(effects);
+                // TODO
               });
             </script>
           </div>
@@ -3224,7 +3331,7 @@ length: 5
             <div id="custom_update_decay">0</div>
             <script>
               idlespiral.addUpdateFunction(function() {
-                $("#custom_update_decay").text(decay(idlespiral.dto.battle_rewards["math"]));
+                $("#custom_update_decay").text(decay(idlespiral.dto.battle_rewards[34]));
               });
             </script>
           </div>
