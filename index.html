@@ -16,7 +16,7 @@
           function parseJSON ( text, debug = false ) {
             if ( debug )
               console.log( "Parsing JSON: " + text )
-            
+
             try {
               return JSON.parse( text )
             } catch ( e ) {
@@ -31,25 +31,25 @@
           function decryptBase64 ( text, debug = false ) {
             if ( debug )
               console.log( "Decrypting base64: " + text )
-            
+
             return CryptoJS.enc.Base64.parse(text)
           }
           function encryptBase64 ( text, debug = false ) {
             if ( debug )
               console.log( "Encrypting base64: " + text )
-            
+
             return CryptoJS.enc.Base64.stringify(text)
           }
           function decryptAES ( text, debug = false ) {
             if ( debug )
               console.log( "Decrypting AES: " + text )
-            
+
             var kdf = CryptoJS.PBKDF2("kkyyhka", "stkttnsstkttns", {
               keySize: 8,
               hasher: CryptoJS.algo.SHA1,
               iterations: 1000
             });
-            
+
             var key = CryptoJS.enc.Hex.parse(kdf.toString().substring(0, 32));
             var iv = CryptoJS.enc.Hex.parse(kdf.toString().substring(32, 64));
 
@@ -70,7 +70,7 @@
           function decryptSave ( ) {
             if ( state != "encrypted" )
               return
-            
+
             savefile = savefile.split("#");
             for ( var i = 0; i < savefile.length; ++i ) {
               savefile[i] = decryptBase64(savefile[i])
@@ -78,19 +78,19 @@
               savefile[i] = savefile[i].toString(CryptoJS.enc.Utf8)
               savefile[i] = parseJSON(savefile[i])
             }
-            
+
             state = "decrypted"
           }
           function encryptSave ( ) {
             if ( state != "decrypted" )
               return
-            
+
             state = "encrypted"
           }
           function updateFields ( ) {
             if ( state == "encrypted" )
               decryptSave()
-            
+
             idlespiral.init(savefile[2])
             idlespiral.debug()
             idlespiral.update()
@@ -98,7 +98,7 @@
 
           // Explanation selection
           var currentExplanation = "";
-          $(document).ready(function() { 
+          $(document).ready(function() {
             $(".explainable").each(function() {
               $(this).click(function() {
                 var name = "";
@@ -124,7 +124,7 @@
                 currentExplanation = target;
               });
             });
-          }); 
+          });
 
           // Calculations
           var idlespiral = new function IdleSpiral ( ) {
@@ -136,7 +136,7 @@
                 this.value = value;
               }
             }
-            
+
             const BattleUpgradesKind = {
               hp_mul_1: 0,
               atk_mul_1: 1,
@@ -492,7 +492,7 @@
               for (var func of this.updateFunctions)
                 func(this);
             }
-            
+
             // Effects
             this.effects = {};
             this.addEffect = function ( name, target, type, value ) {
@@ -515,14 +515,14 @@
               for ( var effect in this.effects )
                 if ( this.effects[effect].target == name && this.effects[effect].name.indexOf(prefix) == 0 )
                   effects[this.effects[effect].type].push(this.effects[effect]);
-              
+
               return effects;
             }
             this.cache = {};
             this.evaluate = function ( name ) {
               if ( this.cache[name] )
                 return this.cache[name];
-              
+
               var effects = this.getEffects(name);
 
               var value = 0;
@@ -538,7 +538,7 @@
                 value += effect.value();
               for ( var effect of effects["exp"] )
                 value **= effect.value();
-              
+
               if ( value != value ) {
                 console.log(`${name} is NaN`);
                 console.log(effects);
@@ -585,14 +585,14 @@
                 value **= effect.value();
                 console.log(value);
               }
-              
+
               if ( value != value ) {
                 console.log(`${name} is NaN`);
                 console.log(effects);
               }
               return value;
             }
-            
+
             this.init = function ( dto ) {
               this.dto = dto;
               console.log(dto)
@@ -637,9 +637,9 @@
               this.addEffect("Battle reward Omega%", ParametersKind.Omega, "mul", () => 1 + (this.dto.battle_rewards[RewardType.Omega_mul] ?? 0));
               this.addEffect("Battle reward attack speed", ParametersKind.attack_speed, "mul", () => diminishedAttackSpeed((this.dto.battle_rewards[RewardType.attackSpeed] ?? 0)));
               this.addEffect("Battle reward rare drop", ParametersKind.rare_drop, "mul", () => diminishedRareChance((this.dto.battle_rewards[RewardType.rare_chance] ?? 0)));
-              this.addEffect("Battle reward math skill", ParametersKind.math, "add", () => this.dto.battle_rewards[RewardType.math_skill] ?? 0); 
+              this.addEffect("Battle reward math skill", ParametersKind.math, "add", () => this.dto.battle_rewards[RewardType.math_skill] ?? 0);
               this.addEffect("Battle reward enemy growth reduction", ParametersKind.enemy_growth_reduction, "mul", () => decay(this.dto.battle_rewards[RewardType.math_skill] ?? 0));
-              
+
               // Domain / Battle / BattleUpgrades
               this.addEffect("Battle upgrade HP +1%", ParametersKind.hp, "mul", () => 1 + 0.01 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.hp_mul_1] ?? 0));
               this.addEffect("Battle upgrade ATK +1%", ParametersKind.atk, "mul", () => 1 + 0.01 * (this.dto.battle_upgrade_levels[BattleUpgradesKind.atk_mul_1] ?? 0));
@@ -761,13 +761,13 @@
               this.addEffect("Challenge StraightLine First Clear Reward", "softPrestigeSkip", "add", () => (this.dto.challengeLevels[ChallengeKind.StraightLine] ?? 0) >= 1 ? 1 : 0);
               this.addEffect("Challenge drain First Clear Reward", "softPrestigeSkip", "add", () => (this.dto.challengeLevels[ChallengeKind.drain] ?? 0) >= 1 ? 1 : 0);
               this.addEffect("Challenge poorMath First Clear Reward", "softPrestigeSkip", "add", () => (this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 1 ? 1 : 0);
-              
+
               this.addEffect("Challenge basic Reward", "delta_r", "mul", () => 1 + 0.5 * (this.dto.challengeLevels[ChallengeKind.basic] ?? 0));
               this.addEffect("Challenge SlowSpiral Reward", "omega", "mul", () => 1 + 0.1 * (this.dto.challengeLevels[ChallengeKind.SlowSpiral] ?? 0));
               this.addEffect("Challenge SinSpiral Reward", "prestige_level_limit", "add", () => this.dto.challengeLevels[ChallengeKind.SinSpiral] ?? 0);
               this.addEffect("Challenge StraightLine Reward", "k", "mul", () => 1 + (this.dto.challengeLevels[ChallengeKind.StraightLine] ?? 0));
               this.addEffect("Challenge drain Reward", "tornado_cost_reduction", "add", () => -0.1 * (this.dto.challengeLevels[ChallengeKind.drain] ?? 0));
-              
+
               this.addEffect("Challenge poorMath Reward", "delta_r", "mul", () => {
                 var value = 1;
                 if ((this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 1) {
@@ -783,7 +783,7 @@
                   value *= this.evaluate("f");
                 if ((this.dto.challengeLevels[ChallengeKind.poorMath] ?? 0) >= 5)
                   value *= this.evaluate("g");
-                
+
                 return value ** (1/11);
               });
               this.addEffect("Challenge no_rebirth Reward", ParametersKind.automation_interval, "mul", () => 0.5 ** (this.dto.challengeLevels[ChallengeKind.no_rebirth] ?? 0));
@@ -843,7 +843,7 @@
               this.addBaseValue("super_critical_damage", 5);
               this.addBaseValue("battle_upgrade_cost", 1);
               this.addBaseValue("enemy_growth_reduction", 1);
-              
+
               this.addBaseValue("line_number_multiplier", 1);
               this.addBaseValue("equation_speed", 1);
               this.addBaseValue("z_reactor_exp", 1);
@@ -866,7 +866,7 @@
 
                 if ( n == 1 )
                   return A;
-                  
+
                 var Ai = A;
                 var sum = Ai;
                 for ( var i = 1; i < n; i++ ) {
@@ -900,13 +900,13 @@
                 var k = this.evaluate("k");
                 return m * sigmaA * omega ** omegaExponent + k;
               });
-              
+
               this.addEffect("Line Number Multiplier", "delta_r", "mul", () => 1 + ((5 /*lines*/) - 1) * 0.1 * this.evaluate("line_number_multiplier"));
-            
+
               // SoftPrestige
               this.addEffect("omega Prestige omegaExponent", "omegaExponent", "add", () => (this.omegaPrestigeLevel ?? 0));
               this.addEffect("Base omega", "omega", "base", () => 1.25 ** (this.omegaPrestigeLevel ?? 0));
-              
+
               // UpgradeContainer
               this.addEffect("r upgrade k", "k", "add", () => (this.dto.upgradeLevels[UpgradeKind.k] ?? 0));
               this.addEffect("r upgrade a", "a", "add", () => 0.1 * this.dto.upgradeLevels[UpgradeKind.a]);
@@ -955,7 +955,7 @@
               this.addEffect("z upgrade f_mul", "f", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.f_mul]);
               this.addEffect("z upgrade g_mul", "g", "mul", () => 1 + 0.1 * this.dto.upgradeLevels[UpgradeKind.g_mul]);
               this.addEffect("z upgrade m", "m", "add", () => this.dto.upgradeLevels[UpgradeKind.m]);
-              
+
               // Currency / ZMultiplier
               this.addEffect("Omega unlock", "Omega", "add", () => this.dto.tornadoPrestigeTier >= 1 ? 0.1 : 0);
               this.addEffect("Base delta_z", "delta_z", "base", () => this.evaluate("gamma") * this.evaluate("Omega") + this.evaluate("delta"));
@@ -982,7 +982,7 @@
               this.addEffect("Tornado unlock NewSigma", "m", "add", () => this.dto.tornadoPrestigeTier >= 13 ? 1 : 0);
               this.addEffect("Tornado unlock critical", "critical", "indep", () => this.dto.tornadoPrestigeTier >= 17 ? 0.1 : 0);
               this.addEffect("Tornado unlock criticalDamage", "criticalDamage", "mul", () => this.dto.tornadoPrestigeTier >= 17 ? 2 : 0);
-              
+
               // InfiniteSpiralDomain
               this.addEffect("Store upgrade k", "k", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.k]);
               this.addEffect("Store upgrade a", "a", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.a]);
@@ -994,26 +994,26 @@
               this.addEffect("Store upgrade g", "g", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.g]);
               this.addEffect("Store upgrade atk", "atk", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.atk]);
               this.addEffect("Store upgrade def", "def", "mul", () => 1 + 0.01 * this.dto.variableUpgradeLevels[VariableUpgradeKind.def]);
-              
+
               // BattleReward / BattleRewardContainer
-              
-              
-              
-              
-              
 
-              
-              
 
-              
 
-              
 
-              
+
+
+
+
+
+
+
+
+
+
 
               // BattleUpgrades
-              
-            
+
+
               // SpiralEquipmentContainer
               this.addEffect("Spiral Equation thales", "hp", "mul", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.thales] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.thales] - 1000));
               this.addEffect("Spiral Equation Hypatia", "def", "mul", () => 1 + 0.01 * this.dto.spiralEquipment_level[EquationKind.Hypatia] + 0.001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.Hypatia] - 1000));
@@ -1027,23 +1027,23 @@
               this.addEffect("Spiral Equation omar", "reward_atk_mul", "mul", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.omar] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.omar] - 1000));
               this.addEffect("Spiral Equation bhaskara", "reward_def_mul", "mul", () => 1 + 0.001 * this.dto.spiralEquipment_level[EquationKind.bhaskara] + 0.0001 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.bhaskara] - 1000));
               this.addEffect("Spiral Equation madhava", "reward_exp_mul", "mul", () => 1 + 0.0005 * this.dto.spiralEquipment_level[EquationKind.madhava] + 0.00005 * Math.max(0, this.dto.spiralEquipment_level[EquationKind.madhava] - 1000));
-            
+
               // SpiralDesignEffect
               this.addEffect("Spiral Design normal_brue active", "a", "mul", () => this.dto.currentDesign == DesignID.normal_brue ? 1.1 : 1);
               this.addEffect("Spiral Design normal_yellow active", "b", "mul", () => this.dto.currentDesign == DesignID.normal_yellow ? 1.1 : 1);
               this.addEffect("Spiral Design normal_red active", "c", "mul", () => this.dto.currentDesign == DesignID.normal_red ? 1.1 : 1);
               this.addEffect("Spiral Design normal_violet active", "d", "mul", () => this.dto.currentDesign == DesignID.normal_violet ? 1.1 : 1);
               this.addEffect("Spiral Design normal_mono active", "e", "mul", () => this.dto.currentDesign == DesignID.normal_mono ? 1.1 : 1);
-              
+
               this.addEffect("Spiral Design gradation_brue_green active", "hp", "mul", () => this.dto.currentDesign == DesignID.gradation_brue_green ? 1.5 : 1);
               this.addEffect("Spiral Design gradation_brue_green passive", "hp", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_brue_green] ? 1.1 : 1);
-              
+
               this.addEffect("Spiral Design gradation_yellow_red active", "atk", "mul", () => this.dto.currentDesign == DesignID.gradation_yellow_red ? 1.5 : 1);
               this.addEffect("Spiral Design gradation_yellow_red passive", "atk", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_yellow_red] ? 1.1 : 1);
 
               this.addEffect("Spiral Design gradation_red_blue active", "def", "mul", () => this.dto.currentDesign == DesignID.gradation_red_blue ? 1.5 : 1);
               this.addEffect("Spiral Design gradation_red_blue passive", "def", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_red_blue] ? 1.1 : 1);
-              
+
               this.addEffect("Spiral Design gradation_violet_pink active", "critical", "mul", () => this.dto.currentDesign == DesignID.gradation_violet_pink ? 1.05 : 1);
               this.addEffect("Spiral Design gradation_violet_pink passive", "critical", "mul", () => this.dto.design_isUnlocked[DesignID.gradation_violet_pink] ? 1.01 : 1);
 
@@ -1057,7 +1057,7 @@
               this.addEffect("Spiral Design circles_green_pink active def", "def", "mul", () => this.dto.currentDesign == DesignID.circles_green_pink ? 1.3 : 1);
               this.addEffect("Spiral Design circles_green_pink passive regene_while_resting", "regene_while_resting", "mul", () => this.dto.design_isUnlocked[DesignID.circles_green_pink] ? 1.1 : 1);
               this.addEffect("Spiral Design circles_green_pink passive def", "def", "mul", () => this.dto.design_isUnlocked[DesignID.circles_green_pink] ? 1.05 : 1);
-              
+
               this.addEffect("Spiral Design circles_cyan_red active regene_while_resting", "regene_while_resting", "mul", () => this.dto.currentDesign == DesignID.circles_cyan_red ? 1.5 : 1);
               this.addEffect("Spiral Design circles_cyan_red active atk", "atk", "mul", () => this.dto.currentDesign == DesignID.circles_cyan_red ? 1.3 : 1);
               this.addEffect("Spiral Design circles_cyan_red passive regene_while_resting", "regene_while_resting", "mul", () => this.dto.design_isUnlocked[DesignID.circles_cyan_red] ? 1.1 : 1);
@@ -1065,7 +1065,7 @@
 
               this.addEffect("Spiral Design dottedLine_blue active", "line_number_multiplier", "mul", () => this.dto.currentDesign == DesignID.dottedLine_blue ? 2 : 1);
               this.addEffect("Spiral Design dottedLine_blue passive", "line_number_multiplier", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_blue] ? 1.25 : 1);
-              
+
               this.addEffect("Spiral Design dottedLine_white active", "line_number_multiplier", "mul", () => this.dto.currentDesign == DesignID.dottedLine_white ? 1.25 : 1);
               this.addEffect("Spiral Design dottedLine_white passive line_number_multiplier", "line_number_multiplier", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.1 : 1);
               this.addEffect("Spiral Design dottedLine_white passive a", "a", "mul", () => this.dto.design_isUnlocked[DesignID.dottedLine_white] ? 1.05 : 1);
@@ -1080,7 +1080,7 @@
 
               this.addEffect("Spiral Design stripe_white active", "v", "add", () => this.dto.currentDesign == DesignID.stripe_white ? 5 : 0);
               this.addEffect("Spiral Design stripe_white passive", "v", "add", () => this.dto.design_isUnlocked[DesignID.stripe_white] ? 2 : 0);
-              
+
               this.addEffect("Spiral Design stripe_blue active", "reward_atk", "add", () => this.dto.currentDesign == DesignID.stripe_blue ? 5 : 0);
               this.addEffect("Spiral Design stripe_blue passive", "reward_atk", "add", () => this.dto.design_isUnlocked[DesignID.stripe_blue] ? 2 : 0);
 
@@ -1114,7 +1114,7 @@
 
               this.addEffect("Spiral Design rects active", "reward_exp_mul", "mul", () => this.dto.currentDesign == DesignID.rects ? 1.05 : 1);
               this.addEffect("Spiral Design rects passive", "battle_upgrade_cost", "mul", () => this.dto.design_isUnlocked[DesignID.rects] ? 0.95 : 1);
-              
+
               this.addEffect("Spiral Design rainbow active", "equation_speed", "mul", () => this.dto.currentDesign == DesignID.rainbow ? 2 : 1);
               this.addEffect("Spiral Design rainbow passive", "equation_speed", "mul", () => this.dto.design_isUnlocked[DesignID.rainbow] ? 1.5 : 1);
 
@@ -1129,7 +1129,7 @@
 
               this.addEffect("Spiral Design spaceShip active", "omega", "mul", () => this.dto.currentDesign == DesignID.spaceShip ? 1.1 : 1);
               this.addEffect("Spiral Design spaceShip passive", "omega", "mul", () => this.dto.design_isUnlocked[DesignID.spaceShip] ? 1.1 : 1);
-              
+
               this.addEffect("Spiral Design seigaiha active", "alpha", "add", () => this.dto.currentDesign == DesignID.seigaiha ? 0.025 : 0);
               this.addEffect("Spiral Design seigaiha passive", "alpha", "add", () => this.dto.design_isUnlocked[DesignID.seigaiha] ? 0.01 : 0);
 
@@ -1138,11 +1138,11 @@
 
               this.addEffect("Spiral Design lame active", "math", "add", () => this.dto.currentDesign == DesignID.lame ? 1000 : 0);
               this.addEffect("Spiral Design lame passive", "math", "add", () => this.dto.design_isUnlocked[DesignID.lame] ? 200 : 0);
-              
+
               // ReactorContainer
-              
+
             }
-            
+
             this.debug = function ( ) {
               console.log(this);
               for ( var effect in this.effects ) {
@@ -1154,7 +1154,7 @@
               }
             }
           }
-          
+
           function diminishedAttackSpeed ( pure_attack_speed ) {
             if ( pure_attack_speed < 4 )
               return 1 + pure_attack_speed;
@@ -1193,7 +1193,7 @@
 
       Last public update: 2022/07/02 12:05<br>
       Last test update: 2022/07/29 10:19<br>
-      Last site update: 2022/08/16 17:24<br/>
+      Last site update: 2022/08/20 22:16<br/>
 
       <input type="file" onchange="loadSave(event)" />
 
@@ -1372,7 +1372,7 @@
         </div>
 
         <div class="" id="main" style="position: absolute; left: 420px; width: 780px">
-          
+
           <div class="explanation" id="explanation_r_upgrades" style="display: none">
             <div class="title">r Upgrades</div>
             <div class="entry">
@@ -2147,7 +2147,7 @@
             Spiral Equations are unlocked at tornado tier 4. Upon unlocking, all enemies will display a onetime reward as their last reward, taking the place of the standard exp reward. You can select up to two equations at the start to level. You gain the ability to select an additional equation from the 'kanji' spiral design passive.<br>
             <br>
             While an equation is selected, it will build up exp based on your spiral equation speed. Once the exp has crossed the 'cost' of the next level, the equation will level up.
-            
+
             <div class="entry">
               <h3>I: Thales</h3>
               <b>Unlock:</b> Training<br>
@@ -2229,7 +2229,7 @@
           </div>
           <div class="explanation" id="explanation_challenges" style="display: none">
             <div class="title">Challenges</div>
-            
+
             First group:
 
             <div class="challenge">
@@ -2980,6 +2980,10 @@
               The rare chance diminishment function has incorrect bounds, making your chance jump at the second threshold.
             </div>
             <div class="entry">
+              <b>Offline reactors:</b><br>
+              The offline progress calculation for the reactors incorrectly uses a single timestep instead of the offline duration; effectively giving you no progress.
+            </div>
+            <div class="entry">
               <b>logk:</b><br>
               The logk r upgrade shows an effect of $a + \log_{10}(k^{\text{level}})\%$, but in actuality, this is $a + 10*\log_{10}(k^{\text{level}})\%$.
             </div>
@@ -3149,7 +3153,7 @@
             <p>
               Your battle spiral attacks at a rate of $2 / \text{attack speed}$ seconds, which gets displayed as the Time to Attack.<br/>
               This $\text{attack speed}$ is the product of the following factors:
-              
+
               <table>
                 <tr><th> Source                      </th><th> Effect                                             </th></tr>
                 <tr><td> Battle reward               </td><td> $$\begin{cases}
@@ -3162,7 +3166,7 @@
                 <tr><td> Spiral design arrow active  </td><td> $* (1 + 20\% \text{ if you use the arrow design})$ </td></tr>
                 <tr><td> Spiral design arrow passive </td><td> $* (1 + 5\% \text{ if you own the arrow design})$  </td></tr>
               </table>
-              
+
               The attack speed percentage you see on the battle spiral screen only incorporates the battle reward and battle upgrade effects.
             </p>
           </div>
