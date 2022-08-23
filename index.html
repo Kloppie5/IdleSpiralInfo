@@ -1193,7 +1193,7 @@
 
       Last public update: 2022/07/02 12:05<br>
       Last test update: 2022/07/29 10:19<br>
-      Last site update: 2022/08/22 12:29<br/>
+      Last site update: 2022/08/23 12:55<br/>
 
       <input type="file" onchange="loadSave(event)" />
 
@@ -1943,7 +1943,11 @@
 
             The rewards shown are still subject to the special reward improvements.<br>
             All but the last tile rewards also increase with the $\text{Reward Multiplier};$<br>
-            $\text{Reward Multiplier} = 0.98 + 2 / (1 + 99 / e ^ {1.9956 * \text{difficulty} / 200})$
+            $\text{Reward Multiplier} = 0.98 + 2 / (1 + 99 / e ^ {1.9956 * \text{difficulty} / 200})$<br>
+            For the sake of late game, you could see this as $690142.52\%$ total reward for the first 2625 stages, and a static $298\%$ per stage afterwards.<br>
+            Because rerolling resets this $\text{Reward Multiplier}$, it is best to continue as long as you kill the enemy in on average $2.98$ hits.<br>
+            This will be the case as long as you can one-hit crit an enemy and have at least a crit rate of $33.557\%$.<br>
+            <b>TODO:</b> add a calculation for the optimal auto-start state based on savefile stats.
 
             <div class="entry">
               <h3>Training</h3>
@@ -2973,16 +2977,19 @@
             <div class="title">Bugs</div>
             <div class="entry">
               <b>Enemy Growth Reduction:</b><br>
-              Instead of using the 50000 threshold and enemy growth reduction from other sources like the fury challenge; the decay used to scale enemy stats incorrectly uses just the 5000 threshold math skill formula.
+              Instead of using the 50000 threshold and enemy growth reduction from other sources like the fury challenge; the decay used to scale enemy stats incorrectly uses just the 5000 threshold math skill formula.<br>
+              <i>Fixed in next update</i>
             </div>
             <div class="entry">
               <b>Rare Chance:</b><br>
-              The rare chance diminishment function has incorrect bounds, making your chance jump at the second threshold.
+              The rare chance diminishment function has incorrect bounds, making your chance jump at the second threshold.<br>
+              <i>Fixed in next update</i>
             </div>
             <div class="entry">
               <b>Offline bonus:</b><br>
               The offline progress calculation for the reactors incorrectly uses a single timestep instead of the offline duration; effectively giving you no progress.<br>
-              The offline bonus for the spiral equations displays the incorrect names; the bonus does correctly apply to the selected equations.
+              The offline bonus for the spiral equations displays the incorrect names; the bonus does correctly apply to the selected equations.<br>
+              <i>Fixed in next update</i>
             </div>
             <div class="entry">
               <b>logk:</b><br>
@@ -2996,12 +3003,12 @@
               <b>UI:</b><br>
               The center of the spiral on the main screen blocks interaction, blocking the 6th and 10th upgrades a bit.<br>
               At some resolutions, the sides of the screen that include menu buttons becomes blocked.<br>
-              Number representations are incredibly inconsistent.<br>
-
+              Number representations are incredibly inconsistent.
             </div>
             <div class="entry">
               <b>Notation:</b><br>
-              Letter notation accidentally merged two orders of magnitude at "UQig, DQig", meaning everything after is off by one order of magnitude.
+              Letter notation accidentally merged two orders of magnitude at "UQig, DQig", meaning everything after is off by one order of magnitude.<br>
+              <i>Fixed in next update</i>
             </div>
             <div class="entry">
               <b>Battle Upgrades:</b><br>
