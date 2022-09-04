@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\(','\)']]}});</script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script src="https://kit.fontawesome.com/412ef7d66d.js" crossorigin="anonymous"></script>
         <script>
@@ -3031,7 +3031,26 @@
               The Inverse Tower enemy's s-critical rate reward tile doesn't render text.<br>
               The Math Tower and Inverse Tower exclusive Souls are swapped.
             </div>
-
+            <div class="title">Bugs I fixed</div>
+            <div class="entry">
+              <ul>
+                <li style="color: blue">Attack progress is updated, resetting when you attack. This locks your attack speed at a certain ticks per attack.</li>
+                <li style="color: blue">Battle Spiral Reward tables have a memory leak related to the text objects.</li>
+                <li style="color: blue">The offline progress calculation for the reactors incorrectly uses a single timestep instead of the offline duration.</li>
+                <li style="color: yellow">Enemy Growth Reduction displays a number scaled based on a threshold of 50000 math skill, but actually uses a number scaled based on a threshold of 5000 math skill.</li>
+                <li style="color: yellow">Fury Challenge reward only applies to the displayed Enemy Growth Reduction, not to the number actually used.</li>
+                <li style="color: green">Battle Upgrade 18 (HP Reward +5%) incorrectly gives +3% per level.</li>
+                <li style="color: green">Battle Upgrade 30 (+300 ATK and DEF from PI) actually gives +500.</li>
+                <li style="color: green">Battle Upgrade 32 (+0.01 Super Critical Damage from Napier) applies to both S-Crit rewards, making it twice as strong.</li>
+                <li style="color: green">Battle Upgrade 40 (EXP Reward +10%) incorrectly gives +5% per level.</li>
+                <li style="color: green">A duplicate special achievement shifts all the titles and unlock texts, making them appear incorrect.</li>
+                <li style="color: green">Letter notation has a formatting error at "UQig, DQig", making all numbers after incorrect.</li>
+                <li style="color: green">The offline bonus for the spiral equations displays the incorrect names due to using wrong indexes.</li>
+                <li style="color: green">The offline bonus for the reactors displays the incorrect names due to using wrong indexes.</li>
+                <li style="color: green">The Laser design passive effect incorrectly gives an additive bonus instead of a multiplicative one.</li>
+                <li style="color: green">The Rahmen design passive effect incorrectly gives an additive bonus instead of a multiplicative one.</li>
+                <li style="color: yellow">The Rare Chance diminishment has incorrect bounds at the second threshold, making the result jump.</li>
+              </ul>
           </div>
           <div class="explanation" id="explanation_faq" style="display: none">
             <div class="title">Frequently Asked Questions</div>
