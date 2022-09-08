@@ -1784,42 +1784,6 @@
 
             <!--
 
-Training of the semicircular canal
-r reaches 1Oc
-Rocket Spiral
-Δrreaches 1Sp
-Many a little makes a mickle
-Upgrade k 2000 times
-You can't lose to c.
-Upgrade a 2000 times
-belief
-Upgrade b 1000 times
-Is this "c" a constant?
-Upgrade c 1000 times
-It could be the fractal dimension.
-Upgrade d 1000 times
-Napier's bones are not just bones
-Upgrade e 1000 times
-Not even fluoride.
-Upgrade f 1000 times
-Not even in Galois's lifetime.
-Upgrade g 1000 times
-I don't need a theory
-Reach 10th ω prestige
-What happens n times will happen n+1 times
-Upgrade n 7 times
-Don't diverge
-Upgrade v 200 times
-With the Maclaurin series, I learned at age 3
-Upgrade u 7 times
-You don't lose experience if you change jobs
-Earn 1M Prestige Point
-Losing events are also overturned
-Reach T10
-DNA was a spiral, too
-z reaches 10M
-Fury Spiral
-Defeat Beta
 neutron star
 r reaches 1Ud
 Light Speed Spiral
@@ -1882,26 +1846,6 @@ be dizzy
 ω reaches 3
 Napier
 let e be more than 2.718
-
-        //Tier4
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E27)));
-        _achievements.Add(Achievement.CreateAchievement(new DistanceDomainAchievement(r, 1E24, DistanceDomainAchievement.Kind.MaxDistancePerSecond)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.k), 2000)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a), 1000)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b), 1000)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c), 1000)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d), 1000)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e), 1000)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f), 1000)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g), 1000)));
-        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(softPrestige, 7)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.n), 7)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.v), 200)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.u), 7)));
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(prestigePoint, 1E6)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => tornadoPrestige.prestigeNum >= 10)));
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(z, 1E7)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => dto.enemy_defeated[(int)EnemyID.b] >= 1)));
 
         //Tier5
         _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E36)));
@@ -1997,7 +1941,8 @@ let e be more than 2.718
             <h2>Tier 1</h2>
             <div class="entry">
               <b>Now it starts to swirl!</b><br>
-              r reaches 1K
+              r reaches 1K<br>
+              <i><span style="color:red">The r is not italic</span></i>
             </div>
             <div class="entry">
               <b>Fast Spiral</b><br>
@@ -2093,7 +2038,8 @@ let e be more than 2.718
             <div class="entry">
               <b>a is the beginning</b><br>
               Upgrade a 500 times<br>
-              <i>This costs 1.87e8 r</i>
+              <i>This costs 1.87e8 r</i><br>
+              <i><span style="color:red">This triggers on 300; costing 9.85e5 r</span></i>
             </div>
             <div class="entry">
               <b>basic</b><br>
@@ -2176,7 +2122,8 @@ let e be more than 2.718
             <div class="entry">
               <b>You can't lose to b.</b><br>
               Upgrade a 1000 times<br>
-              <i>This costs 9.33e13 r</i>
+              <i>This costs 9.33e13 r</i><br>
+              <i><span style="color:red">This triggers on 500; costing 1.87e8 r</span></i>
             </div>
             <div class="entry">
               <b>benefit</b><br>
@@ -2240,6 +2187,94 @@ let e be more than 2.718
             <div class="entry">
               <b>Deadly spiral</b><br>
               Defeat Alpha
+            </div>
+
+            <h2>Tier 4</h2>
+            <div class="entry">
+              <b>Training of the semicircular canal</b><br>
+              r reaches 1Oc<br>
+              <i>1Oc = 1e27</i>
+            </div>
+            <div class="entry">
+              <b>Rocket Spiral</b><br>
+              &Delta;rreaches 1Sp<br><br>
+              <i>1Sp = 1e24</i><br>
+              <i><span style="color:red">There is no space between r and reaches</span></i>
+            </div>
+            <div class="entry">
+              <b>Many a little makes a mickle</b><br>
+              Upgrade k 2000 times<br>
+              <i>This costs 6.10e83 r</i>
+            </div>
+            <div class="entry">
+              <b>You can't lose to c.</b><br>
+              Upgrade a 2000 times<br>
+              <i>This costs 2.31e25 r</i><br>
+              <i><span style="color:red">This triggers on 1000; costing 9.33e13 r</span></i>
+            </div>
+            <div class="entry">
+              <b>belief</b><br>
+              Upgrade b 1000 times<br>
+              <i>This costs 9.83e20 r</i>
+            </div>
+            <div class="entry">
+              <b>Is this "c" a constant?</b><br>
+              Upgrade c 1000 times<br>
+              <i>This costs 1.77e34 r</i>
+            </div>
+            <div class="entry">
+              <b>It could be the fractal dimension.</b><br>
+              Upgrade d 1000 times<br>
+              <i>This costs 6.49e44 r</i>
+            </div>
+            <div class="entry">
+              <b>Napier's bones are not just bones</b><br>
+              Upgrade e 1000 times<br>
+              <i>This costs 4.44e53 r</i>
+            </div>
+            <div class="entry">
+              <b>Not even fluoride.</b><br>
+              Upgrade f 1000 times<br>
+              <i>This costs 1.08e67 r</i>
+            </div>
+            <div class="entry">
+              <b>Not even in Galois's lifetime.</b><br>
+              Upgrade g 1000 times<br>
+              <i>This costs 1.29e72 r</i>
+            </div>
+            <div class="entry">
+              <b>I don't need a theory</b><br>
+              Reach 10th &omega; prestige<br>
+              <i><span style="color:red">This triggers on the 7th &omega; prestige</span></i>
+            </div>
+            <div class="entry">
+              <b>What happens n times will happen n+1 times</b><br>
+              Upgrade n 7 times
+            </div>
+            <div class="entry">
+              <b>Don't diverge</b><br>
+              Upgrade v 200 times<br>
+              <i>This costs 1.61e60 P</i>
+            </div>
+            <div class="entry">
+              <b>With the Maclaurin series, I learned at age 3</b><br>
+              Upgrade u 7 times
+            </div>
+            <div class="entry">
+              <b>You don't lose experience if you change jobs</b><br>
+              Earn 1M Prestige Point
+            </div>
+            <div class="entry">
+              <b>Losing events are also overturned</b><br>
+              Reach T10
+            </div>
+            <div class="entry">
+              <b>DNA was a spiral, too</b><br>
+              z reaches 10M
+            </div>
+            <div class="entry">
+              <b>Fury Spiral</b><br>
+              Defeat Beta
             </div>
           </div>
           <div class="explanation" id="explanation_store" style="display: none">
