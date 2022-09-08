@@ -1772,7 +1772,473 @@
           </div>
           <div class="explanation" id="explanation_achievements" style="display: none">
             <div class="title">Achievements</div>
-            Explanation achievements
+            When you complete an achievement, you can click it to claim it and gain 30 Spiral Points.<br>
+
+            <h2>Daily</h2>
+            <div class="entry">
+              Every day you can claim daily "spins" that give you Spiral Points.<br>
+              You get 3 spins per day, or 5 if you have the Daily DLC.<br>
+              The points you get per spin are random between 1 and 39.<br>
+              If you have the Daily DLC, the amount of points you get gets multiplied by 1.5.
+            </div>
+
+            <!--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Now it starts to swirl!
+r reaches 1B
+Cheetah Spiral
+Δr reaches 1M
+Is it still small?
+Upgrade k 500 times
+a is the beginning
+Upgrade a 500 times
+basic
+Upgrade b 300 times
+Not too hard to make a curve?
+Upgrade c 300 times
+Dimension was 2
+Upgrade d 300 times
+He discovered the logarithm
+Upgrade e 300 times
+It's not completely additive class
+Upgrade f 300 times
+It's not Gaussian
+Upgrade g 300 times
+Spiral molting
+Reach 3rd ω prestige
+The second step is cautious
+Upgrade n 3 times
+Sums of sequences are not easy
+Upgrade v 20 times
+I think of Cantor set
+Upgrade u 3 times
+Babies grow fast
+Earn 100 Prestige Point
+Enemies are too weak
+Reach T2
+You're not a snail anymore
+z reaches 1k
+Sharp Spiral
+Defeat Kappa
+triple axel
+r reaches 1Qa
+A sonic spiral
+Δr reaches 1T
+slow but steady wins the race
+Upgrade k 1000 times
+You can't lose to b.
+Upgrade a 1000 times
+benefit
+Upgrade b 500 times
+Isn't it hard to draw a circle?
+Upgrade c 500 times
+No. 3-D?
+Upgrade d 500 times
+Decimal inventor
+Upgrade e 500 times
+Nor is it the product of mass and acceleration
+Upgrade f 500 times
+It's not  group theory
+Upgrade g 500 times
+Can you explain angular velocity?
+Reach 5th ω prestige
+third time lucky
+Upgrade n 5 times
+What is a Cauchy sequence?
+Upgrade v 100 times
+Which Bernoulli?
+Upgrade u 5 times
+Why do people forget?
+Earn 10K Prestige Point
+Why couldn't we beat that enemy?
+Reach T5
+I've seen a spiral staircase like this
+z reaches 100K
+Deadly spiral
+Defeat Alpha
+Training of the semicircular canal
+r reaches 1Oc
+Rocket Spiral
+Δrreaches 1Sp
+Many a little makes a mickle
+Upgrade k 2000 times
+You can't lose to c.
+Upgrade a 2000 times
+belief
+Upgrade b 1000 times
+Is this "c" a constant?
+Upgrade c 1000 times
+It could be the fractal dimension.
+Upgrade d 1000 times
+Napier's bones are not just bones
+Upgrade e 1000 times
+Not even fluoride.
+Upgrade f 1000 times
+Not even in Galois's lifetime.
+Upgrade g 1000 times
+I don't need a theory
+Reach 10th ω prestige
+What happens n times will happen n+1 times
+Upgrade n 7 times
+Don't diverge
+Upgrade v 200 times
+With the Maclaurin series, I learned at age 3
+Upgrade u 7 times
+You don't lose experience if you change jobs
+Earn 1M Prestige Point
+Losing events are also overturned
+Reach T10
+DNA was a spiral, too
+z reaches 10M
+Fury Spiral
+Defeat Beta
+neutron star
+r reaches 1Ud
+Light Speed Spiral
+Δr reaches 1Dc
+The "k" stands for king.
+Upgrade k 10000 times
+I'm the hero of this story.
+Upgrade a 10000 times
+Best
+Upgrade b 5000 times
+Continuous but not differentiable
+Upgrade c 4000 times
+It was also an infinite dimension
+Upgrade d 3000 times
+Mirifici Logarithmorum Canonis Descriptio
+Upgrade e 2000 times
+Let's learn about category theory
+Upgrade f 2000 times
+Why study group theory?
+Upgrade g 2000 times
+All I want is speed
+Reach 30th ω prestige
+The number line goes on and on... forever
+Upgrade n 10 times
+They don't seem to want to converge
+Upgrade v 1000 times
+But I don't know how to add
+Upgrade u 10 times
+So let's cherish the moment
+Earn 1B Prestige Point
+This time we can save the world
+Reach T15
+This is a real hurricane
+z reaches 1B
+Did you get close to the great mathematicians?
+Defeat PI
+Do you like prime numbers?
+Set the level of all parameters(a~g)  to an even number of 2 or more.
+You are odd lovers.
+Set the level of all parameters(a~g)  to an odd number of 1 or more
+This turned around the earth for a year
+Set all parameter(a~g)  levels to prime into a sequence (2,3,5,...)
+The person who counts the petals
+Make the level of all parameters(a~g)  a Fibonacci sequence (1,1,2,3,5,...)
+The "k" That Lived A Million Times
+Purchase a cumulative total of 1 million k
+A Million Leagues Under the Sea
+Purchase a cumulative total of 1 million a
+a journey of a thousand miles begins with a single step
+Purchase a cumulative total of 1 million n
+Study up on your number sequences!
+Make u and v each level 5 without raising n levels
+Are you doing this on purpose?
+Increase the level of n to 5 without increasing the level of u and v.
+You are an idle gamer
+Don't click for 1 hours
+You read Euclid's Elements.
+Rotate 365
+be dizzy
+ω reaches 3
+Napier
+let e be more than 2.718
+
+              _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E3)));
+        _achievements.Add(Achievement.CreateAchievement(new DistanceDomainAchievement(r, 1000, DistanceDomainAchievement.Kind.MaxDistancePerSecond)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.k), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(softPrestige, 1)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.n), 1)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.v), 10)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.u), 1)));
+        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(prestige, 1)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => tornadoPrestige.prestigeNum >= 1)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(z, 100)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => dto.enemy_defeated[(int)EnemyID.training] >= 1)));
+
+
+        //Tier2
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E9)));
+        _achievements.Add(Achievement.CreateAchievement(new DistanceDomainAchievement(r, 1E6, DistanceDomainAchievement.Kind.MaxDistancePerSecond)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.k), 500)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a), 300)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b), 300)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c), 300)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d), 300)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e), 300)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f), 300)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g), 300)));
+        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(softPrestige, 3)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.n), 3)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.v), 20)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.u), 3)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(prestigePoint, 100)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => tornadoPrestige.prestigeNum >= 2)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(z, 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => dto.enemy_defeated[(int)EnemyID.kappa] >= 1)));
+
+
+        //Tier3
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E15)));
+        _achievements.Add(Achievement.CreateAchievement(new DistanceDomainAchievement(r, 1E12, DistanceDomainAchievement.Kind.MaxDistancePerSecond)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.k), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a), 500)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b), 500)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c), 500)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d), 500)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e), 500)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f), 500)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g), 500)));
+        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(softPrestige, 5)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.n), 5)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.v), 100)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.u), 5)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(prestigePoint, 1E4)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => tornadoPrestige.prestigeNum >= 5)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(z, 1E5)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => dto.enemy_defeated[(int)EnemyID.a] >= 1)));
+
+        //Tier4
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E27)));
+        _achievements.Add(Achievement.CreateAchievement(new DistanceDomainAchievement(r, 1E24, DistanceDomainAchievement.Kind.MaxDistancePerSecond)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.k), 2000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(softPrestige, 7)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.n), 7)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.v), 200)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.u), 7)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(prestigePoint, 1E6)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => tornadoPrestige.prestigeNum >= 10)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(z, 1E7)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => dto.enemy_defeated[(int)EnemyID.b] >= 1)));
+
+        //Tier5
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E36)));
+        _achievements.Add(Achievement.CreateAchievement(new DistanceDomainAchievement(r, 1E33, DistanceDomainAchievement.Kind.MaxDistancePerSecond)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.k), 10000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a), 10000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b), 5000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c), 4000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d), 3000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e), 2000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f), 2000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g), 2000)));
+        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(softPrestige, 10)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.n), 10)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.v), 1000)));
+        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.u), 10)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(prestigePoint, 1E9)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => tornadoPrestige.prestigeNum >= 15)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(z, 1E9)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => dto.enemy_defeated[(int)EnemyID.pi] >= 1)));
+
+		// Special
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(
+          () => upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level % 2 == 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level % 2 == 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level % 2 == 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level % 2 == 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level % 2 == 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level % 2 == 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g).level % 2 == 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level != 0
+            )));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(
+          () => upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level % 2 == 1 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level % 2 == 1 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level % 2 == 1 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level % 2 == 1 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level % 2 == 1 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level % 2 == 1 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g).level % 2 == 1 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level != 0 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level != 0
+            )));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(
+          () => upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level == 2 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level == 3 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level == 5 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level == 7 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level == 11 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level == 13 &&
+                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g).level == 17
+            )));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(
+           () => upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level == 1 &&
+                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level == 1 &&
+                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level == 2 &&
+                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level == 3 &&
+                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level == 5 &&
+                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level == 8 &&
+                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g).level == 13
+             )));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
+            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.k] >= 1E6)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
+            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.a] >= 1E6)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
+            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.n] >= 1E3)));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
+            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.n] == 0
+             && dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.u] >= 5
+             && dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.v] >= 5
+            )));
+        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
+            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.n] >= 5
+             && dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.u] == 0
+             && dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.v] == 0
+            )));
+        _achievements.Add(Achievement.CreateAchievement(new NoClickAchievement(3600)));
+        _achievements.Add(Achievement.CreateAchievement(new CurrentThetaAchievement(365 * 2 * Math.PI)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(parameters.GetParameter( ParameterContainer.ParametersKind.omega), 3)));
+        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(parameters.GetParameter(ParameterContainer.ParametersKind.e), 2.718)));
+
+            -->
+            <h2>Tier 1</h2>
+            <div class="entry">
+              <b>Now it starts to swirl!</b><br>
+              r reaches 1K
+            </div>
+            <div class="entry">
+              <b>Fast Spiral</b><br>
+              &Delta;r reaches 1K
+            </div>
+            <div class="entry">
+              <b>Small Power</b><br>
+              Upgrade k 100 times<br>
+              <i>This costs 1.38e5 r</i>
+            </div>
+            <div class="entry">
+              <b>The main character of this game?</b><br>
+              Upgrade a 100 times<br>
+              <i>This costs 4.81e3 r</i>
+            </div>
+            <div class="entry">
+              <b>The "B" reminds me of Beautiful Voice.</b><br>
+              Upgrade b 100 times<br>
+              <i>This costs 1.37e5 r</i>
+            </div>
+            <div class="entry">
+              <b>Come on, let's count.</b><br>
+              Upgrade c 100 times<br>
+              <i>This costs 1.43e7 r</i>
+            </div>
+            <div class="entry">
+              <b>Is dimension 1?</b><br>
+              Upgrade d 100 times<br>
+              <i>This costs 9.94e8 r</i>
+            </div>
+            <div class="entry">
+              <b>Do you know John Napier?</b><br>
+              Upgrade e 100 times<br>
+              <i>This costs 5.08e10 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not a function</b><br>
+              Upgrade f 100 times<br>
+              <i>This costs 7.05e12 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not gravity</b><br>
+              Upgrade g 100 times<br>
+              <i>This costs 2.10e13 r</i>
+            </div>
+            <div class="entry">
+              <b>This is a new spiral</b><br>
+              Do &omega; Prestige for the first time
+            </div>
+            <div class="entry">
+              <b>The first step is important</b><br>
+              Upgrade n 1 times
+            </div>
+            <div class="entry">
+              <b>Not just a constant</b><br>
+              Upgrade v 10 times
+            </div>
+            <div class="entry">
+              <b>St. Petersburg Paradox</b><br>
+              Upgrade u 1 times
+            </div>
+            <div class="entry">
+              <b>Reborn!</b><br>
+              Do Prestige for the first time
+            </div>
+            <div class="entry">
+              <b>strong new game</b><br>
+              Do T Prestige for the first time
+            </div>
+            <div class="entry">
+              <b>A new dimension to this game</b><br>
+              z reaches 100
+            </div>
+            <div class="entry">
+              <b>The spiral is a weapon.</b><br>
+              Defeat training
+            </div>
           </div>
           <div class="explanation" id="explanation_store" style="display: none">
             <div class="title">Store</div>
@@ -2986,6 +3452,9 @@
           <div class="explanation" id="explanation_meta_changelog" style="display: none">
             <div class="title">Meta changelog</div>
             Some day I'll care enough to write this, or I'll start tracking things after reaching some point of completion.
+
+            <h4>v0.2209082119</h4>
+            Added page parameter interaction to allow for linking to specific explanations.
             <h4>v0.2206142003</h4>
             Initial version
           </div>
