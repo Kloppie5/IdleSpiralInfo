@@ -1209,7 +1209,7 @@
 
       Last public update: 2022/07/02 12:05<br>
       Last test update: 2022/07/29 10:19<br>
-      Last site update: 2022/09/08 21:19<br/>
+      Last site update: 2022/09/08 23:52<br/>
 
       <input type="file" onchange="loadSave(event)" />
 
@@ -1782,106 +1782,6 @@
               If you have the Daily DLC, the amount of points you get gets multiplied by 1.5.
             </div>
 
-            <!--
-
-Do you like prime numbers?
-Set the level of all parameters(a~g)  to an even number of 2 or more.
-You are odd lovers.
-Set the level of all parameters(a~g)  to an odd number of 1 or more
-This turned around the earth for a year
-Set all parameter(a~g)  levels to prime into a sequence (2,3,5,...)
-The person who counts the petals
-Make the level of all parameters(a~g)  a Fibonacci sequence (1,1,2,3,5,...)
-The "k" That Lived A Million Times
-Purchase a cumulative total of 1 million k
-A Million Leagues Under the Sea
-Purchase a cumulative total of 1 million a
-a journey of a thousand miles begins with a single step
-Purchase a cumulative total of 1 million n
-Study up on your number sequences!
-Make u and v each level 5 without raising n levels
-Are you doing this on purpose?
-Increase the level of n to 5 without increasing the level of u and v.
-You are an idle gamer
-Don't click for 1 hours
-You read Euclid's Elements.
-Rotate 365
-be dizzy
-ω reaches 3
-Napier
-let e be more than 2.718
-
-		// Special
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(
-          () => upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level % 2 == 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level % 2 == 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level % 2 == 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level % 2 == 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level % 2 == 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level % 2 == 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g).level % 2 == 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level != 0
-            )));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(
-          () => upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level % 2 == 1 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level % 2 == 1 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level % 2 == 1 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level % 2 == 1 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level % 2 == 1 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level % 2 == 1 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g).level % 2 == 1 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level != 0 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level != 0
-            )));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(
-          () => upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level == 2 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level == 3 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level == 5 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level == 7 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level == 11 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level == 13 &&
-                upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g).level == 17
-            )));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(
-           () => upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a).level == 1 &&
-                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b).level == 1 &&
-                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c).level == 2 &&
-                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d).level == 3 &&
-                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e).level == 5 &&
-                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f).level == 8 &&
-                 upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g).level == 13
-             )));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
-            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.k] >= 1E6)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
-            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.a] >= 1E6)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
-            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.n] >= 1E3)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
-            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.n] == 0
-             && dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.u] >= 5
-             && dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.v] >= 5
-            )));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(()
-            => dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.n] >= 5
-             && dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.u] == 0
-             && dto.totalUpgradeLevels[(int)UpgradeContainer.UpgradeKind.v] == 0
-            )));
-        _achievements.Add(Achievement.CreateAchievement(new NoClickAchievement(3600)));
-        _achievements.Add(Achievement.CreateAchievement(new CurrentThetaAchievement(365 * 2 * Math.PI)));
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(parameters.GetParameter( ParameterContainer.ParametersKind.omega), 3)));
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(parameters.GetParameter(ParameterContainer.ParametersKind.e), 2.718)));
-
-            -->
             <h2>Tier 1</h2>
             <div class="entry">
               <b>Now it starts to swirl!</b><br>
@@ -2307,6 +2207,66 @@ let e be more than 2.718
             <div class="entry">
               <b>Did you get close to the great mathematicians?</b><br>
               Defeat PI
+            </div>
+
+            <h2>Special</h2>
+            <div class="entry">
+              <b>Do you like prime numbers?</b><br>
+              Set the level of all parameters(a~g)  to an even number of 2 or more.
+            </div>
+            <div class="entry">
+              <b>You are odd lovers.</b><br>
+              Set the level of all parameters(a~g)  to an odd number of 1 or more
+            </div>
+            <div class="entry">
+              <b>This turned around the earth for a year</b><br>
+              Set all parameter(a~g)  levels to prime into a sequence (2,3,5,...)<br>
+              <i>The full sequence is 2, 3, 5, 7, 11, 13, 17</i>
+            </div>
+            <div class="entry">
+              <b>The person who counts the petals</b><br>
+              Make the level of all parameters(a~g)  a Fibonacci sequence (1,1,2,3,5,...)<br>
+              <i>The full sequence is 1, 1, 2, 3, 5, 8, 13</i>
+            </div>
+            <div class="entry">
+              <b>The "k" That Lived A Million Times</b><br>
+              Purchase a cumulative total of 1 million k<br>
+              <i><span style="color:red">Accumulated achievements don't accumulate, so you would need to reach it in one go.<br>This would cost 4.84e41393 r</span></i>
+            </div>
+            <div class="entry">
+              <b>A Million Leagues Under the Sea</b><br>
+              Purchase a cumulative total of 1 million a<br>
+              <i><span style="color:red">Accumulated achievements don't accumulate, so you would need to reach it in one go.<br>This would cost 8.14e11396 r</span></i>
+            </div>
+            <div class="entry">
+              <b>a journey of a thousand miles begins with a single step</b><br>
+              Purchase a cumulative total of 1 million n<br>
+              <i><span style="color:red">Accumulated achievements don't accumulate, so you would need to reach it in one go.<br>It also technically checks for level 1000, but this is still impossible</span></i>
+            </div>
+            <div class="entry">
+              <b>Study up on your number sequences!</b><br>
+              Make u and v each level 5 without raising n levels
+            </div>
+            <div class="entry">
+              <b>Are you doing this on purpose?</b><br>
+              Increase the level of n to 5 without increasing the level of u and v.
+            </div>
+            <div class="entry">
+              <b>You are an idle gamer</b><br>
+              Don't click for 1 hours
+            </div>
+            <div class="entry">
+              <b>You read Euclid's Elements.</b><br>
+              Rotate 365<br>
+              <i>Honestly, I don't know</i>
+            </div>
+            <div class="entry">
+              <b>be dizzy</b><br>
+              &omega; reaches 3
+            </div>
+            <div class="entry">
+              <b>Napier</b><br>
+              let e be more than 2.718
             </div>
           </div>
           <div class="explanation" id="explanation_store" style="display: none">
@@ -3521,7 +3481,8 @@ let e be more than 2.718
           <div class="explanation" id="explanation_meta_changelog" style="display: none">
             <div class="title">Meta changelog</div>
             Some day I'll care enough to write this, or I'll start tracking things after reaching some point of completion.
-
+            <h4>v0.2209082352</h4>
+            Added achievements.
             <h4>v0.2209082119</h4>
             Added page parameter interaction to allow for linking to specific explanations.
             <h4>v0.2206142003</h4>
