@@ -1783,74 +1783,6 @@
             </div>
 
             <!--
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Now it starts to swirl!
-r reaches 1B
-Cheetah Spiral
-Δr reaches 1M
-Is it still small?
-Upgrade k 500 times
-a is the beginning
-Upgrade a 500 times
-basic
-Upgrade b 300 times
-Not too hard to make a curve?
-Upgrade c 300 times
-Dimension was 2
-Upgrade d 300 times
-He discovered the logarithm
-Upgrade e 300 times
-It's not completely additive class
-Upgrade f 300 times
-It's not Gaussian
-Upgrade g 300 times
-Spiral molting
-Reach 3rd ω prestige
-The second step is cautious
-Upgrade n 3 times
-Sums of sequences are not easy
-Upgrade v 20 times
-I think of Cantor set
-Upgrade u 3 times
-Babies grow fast
-Earn 100 Prestige Point
-Enemies are too weak
-Reach T2
-You're not a snail anymore
-z reaches 1k
-Sharp Spiral
-Defeat Kappa
 triple axel
 r reaches 1Qa
 A sonic spiral
@@ -1985,47 +1917,6 @@ be dizzy
 ω reaches 3
 Napier
 let e be more than 2.718
-
-              _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E3)));
-        _achievements.Add(Achievement.CreateAchievement(new DistanceDomainAchievement(r, 1000, DistanceDomainAchievement.Kind.MaxDistancePerSecond)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.k), 100)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a), 100)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b), 100)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c), 100)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d), 100)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e), 100)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f), 100)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g), 100)));
-        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(softPrestige, 1)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.n), 1)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.v), 10)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.u), 1)));
-        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(prestige, 1)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => tornadoPrestige.prestigeNum >= 1)));
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(z, 100)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => dto.enemy_defeated[(int)EnemyID.training] >= 1)));
-
-
-        //Tier2
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E9)));
-        _achievements.Add(Achievement.CreateAchievement(new DistanceDomainAchievement(r, 1E6, DistanceDomainAchievement.Kind.MaxDistancePerSecond)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.k), 500)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.a), 300)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.b), 300)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.c), 300)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.d), 300)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.e), 300)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.f), 300)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.g), 300)));
-        _achievements.Add(Achievement.CreateAchievement(new PrestigeNumberAchievement(softPrestige, 3)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.n), 3)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.v), 20)));
-        _achievements.Add(Achievement.CreateAchievement(new LevelAchievement(upgradeContainer.GetUpgrade(UpgradeContainer.UpgradeKind.u), 3)));
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(prestigePoint, 100)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => tornadoPrestige.prestigeNum >= 2)));
-        _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(z, 1000)));
-        _achievements.Add(Achievement.CreateAchievement(new NormalAchievement(() => dto.enemy_defeated[(int)EnemyID.kappa] >= 1)));
-
 
         //Tier3
         _achievements.Add(Achievement.CreateAchievement(new NumberAchievement(r, 1E15)));
@@ -2238,6 +2129,88 @@ let e be more than 2.718
             <div class="entry">
               <b>The spiral is a weapon.</b><br>
               Defeat training
+            </div>
+
+            <h2>Tier 2</h2>
+            <div class="entry">
+              <b>Now it starts to swirl!</b><br>
+              r reaches 1B
+            </div>
+            <div class="entry">
+              <b>Cheetah Spiral</b><br>
+              &Delta;r reaches 1M
+            </div>
+            <div class="entry">
+              <b>Is it still small?</b><br>
+              Upgrade k 500 times<br>
+              <i>This costs 4.97e21 r</i>
+            </div>
+            <div class="entry">
+              <b>a is the beginning</b><br>
+              Upgrade a 500 times<br>
+              <i>This costs 1.87e8 r</i>
+            </div>
+            <div class="entry">
+              <b>basic</b><br>
+              Upgrade b 300 times<br>
+              <i>This costs 4.63e8 r</i>
+            </div>
+            <div class="entry">
+              <b>Not too hard to make a curve?</b><br>
+              Upgrade c 300 times<br>
+              <i>This costs 1.50e13 r</i>
+            </div>
+            <div class="entry">
+              <b>Dimension was 2</b><br>
+              Upgrade d 300 times<br>
+              <i>This costs 9.04e16 r</i>
+            </div>
+            <div class="entry">
+              <b>He discovered the logarithm</b><br>
+              Upgrade e 300 times<br>
+              <i>This costs 1.77e20 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not completely additive class</b><br>
+              Upgrade f 300 times<br>
+              <i>This costs 7.75e24 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not Gaussian</b><br>
+              Upgrade g 300 times<br>
+              <i>This costs 2.43e26 r</i>
+            </div>
+            <div class="entry">
+              <b>Spiral molting</b><br>
+              Reach 3rd &omega; prestige
+            </div>
+            <div class="entry">
+              <b>The second step is cautious</b><br>
+              Upgrade n 3 times
+            </div>
+            <div class="entry">
+              <b>Sums of sequences are not easy</b><br>
+              Upgrade v 20 times
+            </div>
+            <div class="entry">
+              <b>I think of Cantor set</b><br>
+              Upgrade u 3 times
+            </div>
+            <div class="entry">
+              <b>Babies grow fast</b><br>
+              Earn 100 Prestige Point
+            </div>
+            <div class="entry">
+              <b>Enemies are too weak</b><br>
+              Reach T2
+            </div>
+            <div class="entry">
+              <b>You're not a snail anymore</b><br>
+              z reaches 1k
+            </div>
+            <div class="entry">
+              <b>Sharp Spiral</b><br>
+              Defeat Kappa
             </div>
           </div>
           <div class="explanation" id="explanation_store" style="display: none">
