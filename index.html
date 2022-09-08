@@ -95,9 +95,30 @@
             idlespiral.debug()
             idlespiral.update()
           }
-
+        </script>
+        <script>
           // Explanation selection
           var currentExplanation = "";
+          function showExplanation ( name ) {
+            if ( name == "" ) {
+              console.log("No explaination found for " + $(this));
+              return;
+            }
+
+            if ( currentExplanation != "") {
+              console.log("Hiding " + currentExplanation);
+              $(currentExplanation).hide();
+            }
+            var target = "#explanation_" + name;
+            console.log("Showing " + target);
+            $(target).show();
+            currentExplanation = target;
+
+            const url = new URL(window.location.href);
+            url.searchParams.set("page", name);
+            console.log("Setting URL to " + url);
+            window.history.pushState({}, "", url);
+          }
           $(document).ready(function() {
             $(".explainable").each(function() {
               $(this).click(function() {
@@ -109,21 +130,17 @@
                     break;
                   }
                 }
-                if ( name == "" ) {
-                  console.log("No explaination found for " + $(this));
-                  return;
-                }
 
-                if ( currentExplanation != "") {
-                  console.log("Hiding " + currentExplanation);
-                  $(currentExplanation).hide();
-                }
-                var target = "#explanation_" + name;
-                console.log("Showing " + target);
-                $(target).show();
-                currentExplanation = target;
+                showExplanation(name);
               });
             });
+
+            var url = new URL(window.location.href);
+            console.log("URL: " + url);
+            var page = url.searchParams.get("page");
+            if ( page != null ) {
+              showExplanation(page);
+            }
           });
 
           // Calculations
@@ -1188,12 +1205,11 @@
         </script>
     </head>
     <body>
-
       <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
 
       Last public update: 2022/07/02 12:05<br>
       Last test update: 2022/07/29 10:19<br>
-      Last site update: 2022/09/08 11:16<br/>
+      Last site update: 2022/09/08 21:19<br/>
 
       <input type="file" onchange="loadSave(event)" />
 
