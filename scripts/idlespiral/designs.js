@@ -131,10 +131,10 @@ addEffect("Spiral Design kanji active", "delta", "mul", () => dto.currentDesign 
 addEffect("Spiral Design kanji passive", "equation_slot", "add", () => dto.design_isUnlocked[DesignID.kanji] ? 1 : 0);
 
 addEffect("Spiral Design rahmen active", "gamma", "mul", () => dto.currentDesign == DesignID.rahmen ? 1.5 : 1);
-addEffect("Spiral Design rahmen passive", "gamma", "mul", () => dto.design_isUnlocked[DesignID.rahmen] ? 1.2 : 0);
+addEffect("Spiral Design rahmen passive", "gamma", "mul", () => dto.design_isUnlocked[DesignID.rahmen] ? 1.2 : 1);
 
 addEffect("Spiral Design lazer active", "z_reactor_exp", "mul", () => dto.currentDesign == DesignID.lazer ? 1.5 : 1);
-addEffect("Spiral Design lazer passive", "z_reactor_exp", "mul", () => dto.design_isUnlocked[DesignID.lazer] ? 1.2 : 0);
+addEffect("Spiral Design lazer passive", "z_reactor_exp", "mul", () => dto.design_isUnlocked[DesignID.lazer] ? 1.2 : 1);
 
 addEffect("Spiral Design spaceShip active", "omega", "mul", () => dto.currentDesign == DesignID.spaceShip ? 1.1 : 1);
 addEffect("Spiral Design spaceShip passive", "omega", "mul", () => dto.design_isUnlocked[DesignID.spaceShip] ? 1.1 : 1);

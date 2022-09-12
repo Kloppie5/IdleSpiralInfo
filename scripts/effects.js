@@ -19,27 +19,54 @@ function addBaseValue ( target, value ) {
 }
 
 var evalation_cache = {}
-function evaluate ( name ) {
-  if ( evalation_cache[name] )
+function evaluate ( name, debug = false ) {
+  if ( debug )
+    console.log("Evaluating " + name)
+  if ( evalation_cache[name] && !debug )
     return evalation_cache[name]
 
   var value = 0
   if ( effects[name] ) {
     for ( var effect of effects[name] )
-      if ( effect.type == "base" )
+      if ( effect.type == "base" ) {
+        if ( debug ) {
+          console.log(effect)
+          console.log(effect.value())
+        }
         value = effect.value()
+      }
     for ( var effect of effects[name] )
-      if ( effect.type == "add" )
+      if ( effect.type == "add" ) {
+        if ( debug ) {
+          console.log(effect)
+          console.log(effect.value())
+        }
         value += effect.value()
+      }
     for ( var effect of effects[name] )
-      if ( effect.type == "mul" )
+      if ( effect.type == "mul" ) {
+        if ( debug ) {
+          console.log(effect)
+          console.log(effect.value())
+        }
         value *= effect.value()
+      }
     for ( var effect of effects[name] )
-      if ( effect.type == "indep" )
+      if ( effect.type == "indep" ) {
+        if ( debug ) {
+          console.log(effect)
+          console.log(effect.value())
+        }
         value += effect.value()
+      }
     for ( var effect of effects[name] )
-      if ( effect.type == "exp" )
+      if ( effect.type == "exp" ) {
+        if ( debug ) {
+          console.log(effect)
+          console.log(effect.value())
+        }
         value **= effect.value()
+      }
   }
 
   if ( value != value ) {
