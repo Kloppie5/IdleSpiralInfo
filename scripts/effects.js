@@ -18,12 +18,12 @@ function addBaseValue ( target, value ) {
   addEffect("Base Value", target, "base", () => value)
 }
 
-var evalation_cache = {}
+var evaluation_cache = {}
 function evaluate ( name, debug = false ) {
   if ( debug )
     console.log("Evaluating " + name)
-  if ( evalation_cache[name] && !debug )
-    return evalation_cache[name]
+  if ( evaluation_cache[name] && !debug )
+    return evaluation_cache[name]
 
   var value = 0
   if ( effects[name] ) {
@@ -74,6 +74,6 @@ function evaluate ( name, debug = false ) {
     console.log(effects[name])
   }
 
-  evalation_cache[name] = value
+  evaluation_cache[name] = value
   return value
 }
