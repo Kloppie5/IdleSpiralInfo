@@ -27,6 +27,13 @@
         <script src="scripts/explanations.js"></script>
 
         <script>
+          function prettyprint ( number ) {
+            if ( number < 1000 ) {
+              return number.toFixed(3);
+            }
+            return number.toExponential(3).replace('+','')
+          }
+
           var updateFunctions = []
           function addUpdateFunction ( func ) {
             updateFunctions.push(func)
@@ -37,12 +44,12 @@
               for ( var i = 0 ; i < classes.length ; ++i ) {
                 if ( classes[i].indexOf('display_') == 0 ) {
                   var name = classes[i].substring(8)
-                  $(this).text(evaluate(name))
+                  $(this).text(prettyprint(evaluate(name)))
                   break
                 }
                 if ( classes[i].indexOf('battle_reward_') == 0 ) {
                   var name = classes[i].substring(14)
-                  $(this).text(dto.battle_rewards[RewardType[name]])
+                  $(this).text(prettyprint(dto.battle_rewards[RewardType[name]]))
                   break
                 }
               }
