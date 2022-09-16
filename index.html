@@ -65,7 +65,7 @@
 
       Last public update: 2022/07/02 12:05<br>
       Last test update: 2022/07/29 10:19<br>
-      Last site update: 2022/09/12 16:06<br/>
+      Last site update: 2022/09/16 12:01<br/>
 
       <input type="file" onchange="loadSave(event)" />
 
@@ -1798,8 +1798,8 @@
               <table>
                 <tr><th>Spiral Design          </td><th>Passive Effect                     </td><th>Active Effect                         </th></tr>
                 <tr><td>Green Winding          </td><td>$Exp Reward +1$                    </td><td>$Exp Reward + 3$                      </td></tr>
-                <tr><td>White & Red Winding    </td><td>$Exp Reward +3%$                   </td><td>$Exp Reward +10%$                     </td></tr>
-                <tr><td>Orange & Purple Winding</td><td>$ATK +30%$ | $DEF +30%$ | $HP +30%$</td><td>$ATK +100%$ | $DEF +100%$ | $HP +100%$</td></tr>
+                <tr><td>White & Red Winding    </td><td>$Exp Reward +3\%$                   </td><td>$Exp Reward +10\%$                     </td></tr>
+                <tr><td>Orange & Purple Winding</td><td>$ATK +30\%$ | $DEF +30\%$ | $HP +30\%$</td><td>$ATK +100\%$ | $DEF +100\%$ | $HP +100\%$</td></tr>
                 <tr><td>$\pi$                  </td><td>$\Omega +20\%$                     </td><td>$\Omega +50\%$                        </td></tr>
                 <tr><td>Diamond                </td><td>$Battle Upgrade Cost -5\%$         </td><td>$Exp Reward +5\%$                     </td></tr>
                 <tr><td>Rainbow                </td><td>$Spiral Equation Speed +50\%$      </td><td>$Spiral Equation Speed +100\%$        </td></tr>
@@ -2468,7 +2468,24 @@
           <div class="explanation" id="explanation_delta_r" style="display: none">
             <div class="title">$\Delta r$</div>
             $\Delta r$ is the amount $r$ increases per second, making it the most important number in the game.<br>
-            Something something a bazillion different effects.
+
+            <table>
+              <tr><th> Source                      </th><th> Effect                                             </th></tr>
+              <tr><td> Base Equation               </td><td> m * sigmaA * omega ^ omegaExponent + k </td></tr>
+              <tr><td> Line Number Multiplier      </td><td> *= (1 + (lines - 1) * 0.1 * line_number_multiplier))           </td></tr>
+              <tr><td> Basic Challenge Reward      </td><td> *= (1 + 0.5 * level)                   </td></tr>
+              <tr><td> Poor Math Challenge Reward  </td><td> *= (a * b * c [* d [* e [* f [* g]]]])^(1/11) based on level             </td></tr>
+              <tr><td> Sinkhold Challenge Reward   </td><td> *= (1 + log(time since omega prestige / 13 + 1) / log(10 - level))                   </td></tr>
+              <tr><td> R Reactor Active Effect     </td><td> *= (1 + 0.01 * value)                   </td></tr>
+              <tr><td> R Reactor Passive Effect    </td><td> *= (1 + 0.005 * level)                   </td></tr>
+              <tr><td> Tornado Tier Factor         </td><td> *= (1 + 0.5 * tornado tier)                   </td></tr>
+              <tr><td> Tornado Playtime Factor     </td><td> *= (1 + playtime in hours * 1.0 * 0.01 + [playtime in hours - 100.0] * 1.0 * 0.005 + [playtime in hours - 1100.0] * 1.0 * 0.001)                   </td></tr>
+              <tr><td> Tornado Max P Factor        </td><td> *= (1 + 0.1 * log_10(Max P + 1))                   </td></tr>
+              <tr><td> r upgrade rAll Passive      </td><td> *= (1 + sum of r upgrade levels / 10000)                   </td></tr>
+              <tr><td> r upgrade rAll Active       </td><td> *= (1 + 0.1 * level)                   </td></tr>
+              <tr><td> z upgrade z_multiplier      </td><td> *= (1 + (1 + 0.1 * level) * log_10(z + 1) / 5)                   </td></tr>
+            </table>
+
           </div>
           <div class="explanation" id="explanation_sigmaA" style="display: none">
             Explanation sigmaA
