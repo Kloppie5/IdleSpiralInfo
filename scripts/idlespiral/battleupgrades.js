@@ -1,6 +1,6 @@
 
 var BattleUpgradesKind = {
-  hp_mul_1: {id: 0, },
+  hp_mul_1: 0,
   atk_mul_1: 1,
   def_mul_1: 2,
   regene_mul_1: 3,

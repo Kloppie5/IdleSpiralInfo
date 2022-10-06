@@ -65,7 +65,7 @@
 
       Last public update: 2022/07/02 12:05<br>
       Last test update: 2022/07/29 10:19<br>
-      Last site update: 2022/09/16 12:01<br/>
+      Last site update: 2022/10/06 11:26<br/>
 
       <input type="file" onchange="loadSave(event)" />
 
@@ -2601,21 +2601,19 @@
           </div>
           <div class="explanation" id="explanation_critical" style="display: none">
             <div class="title">Critical Rate</div>
-            <!--
-            5%
-
-            Spiral equation euclides: * (1 + 0.001 * level)
-            Spiral design gradation_violet_pink active: * 1.05 if you use the gradation_violet_pink design
-            Spiral Design gradation_violet_pink passive: * 1.01 if you own the gradation_violet_pink design
-
-
-            0: Effect {name: 'Tornado unlock critical', target: 'critical', type: 'indep', formula: '0.1 if tornadoPrestigeTier >= 17', value: ƒ}
-1: Effect {name: 'Battle upgrade Critical +0.1%', target: 'critical', type: 'indep', formula: '1 + battle upgrade Critical +1%', value: ƒ}
-2: Effect {name: 'Battle upgrade Critical +0.2%', target: 'critical', type: 'indep', formula: '1 + battle upgrade Critical +0.2%', value: ƒ}
-3: Effect {name: 'Reactor crit active', target: 'critical', type: 'indep', formula: '0.01 * SigmaSum(Math.floor(reactor value / 1e9))', value: ƒ}
-4: Effect {name: 'Reactor crit passive', target: 'critical', type: 'indep', formula: 'Its complicated', value: ƒ}
-length: 5
-            -->
+            <table>
+              <tr><th> Source                                      </th><th> Effect                                      </th></tr>
+              <tr><td> Base value                                  </td><td> 5%                                          </td></tr>
+              <tr><td> Battle Reward                               </td><td> + battle reward (currently unobtainable)    </td></tr>
+              <tr><td> Spiral Design gradation_violet_pink active  </td><td> * 1.05 if you use gradation_violet_pink     </td></tr>
+              <tr><td> Spiral Design gradation_violet_pink passive </td><td> * 1.01 if you own gradation_violet_pink     </td></tr>
+              <tr><td> Spiral Equation euclides                    </td><td> * (1 + 0.1% * level + 0.01% * [level - 50]) </td></tr>
+              <tr><td> Tornado Tier 17                             </td><td> + 10% after Tornado Tier 17                 </td></tr>
+              <tr><td> Battle Upgrade Critical +0.1%               </td><td> + 0.1% * level                              </td></tr>
+              <tr><td> Battle Upgrade Critical +0.2%               </td><td> + 0.2% * level                              </td></tr>
+              <tr><td> Reactor CR active                           </td><td> + 1% * SigmaSum(|value / 1e9|)              </td></tr>
+              <tr><td> Reactor CR passive                          </td><td> + 0.005% * level                            </td></tr>
+            </table>
             <script>
               addUpdateFunction(function() {
                 // TODO
