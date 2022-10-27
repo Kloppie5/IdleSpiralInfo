@@ -1624,7 +1624,11 @@
               You fail if $r$ reaches 0 after 10 seconds<br>
               Max level: 5<br>
               Complete Bonus: Get Spiral Design "Diamond"<br>
-              Reward: $omegaExponent \mathrel{{+}{=}} 0.1 * \text{level}$
+              Reward: $omegaExponent \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+
+              <br/>
+              <a href="javascript:void(0)" class="spoiler">Click to reveal a tip</a>
+              <span>On level 4 and above, it's not worth doing $\omega$ prestige, since $\omega \lt 1$</span>
             </div>
             <div class="challenge unavailable">
               Drain Challenge<br>
@@ -1648,7 +1652,13 @@
               Max level: 5<br>
               First Clear Reward: Skip one $\omega$ Prestige Progress<br>
               Complete Bonus: Get Spiral Design "Rainbow"<br>
-              Reward: $prestige\_level\_limit \mathrel{{+}{=}} \text{level}$
+              Reward: $prestige\_level\_limit \mathrel{{+}{=}} \text{level}$<br>
+              
+              <br/>
+              <em>Try to finish this as soon as you unlock it!</em><br/><br/>
+
+              <a href="javascript:void(0)" class="spoiler">Click to reveal a tip</a>
+              <span>Look closely to the spiral - when the spiral starts moving further from the center, activate line multiplier. When the line starts moving towards the center, deactivate line multiplier.</span>              
             </div>
             <div class="challenge">
               IV: Slow Spiral Challenge<br>
@@ -1657,7 +1667,10 @@
               Max level: 5<br>
               First Clear Reward: Skip one $\omega$ Prestige Progress<br>
               Complete Bonus: Get Spiral Design "kanji"<br>
-              Reward: $\omega \mathrel{{*}{=}} 1 + 0.1 * \text{level}$
+              Reward: $\omega \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br><br/>
+
+              <a href="javascript:void(0)" class="spoiler">Click to reveal a tip</a>
+              <span>Don't $\omega$ prestige - this slows you down since $\omega \lt 1$</span>
             </div>
             <div class="challenge unavailable">
               Gear Challenge<br>
@@ -2396,6 +2409,10 @@
               Getting the $k$ upgrade to level 10000 costs more $r$ than the game can handle, making the achievement for it impossible.<br>
               The cumulative upgrade achievements are impossible.
             </div>
+            <div class="entry">
+              <b>Line number multiplier:</b><br>
+              Activating the line number multiplier then switching to Battle Spiral screen causes the multiplier to deplete at half speed.
+            </div>
             <div class="entry unavailable">
               <b>Raid Enemies:</b><br>
               The Spiral Tower enemy's exp tiles lose their reward exp effect after the first board.<br>
@@ -2680,8 +2697,9 @@
               <textarea id="savefile-decrypted-2" style="width: 730px; height: 200px" readonly="readonly"></textarea>
             </div>
             <div class="entry">
+              <a href="javascript:void(0)" onclick="exportSavefile()" style="float: right">Export</a>
               <b>Formatted savefile:</b><br>
-              <textarea id="savefile-decrypted-full" style="width: 730px; height: 200px" readonly="readonly"></textarea>
+              <textarea id="savefile-decrypted-full" style="width: 730px; height: 200px"></textarea>
             </div>
           </div>
         </div>

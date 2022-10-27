@@ -103,3 +103,17 @@ p {
 .bug_resolved {
   color: #00aa00;
 }
+
+a {
+  color: rgb(207, 207, 235);
+}
+
+.spoiler {
+  display: block;
+}
+.spoiler + span {
+  display: none;
+}
+.spoiler:focus + span {
+  display: block;
+}
