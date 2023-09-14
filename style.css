@@ -1,5 +1,25 @@
 html {
-  background-color: #000;
-  color: #fff;
+  background-color: #343434;
+  color: #FFFFFF;
   user-select: none;
+}
+
+div {
+  outline: 1px solid #FFFFFF;
+}
+
+.expand {
+  background-color: #C0C0C0;
+  color: #000000;
+}
+.expandable {
+  display: none;
+}
+
+.nav-button {
+  width: 150px;
+  height: 48px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 48px;
 }

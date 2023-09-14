@@ -2,12 +2,28 @@
     <head>
         <title>Idle Spiral Info Repo</title>
         <link rel="stylesheet" href="style.css">
+        <script>
+            function expand(id) {
+                var x = document.getElementById(id);
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
+                }
+            }
+        </script>
     </head>
     <body>
         <div style="text-align: center;">
             <span style="font-size: 60px;">UNDER CONSTRUCTION</span>
-            <br>
-            <span style="font-size: 30px;">Reworking everything</span>
+        </div>
+
+        <div id="content" style="size: 100%; margin: 0">
+            <div class="expand nav-button" onclick="expand('explanation-upgrades')">Upgrades</div>
+            <div class="expandable" id="explanation-upgrades">
+                Testing
+            </div>
+
         </div>
     </body>
 </html>
