@@ -1,0 +1,2802 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Idle Spiral Info Repo</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://kit.fontawesome.com/412ef7d66d.js" crossorigin="anonymous"></script>
+
+        <script src="scripts/effects.js"></script>
+        <script src="scripts/savefile.js"></script>
+
+        <script src="scripts/idlespiral/parameters.js"></script>
+
+        <script src="scripts/idlespiral/battlerewards.js"></script>
+        <script src="scripts/idlespiral/battleupgrades.js"></script>
+        <script src="scripts/idlespiral/challenges.js"></script>
+        <script src="scripts/idlespiral/designs.js"></script>
+        <script src="scripts/idlespiral/equations.js"></script>
+        <script src="scripts/idlespiral/reactors.js"></script>
+        <script src="scripts/idlespiral/tornadoprestige.js"></script>
+        <script src="scripts/idlespiral/upgrades.js"></script>
+        <script src="scripts/idlespiral/variableupgrades.js"></script>
+
+        <script src="scripts/explanations.js"></script>
+
+        <script>
+          function prettyprint ( number ) {
+            if ( number < 1000 ) {
+              return number.toFixed(3);
+            }
+            return number.toExponential(3).replace('+','')
+          }
+
+          var updateFunctions = []
+          function addUpdateFunction ( func ) {
+            updateFunctions.push(func)
+          }
+          function update ( ) {
+            $('.update_display').each(function() {
+              var classes = $(this).attr('class').split(' ')
+              for ( var i = 0 ; i < classes.length ; ++i ) {
+                if ( classes[i].indexOf('display_') == 0 ) {
+                  var name = classes[i].substring(8)
+                  $(this).text(prettyprint(evaluate(name)))
+                  break
+                }
+                if ( classes[i].indexOf('battle_reward_') == 0 ) {
+                  var name = classes[i].substring(14)
+                  $(this).text(prettyprint(dto.battle_rewards[RewardType[name]]))
+                  break
+                }
+              }
+            })
+
+            for (var func of this.updateFunctions)
+              func(this)
+          }
+        </script>
+    </head>
+    <body>
+      <img src="https://visitor-badge.glitch.me/badge?page_id=kloppie5.idlespiralinforepo" alt="visitor counter" /><br/>
+
+      Last public update: 2022/07/02 12:05<br>
+      Last test update: 2022/07/29 10:19<br>
+      Last site update: 2022/10/31 15:00<br/>
+
+      <input type="file" onchange="loadSave(event)" />
+
+      <div class="navbar" style="position: relative; width: 1500px; height: 60px">
+        <div class="marked nav-button explainable explain_r_upgrades" style="left: 0px; width: 375px">r Upgrades</div>
+        <div class="marked nav-button explainable explain_p_upgrades" style="left: 375px; width: 375px">P Upgrades</div>
+        <div class="marked nav-button explainable explain_z_upgrades" style="left: 750px; width: 375px">z Upgrades</div>
+        <div class="marked nav-button explainable explain_tornado_prestiges" style="left: 1125px; width: 375px">Tornado Prestige</div>
+      </div>
+      <div class="navbar" style="position: relative; width: 1500px; height: 60px">
+        <div class="marked nav-button explainable explain_achievements" style="left: 0px; width: 187px">Achievements</div>
+        <div class="marked nav-button explainable explain_store" style="left: 187px; width: 188px">Store</div>
+        <div class="marked nav-button explainable explain_battle_spiral" style="left: 375px; width: 93px">Battle</div>
+        <div class="marked nav-button-mini explainable explain_battle_upgrades" style="left: 468px; width: 94px">upgrades</div>
+        <div class="marked nav-button-mini explainable explain_battle_reward_candidates" style="top: 30px; left: 468px; width: 94px">rewards</div>
+        <div class="marked nav-button explainable explain_spiral_equations" style="left: 562px; width: 188px">Equations</div>
+        <div class="marked nav-button explainable explain_challenges" style="left: 750px; width: 187px">Challenges</div>
+        <div class="marked nav-button explainable explain_spiral_designs" style="left: 937px; width: 188px">Designs</div>
+        <div class="marked nav-button explainable explain_z_reactors" style="left: 1125px; width: 187px">Z Reactors</div>
+        <div class="marked nav-button explainable explain_theorems unavailable" style="left: 1312px; width: 188px">Theorems</div>
+      </div>
+      <div class="navbar" style="position: relative; width: 1500px; height: 60px">
+        <div class="marked nav-button explainable explain_story" style="left: 0px; width: 250px">Story</div>
+        <div class="marked nav-button explainable explain_changelog" style="left: 250px; width: 250px">changelog</div>
+        <div class="marked nav-button explainable explain_meta_changelog" style="left: 500px; width: 250px">meta changelog</div>
+        <div class="marked nav-button explainable explain_bugs" style="left: 750px; width: 250px"><i class="fa-solid fa-bug"></i></div>
+        <div class="marked nav-button explainable explain_faq" style="left: 1000px; width: 250px">faq</div>
+        <div class="marked nav-button explainable explain_dev" style="left: 1250px; width: 250px">dev</div>
+      </div>
+      <div class="" style="position: absolute; width: 1500px; height: 1000px">
+        <div class="" style="position: absolute; width: 420px; height: 500px">
+          <div class="" style="position: absolute; width: 420px; height: 400px;">
+            <div class="formula" style="height: 50px">
+              <div class="explainable explain_delta_r">$\Delta r$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="explainable explain_m">$\displaystyle\sum\limits_{l_2=1}^m$</div>
+              <div class="explainable explain_sigmaA">$\displaystyle\sum\limits_{l=1}^n A_l$</div>
+              <div class="explainable explain_omega">$\omega^{omegaExponent}$</div>
+              <div>+</div>
+              <div class="explainable explain_k">$k$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_delta_r">0</div>
+            </div>
+            <div class="formula" style="position: absolute; top: 50px; height: 65px">
+              <div class="explainable explain_sigmaA">$A_i$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="explainable explain_integral">$\displaystyle\int\limits_0^\alpha 2 x^\beta$</div>
+              <div class="explainable explain_u">$u$</div>
+              <div class="explainable explain_sigmaA">$A_{i-1}$</div>
+              <div>$dx$</div>
+              <div>+</div>
+              <div class="explainable explain_v">$v$</div>
+            </div>
+            <div class="formula explainable explain_u" style="position: absolute; top: 115px; left: 30px; width: 120px; height: 20px">
+              <div>$u$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_u">0</div>
+            </div>
+            <div class="formula explainable explain_v" style="position: absolute; top: 115px; left: 150px; width: 120px; height: 20px">
+              <div>$v$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_v">0</div>
+            </div>
+            <div class="formula explainable explain_n" style="position: absolute; top: 135px; left: 30px; width: 120px; height: 20px">
+              <div>$n$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_n">0</div>
+            </div>
+            <div class="formula explainable explain_m" style="position: absolute; top: 135px; left: 150px; width: 120px; height: 20px">
+              <div>$m$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_m">0</div>
+            </div>
+            <div class="formula explainable explain_alpha" style="position: absolute; top: 155px; left: 30px; width: 120px; height: 20px">
+              <div>$\alpha$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_alpha">0</div>
+            </div>
+            <div class="formula explainable explain_beta" style="position: absolute; top: 155px; left: 150px; width: 120px; height: 20px">
+              <div>$\beta$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_beta">0</div>
+            </div>
+            <div class="formula" style="position: absolute; top: 175px; left: 30px; height: 20px">
+              <div class="explainable explain_largeA">$A_1$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="explainable explain_a">$a$</div>
+              <div>$\times$</div>
+              <div class="explainable explain_b">$b$</div>
+              <div>$\times$</div>
+              <div class="explainable explain_c">$c$</div>
+              <div>$\times$</div>
+              <div class="explainable explain_d">$d$</div>
+              <div>$\times$</div>
+              <div class="explainable explain_e">$e$</div>
+              <div>$\times$</div>
+              <div class="explainable explain_f">$f$</div>
+              <div>$\times$</div>
+              <div class="explainable explain_g">$g$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_largeA explainable explain_largeA">0</div>
+            </div>
+            <div class="formula explainable explain_a" style="position: absolute; top: 195px; left: 30px; height: 20px">
+              <div>$a$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_a">0</div>
+            </div>
+            <div class="formula explainable explain_b" style="position: absolute; top: 215px; left: 30px; height: 20px">
+              <div>$b$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_b">0</div>
+            </div>
+            <div class="formula explainable explain_c" style="position: absolute; top: 235px; left: 30px; height: 20px">
+              <div>$c$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_c">0</div>
+            </div>
+            <div class="formula explainable explain_d" style="position: absolute; top: 255px; left: 30px; height: 20px">
+              <div>$d$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_d">0</div>
+            </div>
+            <div class="formula explainable explain_e" style="position: absolute; top: 275px; left: 30px; height: 20px">
+              <div>$e$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_e">0</div>
+            </div>
+            <div class="formula explainable explain_f" style="position: absolute; top: 295px; left: 30px; height: 20px">
+              <div>$f$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_f">0</div>
+            </div>
+            <div class="formula explainable explain_g" style="position: absolute; top: 315px; left: 30px; height: 20px">
+              <div>$g$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_g">0</div>
+            </div>
+            <div class="formula explainable explain_k" style="position: absolute; top: 335px; left: 30px; height: 20px">
+              <div>$k$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_k">0</div>
+            </div>
+            <div class="formula explainable explain_omega" style="position: absolute; top: 370px; left: 30px; height: 20px">
+              <div>$\omega$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_omega">0</div>
+            </div>
+          </div>
+          <div class="" style="position: absolute; top: 420px; width: 420px; height: 80px;">
+            <div class="formula" style="height: 20px">
+              <div class="explainable explain_delta_z">$\Delta z$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="explainable explain_gamma">$\gamma$</div>
+              <div class="explainable explain_Omega">$\Omega$</div>
+              <div>+</div>
+              <div class="explainable explain_delta">$\delta$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_delta_z explainable explain_delta_z">0</div>
+            </div>
+            <div class="formula explainable explain_gamma" style="position: absolute; top: 20px; left: 30px; height: 20px">
+              <div>$\gamma$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_gamma">0</div>
+            </div>
+            <div class="formula explainable explain_Omega" style="position: absolute; top: 40px; left: 30px; height: 20px">
+              <div>$\Omega$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_Omega">0</div>
+            </div>
+            <div class="formula explainable explain_delta" style="position: absolute; top: 60px; left: 30px; height: 20px">
+              <div>$\delta$</div>
+              <div>&nbsp;=&nbsp;</div>
+              <div class="update_display display_delta">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="" id="main" style="position: absolute; left: 420px; width: 780px">
+
+          <div class="explanation" id="explanation_r_upgrades" style="display: none">
+            <div class="title">r Upgrades</div>
+            <div class="entry">
+              <b>k:</b><br>
+              $k \mathrel{{+}{=}} \text{level}$<br>
+              <b>Upgrade Cost:</b> $1 * 1.1 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>a:</b><br>
+              $a \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10 * (1.3 ^ {0.1}) ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>b:</b><br>
+              $b \mathrel{{+}{=}} 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^2 * (1.5 ^ {0.1}) ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>c:</b><br>
+              $c \mathrel{{+}{=}} 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^3 * (2 ^ {0.1}) ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>d:</b><br>
+              $d \mathrel{{+}{=}} 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^4 * (2.5 ^ {0.1}) ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>e:</b><br>
+              $e \mathrel{{+}{=}} 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^5 * (3 ^ {0.1}) ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>ae11:</b><br>
+              $a \mathrel{{*}{=}} 1 + 0.01 * \text{level}$<br>
+              $b \mathrel{{*}{=}} 1 + 0.01 * \text{level}$<br>
+              $c \mathrel{{*}{=}} 1 + 0.01 * \text{level}$<br>
+              $d \mathrel{{*}{=}} 1 + 0.01 * \text{level}$<br>
+              $e \mathrel{{*}{=}} 1 + 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^4 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>logk:</b><br>
+              $a \mathrel{{*}{=}} 1 + 0.1 * \text{level} * \log(k + 1)$<br>
+              <b>Upgrade Cost:</b> $10^4 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>f:</b><br>
+              $f \mathrel{{+}{=}} 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^6 * (4 ^ {0.1}) ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>g:</b><br>
+              $g \mathrel{{+}{=}} 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^6 * (4.5 ^ {0.1}) ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>beMul:</b><br>
+              $a \mathrel{{*}{=}} (b + c + d + e + f + g) / 6$<br>
+              $a \mathrel{{*}{=}} (1 + 0.1 * \text{level})$<br>
+              <b>Upgrade Cost:</b> $10^{12} * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>rAll:</b><br>
+              $\Delta r \mathrel{{*}{=}} (1 + \text{sum of levels} / 10000)$<br>
+              $\Delta r \mathrel{{*}{=}} (1 + 0.1 * \text{level})$<br>
+              <b>Upgrade Cost:</b> $10^{18} * 10 ^ {\text{level}}$
+            </div>
+
+          </div>
+          <div class="explanation" id="explanation_p_upgrades" style="display: none">
+            <div class="title">P Upgrades</div>
+            <div class="entry">
+              <b>n:</b><br>
+              $n \mathrel{{+}{=}} \text{level}$<br>
+              <b>Upgrade Cost:</b> $1 * 5 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>v:</b><br>
+              $v \mathrel{{+}{=}} 10 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $1 * 2 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>u:</b><br>
+              $u \mathrel{{+}{=}} \text{level}$<br>
+              <b>Upgrade Cost:</b> $10 * 1e1 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>parmA:</b><br>
+              $a \mathrel{{+}{=}} \text{level}$<br>
+              <b>Upgrade Cost:</b> $10 * 1.5 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>parmK:</b><br>
+              $k \mathrel{{+}{=}} 10 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>parmB:</b><br>
+              $b \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^2 * 1.5 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>parmC:</b><br>
+              $c \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^3 * 1.5 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>parmD:</b><br>
+              $d \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^4 * 1.5 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>parmE:</b><br>
+              $e \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^5 * 1.5 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>parmF:</b><br>
+              $f \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^6 * 1.5 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>parmG:</b><br>
+              $g \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^7 * 1.5 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>exponentK:</b><br>
+              $k\_exponent \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^7 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>alpha:</b><br>
+              $\alpha \mathrel{{+}{=}} 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^{21} * 1.25 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>beta:</b><br>
+              $\beta \mathrel{{+}{=}} 0.01 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^{24} * 1.4 ^ {\text{level}}$
+            </div>
+            <div class="entry unavailable">
+              <b>ppd:</b><br>
+              $ppd \mathrel{{*}{=}} 0.95 ^ {\text{level}}$<br>
+              <b>Upgrade Cost:</b> $5 * 2 ^ {\text{level}}$
+            </div>
+
+          </div>
+          <div class="explanation" id="explanation_z_upgrades" style="display: none">
+            <div class="title">z Upgrades</div>
+            <div class="entry">
+              <b>z_multiplier:</b><br>
+              $\Delta r \mathrel{{*}{=}} 1 + (1 + 0.1 * \text{level}) * \log(z + 1) / 5$<br>
+              <b>Upgrade Cost:</b> $1 + 5 * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Omega:</b><br>
+              $\Omega \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^2 * 2 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>gamma:</b><br>
+              $\gamma \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^2 * 2 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>delta:</b><br>
+              $\delta \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^2 * 2 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>a_mul:</b><br>
+              $a \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^3 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>b_mul:</b><br>
+              $b \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^4 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>c_mul:</b><br>
+              $c \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^5 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>d_mul:</b><br>
+              $d \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^6 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>e_mul:</b><br>
+              $e \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^7 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>f_mul:</b><br>
+              $f \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^8 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>g_mul:</b><br>
+              $g \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^9 * 10 ^ {\text{level}}$
+            </div>
+            <div class="entry">
+              <b>m:</b><br>
+              $m \mathrel{{+}{=}} \text{level}$<br>
+              <b>Upgrade Cost:</b> $10^{12} * (10^3) ^ {\text{level}}$
+            </div>
+
+          </div>
+          <div class="explanation" id="explanation_tornado_prestiges" style="display: none">
+            <div class="title">Tornado Prestiges</div>
+            <p>
+              <b>Tornado Prestiges</b> are the main way to progress in the game.<br>
+              <br>
+              After your first tornado prestige, you will get access to a set of small bonuses that are based on the following factors:<br>
+              <br>
+              <b>tornado tier</b> - Your current tornado tier; <span id="update_custom_tornado_tier"></span><br>
+              <script>
+                addUpdateFunction(function() {
+                  $("#update_custom_tornado_tier").text(dto.tornadoPrestigeTier);
+                });
+              </script>
+              <b>HourFactor</b> - A factor based on your total playtime in hours, following the formula below; <span id="update_custom_hour_factor"></span><br>
+              <script>
+                addUpdateFunction(function() {
+                  $("#update_custom_hour_factor").text(HourFactor(dto.AccumulatedHour));
+                });
+              </script>
+              <b>maxP</b> - The highest P you have ever had at the time of a tornado prestige; <span id="update_custom_accumulated_max_p"></span><br>
+              <script>
+                addUpdateFunction(function() {
+                  $("#update_custom_accumulated_max_p").text(dto.AccumulatedMaxP);
+                });
+              </script>
+              <div class="formula" style="height: 80px">
+                <div>$$\text{HourFactor} = \begin{cases}
+                  0.01 * \text{playtime},& \text{if playtime} \leq 100 \\
+                  0.015 * \text{playtime} - 0.5,& \text{if } 100 \lt \text{playtime} \leq 1000 \\
+                  0.016 * \text{playtime} - 1.6,& \text{otherwise}
+                \end{cases}$$</div>
+              </div>
+              <br>
+            </p>
+
+            <div class="formula" style="height: 30px">
+              <div class="explainable explain_delta_r">$\Delta r$</div>
+              <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
+              <div class="">$(1 + 0.5 * \text{tornado tier})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + \text{HourFactor})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + 0.1 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula" style="height: 30px">
+              <div class="explainable explain_delta_z">$\Delta z$</div>
+              <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
+              <div class="">$(1 + 0.5 * \text{tornado tier})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + \text{HourFactor})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + 0.1 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula" style="height: 30px">
+              <div class="">$regene\_while\_resting$</div>
+              <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
+              <div class="">$(1 + 0.1 * \text{tornado tier})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + \text{HourFactor})$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + 0.1 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula" style="height: 30px">
+              <div class="">$spiral\_point\_multiplier$</div>
+              <div>&nbsp;$=$&nbsp;</div>
+              <div class="">$1 + 1\% * \text{tornado tier}$</div>
+            </div>
+            <div class="formula" style="height: 30px">
+              <div class="explainable explain_a">$a$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="">$0.2$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + 0.1 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula" style="height: 30px">
+              <div class="explainable explain_b">$b$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="">$0.02$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + 0.01 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula" style="height: 30px">
+              <div class="explainable explain_c">$c$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="">$0.02$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + 0.01 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula" style="height: 30px">
+              <div class="explainable explain_d">$d$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="">$0.02$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + 0.01 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <div class="formula" style="height: 30px">
+              <div class="explainable explain_e">$e$</div>
+              <div>&nbsp;$\mathrel{{+}{=}}$&nbsp;</div>
+              <div class="">$0.02$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{tornado tier}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$\text{HourFactor}$</div>
+              <div>&nbsp;$*$&nbsp;</div>
+              <div class="">$(1 + 0.01 * \log(\text{maxP} + 1))$</div>
+            </div>
+            <br>
+            <p>
+              Besides these bonuses; you also unlock new features when you reach certain levels;
+            </p>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Level</th>
+                  <th>Unlock</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Basic Challenge</td></tr>
+                <tr><td>2</td><td>Auto omega Prestige</td></tr>
+                <tr><td>3</td><td>Drunk Challenge</td></tr>
+                <tr class="unavailable"><td>3</td><td>Drain Challenge</td></tr>
+                <tr><td>4</td><td>Spiral Equations</td></tr>
+                <tr><td>5</td><td>Flower Challenge</td></tr>
+                <tr><td>6</td><td>Auto p Prestige</td></tr>
+                <tr><td>7</td><td>Slow Spiral Challenge</td></tr>
+                <tr><td>8</td><td>Enemy PI</td></tr>
+                <tr><td>9</td><td>Gluttony Challenge</td></tr>
+                <tr><td>10</td><td>Z Reactors</td></tr>
+                <tr><td>11</td><td>Straight Line Challenge</td></tr>
+                <tr><td>12</td><td>Enemy Gamma</td></tr>
+                <tr><td>13</td><td>New Sigma</td></tr>
+                <tr><td>14</td><td>Poor Challenge</td></tr>
+                <tr><td>15</td><td>No Rebirth Challenge</td></tr>
+                <tr><td>16</td><td>Enemy Napier</td></tr>
+                <tr><td>17</td><td>Critical</td></tr>
+                <tr><td>18</td><td>Sinkhole Challenge</td></tr>
+                <tr><td>19</td><td>m</td></tr>
+                <tr><td>20</td><td>Sphere Challenge</td></tr>
+                <tr><td>21</td><td>Integral</td></tr>
+                <tr><td>22</td><td>New battle upgrades</td></tr>
+                <tr><td>23</td><td>Z Reactor CR</td></tr>
+                <tr><td>24</td><td>Fury Challenge</td></tr>
+                <tr><td>25</td><td>Enemy penta</td></tr>
+                <tr><td>26</td><td>Z Reactor CRX</td></tr>
+                <tr><td>27</td><td>New battle upgrades 2</td></tr>
+                <tr class="unavailable"><td>99</td><td>Exponent A</td></tr>
+              </tbody>
+            </table>
+
+          </div>
+          <div class="explanation" id="explanation_achievements" style="display: none">
+            <div class="title">Achievements</div>
+            When you complete an achievement, you can click it to claim it and gain 30 Spiral Points.<br>
+
+            <h2>Daily</h2>
+            <div class="entry">
+              Every day you can claim daily "spins" that give you Spiral Points.<br>
+              You get 3 spins per day, or 5 if you have the Daily DLC.<br>
+              The points you get per spin are random between 1 and 39.<br>
+              If you have the Daily DLC, the amount of points you get gets multiplied by 1.5.
+            </div>
+
+            <h2>Tier 1</h2>
+            <div class="entry">
+              <b>Now it starts to swirl!</b><br>
+              r reaches 1K<br>
+              <i><span style="color:red">The r is not italic</span></i>
+            </div>
+            <div class="entry">
+              <b>Fast Spiral</b><br>
+              &Delta;r reaches 1K
+            </div>
+            <div class="entry">
+              <b>Small Power</b><br>
+              Upgrade k 100 times<br>
+              <i>This costs 1.38e5 r</i>
+            </div>
+            <div class="entry">
+              <b>The main character of this game?</b><br>
+              Upgrade a 100 times<br>
+              <i>This costs 4.81e3 r</i>
+            </div>
+            <div class="entry">
+              <b>The "B" reminds me of Beautiful Voice.</b><br>
+              Upgrade b 100 times<br>
+              <i>This costs 1.37e5 r</i>
+            </div>
+            <div class="entry">
+              <b>Come on, let's count.</b><br>
+              Upgrade c 100 times<br>
+              <i>This costs 1.43e7 r</i>
+            </div>
+            <div class="entry">
+              <b>Is dimension 1?</b><br>
+              Upgrade d 100 times<br>
+              <i>This costs 9.94e8 r</i>
+            </div>
+            <div class="entry">
+              <b>Do you know John Napier?</b><br>
+              Upgrade e 100 times<br>
+              <i>This costs 5.08e10 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not a function</b><br>
+              Upgrade f 100 times<br>
+              <i>This costs 7.05e12 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not gravity</b><br>
+              Upgrade g 100 times<br>
+              <i>This costs 2.10e13 r</i>
+            </div>
+            <div class="entry">
+              <b>This is a new spiral</b><br>
+              Do &omega; Prestige for the first time
+            </div>
+            <div class="entry">
+              <b>The first step is important</b><br>
+              Upgrade n 1 times
+            </div>
+            <div class="entry">
+              <b>Not just a constant</b><br>
+              Upgrade v 10 times
+            </div>
+            <div class="entry">
+              <b>St. Petersburg Paradox</b><br>
+              Upgrade u 1 times
+            </div>
+            <div class="entry">
+              <b>Reborn!</b><br>
+              Do Prestige for the first time
+            </div>
+            <div class="entry">
+              <b>strong new game</b><br>
+              Do T Prestige for the first time
+            </div>
+            <div class="entry">
+              <b>A new dimension to this game</b><br>
+              z reaches 100
+            </div>
+            <div class="entry">
+              <b>The spiral is a weapon.</b><br>
+              Defeat training
+            </div>
+
+            <h2>Tier 2</h2>
+            <div class="entry">
+              <b>Now it starts to swirl!</b><br>
+              r reaches 1B
+            </div>
+            <div class="entry">
+              <b>Cheetah Spiral</b><br>
+              &Delta;r reaches 1M
+            </div>
+            <div class="entry">
+              <b>Is it still small?</b><br>
+              Upgrade k 500 times<br>
+              <i>This costs 4.97e21 r</i>
+            </div>
+            <div class="entry">
+              <b>a is the beginning</b><br>
+              Upgrade a 500 times<br>
+              <i>This costs 1.87e8 r</i><br>
+              <i><span style="color:red">This triggers on 300; costing 9.85e5 r</span></i>
+            </div>
+            <div class="entry">
+              <b>basic</b><br>
+              Upgrade b 300 times<br>
+              <i>This costs 4.63e8 r</i>
+            </div>
+            <div class="entry">
+              <b>Not too hard to make a curve?</b><br>
+              Upgrade c 300 times<br>
+              <i>This costs 1.50e13 r</i>
+            </div>
+            <div class="entry">
+              <b>Dimension was 2</b><br>
+              Upgrade d 300 times<br>
+              <i>This costs 9.04e16 r</i>
+            </div>
+            <div class="entry">
+              <b>He discovered the logarithm</b><br>
+              Upgrade e 300 times<br>
+              <i>This costs 1.77e20 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not completely additive class</b><br>
+              Upgrade f 300 times<br>
+              <i>This costs 7.75e24 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not Gaussian</b><br>
+              Upgrade g 300 times<br>
+              <i>This costs 2.43e26 r</i>
+            </div>
+            <div class="entry">
+              <b>Spiral molting</b><br>
+              Reach 3rd &omega; prestige
+            </div>
+            <div class="entry">
+              <b>The second step is cautious</b><br>
+              Upgrade n 3 times
+            </div>
+            <div class="entry">
+              <b>Sums of sequences are not easy</b><br>
+              Upgrade v 20 times
+            </div>
+            <div class="entry">
+              <b>I think of Cantor set</b><br>
+              Upgrade u 3 times
+            </div>
+            <div class="entry">
+              <b>Babies grow fast</b><br>
+              Earn 100 Prestige Point
+            </div>
+            <div class="entry">
+              <b>Enemies are too weak</b><br>
+              Reach T2
+            </div>
+            <div class="entry">
+              <b>You're not a snail anymore</b><br>
+              z reaches 1k
+            </div>
+            <div class="entry">
+              <b>Sharp Spiral</b><br>
+              Defeat Kappa
+            </div>
+
+            <h2>Tier 3</h2>
+            <div class="entry">
+              <b>triple axel</b><br>
+              r reaches 1Qa<br>
+              <i>1Qa = 1e15</i>
+            </div>
+            <div class="entry">
+              <b>A sonic spiral</b><br>
+              &Delta;r reaches 1T
+            </div>
+            <div class="entry">
+              <b>slow but steady wins the race</b><br>
+              Upgrade k 1000 times<br>
+              <i>This costs 2.47e42 r</i>
+            </div>
+            <div class="entry">
+              <b>You can't lose to b.</b><br>
+              Upgrade a 1000 times<br>
+              <i>This costs 9.33e13 r</i><br>
+              <i><span style="color:red">This triggers on 500; costing 1.87e8 r</span></i>
+            </div>
+            <div class="entry">
+              <b>benefit</b><br>
+              Upgrade b 500 times<br>
+              <i>This costs 1.54e12 r</i>
+            </div>
+            <div class="entry">
+              <b>Isn't it hard to draw a circle?</b><br>
+              Upgrade c 500 times<br>
+              <i>This costs 1.57e19 r</i>
+            </div>
+            <div class="entry">
+              <b>No. 3-D?</b><br>
+              Upgrade d 500 times<br>
+              <i>This costs 8.22e24 r</i>
+            </div>
+            <div class="entry">
+              <b>Decimal inventor</b><br>
+              Upgrade e 500 times<br>
+              <i>This costs 6.18e29 r</i>
+            </div>
+            <div class="entry">
+              <b>Nor is it the product of mass and acceleration</b><br>
+              Upgrade f 500 times<br>
+              <i>This costs 8.52e36 r</i>
+            </div>
+            <div class="entry">
+              <b>It's not  group theory</b><br>
+              Upgrade g 500 times<br>
+              <i>This costs 2.82e39 r</i>
+            </div>
+            <div class="entry">
+              <b>Can you explain angular velocity?</b><br>
+              Reach 5th &omega; prestige
+            </div>
+            <div class="entry">
+              <b>third time lucky</b><br>
+              Upgrade n 5 times
+            </div>
+            <div class="entry">
+              <b>What is a Cauchy sequence?</b><br>
+              Upgrade v 100 times<br>
+              <i>This costs 1.27e30 P</i>
+            </div>
+            <div class="entry">
+              <b>Which Bernoulli?</b><br>
+              Upgrade u 5 times
+            </div>
+            <div class="entry">
+              <b>Why do people forget?</b><br>
+              Earn 10K Prestige Point
+            </div>
+            <div class="entry">
+              <b>Why couldn't we beat that enemy?</b><br>
+              Reach T5
+            </div>
+            <div class="entry">
+              <b>I've seen a spiral staircase like this</b><br>
+              z reaches 100K
+            </div>
+            <div class="entry">
+              <b>Deadly spiral</b><br>
+              Defeat Alpha
+            </div>
+
+            <h2>Tier 4</h2>
+            <div class="entry">
+              <b>Training of the semicircular canal</b><br>
+              r reaches 1Oc<br>
+              <i>1Oc = 1e27</i>
+            </div>
+            <div class="entry">
+              <b>Rocket Spiral</b><br>
+              &Delta;rreaches 1Sp<br>
+              <i>1Sp = 1e24</i><br>
+              <i><span style="color:red">There is no space between r and reaches</span></i>
+            </div>
+            <div class="entry">
+              <b>Many a little makes a mickle</b><br>
+              Upgrade k 2000 times<br>
+              <i>This costs 6.10e83 r</i>
+            </div>
+            <div class="entry">
+              <b>You can't lose to c.</b><br>
+              Upgrade a 2000 times<br>
+              <i>This costs 2.31e25 r</i><br>
+              <i><span style="color:red">This triggers on 1000; costing 9.33e13 r</span></i>
+            </div>
+            <div class="entry">
+              <b>belief</b><br>
+              Upgrade b 1000 times<br>
+              <i>This costs 9.83e20 r</i>
+            </div>
+            <div class="entry">
+              <b>Is this "c" a constant?</b><br>
+              Upgrade c 1000 times<br>
+              <i>This costs 1.77e34 r</i>
+            </div>
+            <div class="entry">
+              <b>It could be the fractal dimension.</b><br>
+              Upgrade d 1000 times<br>
+              <i>This costs 6.49e44 r</i>
+            </div>
+            <div class="entry">
+              <b>Napier's bones are not just bones</b><br>
+              Upgrade e 1000 times<br>
+              <i>This costs 4.44e53 r</i>
+            </div>
+            <div class="entry">
+              <b>Not even fluoride.</b><br>
+              Upgrade f 1000 times<br>
+              <i>This costs 1.08e67 r</i>
+            </div>
+            <div class="entry">
+              <b>Not even in Galois's lifetime.</b><br>
+              Upgrade g 1000 times<br>
+              <i>This costs 1.29e72 r</i>
+            </div>
+            <div class="entry">
+              <b>I don't need a theory</b><br>
+              Reach 10th &omega; prestige<br>
+              <i><span style="color:red">This triggers on the 7th &omega; prestige</span></i>
+            </div>
+            <div class="entry">
+              <b>What happens n times will happen n+1 times</b><br>
+              Upgrade n 7 times
+            </div>
+            <div class="entry">
+              <b>Don't diverge</b><br>
+              Upgrade v 200 times<br>
+              <i>This costs 1.61e60 P</i>
+            </div>
+            <div class="entry">
+              <b>With the Maclaurin series, I learned at age 3</b><br>
+              Upgrade u 7 times
+            </div>
+            <div class="entry">
+              <b>You don't lose experience if you change jobs</b><br>
+              Earn 1M Prestige Point
+            </div>
+            <div class="entry">
+              <b>Losing events are also overturned</b><br>
+              Reach T10
+            </div>
+            <div class="entry">
+              <b>DNA was a spiral, too</b><br>
+              z reaches 10M
+            </div>
+            <div class="entry">
+              <b>Fury Spiral</b><br>
+              Defeat Beta
+            </div>
+
+            <h2>Tier 5</h2>
+            <div class="entry">
+              <b>neutron star</b><br>
+              r reaches 1Ud<br>
+              <i>1Ud = 1e36</i>
+            </div>
+            <div class="entry">
+              <b>Light Speed Spiral</b><br>
+              &Delta;r reaches 1Dc<br><br>
+              <i>1Dc = 1e33</i>
+            </div>
+            <div class="entry">
+              <b>The "k" stands for king.</b><br>
+              Upgrade k 10000 times<br>
+              <i>This costs 8.45e414 r</i><br>
+              <i><span style="color:red">The game can't handle this and shits the bed after level 7422</span></i>
+            </div>
+            <div class="entry">
+              <b>I'm the hero of this story.</b><br>
+              Upgrade a 10000 times<br>
+              <i>This costs 3.30e116 r</i>
+            </div>
+            <div class="entry">
+              <b>Best</b><br>
+              Upgrade b 5000 times<br>
+              <i>This costs 2.68e91 r</i>
+            </div>
+            <div class="entry">
+              <b>Continuous but not differentiable</b><br>
+              Upgrade c 4000 times<br>
+              <i>This costs 3.60e124 r</i>
+            </div>
+            <div class="entry">
+              <b>It was also an infinite dimension</b><br>
+              Upgrade d 3000 times<br>
+              <i>This costs 2.51e124 r</i>
+            </div>
+            <div class="entry">
+              <b>Mirifici Logarithmorum Canonis Descriptio</b><br>
+              Upgrade e 2000 times<br>
+              <i>This costs 2.29e101 r</i>
+            </div>
+            <div class="entry">
+              <b>Let's learn about category theory</b><br>
+              Upgrade f 2000 times<br>
+              <i>This costs 1.74e127 r</i>
+            </div>
+            <div class="entry">
+              <b>Why study group theory?</b><br>
+              Upgrade g 2000 times<br>
+              <i>This costs 2.70e137 r</i>
+            </div>
+            <div class="entry">
+              <b>All I want is speed</b><br>
+              Reach 30th &omega; prestige<br>
+              <i><span style="color:red">This triggers on the 10th &omega; prestige</span></i>
+            </div>
+            <div class="entry">
+              <b>The number line goes on and on... forever</b><br>
+              Upgrade n 10 times
+            </div>
+            <div class="entry">
+              <b>They don't seem to want to converge</b><br>
+              Upgrade v 1000 times<br>
+              <i>This costs 1.07e301 P</i><br>
+              <i><span style="color:red">This is impossible to get</span></i>
+            </div>
+            <div class="entry">
+              <b>But I don't know how to add</b><br>
+              Upgrade u 10 times
+            </div>
+            <div class="entry">
+              <b>So let's cherish the moment</b><br>
+              Earn 1B Prestige Point
+            </div>
+            <div class="entry">
+              <b>This time we can save the world</b><br>
+              Reach T15
+            </div>
+            <div class="entry">
+              <b>This is a real hurricane</b><br>
+              z reaches 1B
+            </div>
+            <div class="entry">
+              <b>Did you get close to the great mathematicians?</b><br>
+              Defeat PI
+            </div>
+
+            <h2>Special</h2>
+            <div class="entry">
+              <b>Do you like prime numbers?</b><br>
+              Set the level of all parameters(a~g)  to an even number of 2 or more.
+            </div>
+            <div class="entry">
+              <b>You are odd lovers.</b><br>
+              Set the level of all parameters(a~g)  to an odd number of 1 or more
+            </div>
+            <div class="entry">
+              <b>This turned around the earth for a year</b><br>
+              Set all parameter(a~g)  levels to prime into a sequence (2,3,5,...)<br>
+              <i>The full sequence is 2, 3, 5, 7, 11, 13, 17</i>
+            </div>
+            <div class="entry">
+              <b>The person who counts the petals</b><br>
+              Make the level of all parameters(a~g)  a Fibonacci sequence (1,1,2,3,5,...)<br>
+              <i>The full sequence is 1, 1, 2, 3, 5, 8, 13</i>
+            </div>
+            <div class="entry">
+              <b>The "k" That Lived A Million Times</b><br>
+              Purchase a cumulative total of 1 million k<br>
+              <i><span style="color:red">Accumulated achievements don't accumulate, so you would need to reach it in one go.<br>This would cost 4.84e41393 r</span></i>
+            </div>
+            <div class="entry">
+              <b>A Million Leagues Under the Sea</b><br>
+              Purchase a cumulative total of 1 million a<br>
+              <i><span style="color:red">Accumulated achievements don't accumulate, so you would need to reach it in one go.<br>This would cost 8.14e11396 r</span></i>
+            </div>
+            <div class="entry">
+              <b>a journey of a thousand miles begins with a single step</b><br>
+              Purchase a cumulative total of 1 million n<br>
+              <i><span style="color:red">Accumulated achievements don't accumulate, so you would need to reach it in one go.<br>It also technically checks for level 1000, but this is still impossible</span></i>
+            </div>
+            <div class="entry">
+              <b>Study up on your number sequences!</b><br>
+              Make u and v each level 5 without raising n levels
+            </div>
+            <div class="entry">
+              <b>Are you doing this on purpose?</b><br>
+              Increase the level of n to 5 without increasing the level of u and v.
+            </div>
+            <div class="entry">
+              <b>You are an idle gamer</b><br>
+              Don't click for 1 hours
+            </div>
+            <div class="entry">
+              <b>You read Euclid's Elements.</b><br>
+              Rotate 365<br>
+              <i>Honestly, I don't know</i>
+            </div>
+            <div class="entry">
+              <b>be dizzy</b><br>
+              &omega; reaches 3
+            </div>
+            <div class="entry">
+              <b>Napier</b><br>
+              let e be more than 2.718
+            </div>
+          </div>
+          <div class="explanation" id="explanation_store" style="display: none">
+            <div class="title">Store</div>
+            Explanation store
+          </div>
+          <div class="explanation" id="explanation_battle_spiral" style="display: none">
+            <div class="title">Battle Spiral</div>
+            unlocked upon reaching the second $\omega$ tier for the first time. This is currently by far the most important part of the game.<br>
+
+            There are currently 8 tiers of normal enemies;<br>
+            <br>
+            $\text{HP} = \text{base HP} * \text{Enemy HP Reduction Add} / 100 * (1 + 5\% * \text{Decay})^{\text{difficulty}}$<br>
+            $\text{ATK} = \text{base ATK} * (1 + 3\% * \text{Decay})^{\text{difficulty}}$<br>
+            $\text{DEF} = \text{base DEF} * (1 + 1\% * \text{Decay})^{\text{difficulty}}$<br>
+            <br>
+            In the Fury Challenge, this is changed to:<br>
+            $\text{ATK} = \text{base ATK} * (1 + 50\% * \text{Decay})^{\text{difficulty}}$<br>
+            $\text{Attack Speed} = \text{Attack Speed} * \min(1 + 1.5\% * \text{Fury})^{\text{difficulty}}, 7.5)$<br>
+            <br>
+
+            <div class="entry">
+              <h3>Training</h3>
+              <b>Base HP:</b> $100$<br>
+              <b>Base ATK:</b> $3$<br>
+              <b>Base DEF:</b> $1$<br>
+              <b>Attack Speed:</b> $0.3$<br>
+            </div>
+            <div class="entry">
+              <h3>Kappa</h3>
+              <b>Base HP:</b> $7000$<br>
+              <b>Base ATK:</b> $50$<br>
+              <b>Base DEF:</b> $30$<br>
+              <b>Attack Speed:</b> $0.5$<br>
+            </div>
+            <div class="entry">
+              <h3>Alpha</h3>
+              <b>Base HP:</b> $10^5$<br>
+              <b>Base ATK:</b> $1000$<br>
+              <b>Base DEF:</b> $200$<br>
+              <b>Attack Speed:</b> $0.5$<br>
+              15 rewards
+            </div>
+            <div class="entry">
+              <h3>Beta</h3>
+              <b>Base HP:</b> $10^8$<br>
+              <b>Base ATK:</b> $10^5$<br>
+              <b>Base DEF:</b> $1000$<br>
+              <b>Attack Speed:</b> $0.1$<br>
+            </div>
+            <div class="entry">
+              <h3>Pi</h3>
+              <b>Base HP:</b> $10^{11}$<br>
+              <b>Base ATK:</b> $10^5$<br>
+              <b>Base DEF:</b> $10^4$<br>
+              <b>Attack Speed:</b> $0.05$<br>
+            </div>
+            <div class="entry">
+              <h3>Gamma</h3>
+              <b>Base HP:</b> $5*10^{14}$<br>
+              <b>Base ATK:</b> $10^6$<br>
+              <b>Base DEF:</b> $10^5$<br>
+              <b>Attack Speed:</b> $0.03$<br>
+            </div>
+            <div class="entry">
+              <h3>Napier</h3>
+              <b>Base HP:</b> $2.718*10^{18}$<br>
+              <b>Base ATK:</b> $2.718*10^8$<br>
+              <b>Base DEF:</b> $2.718*10^8$<br>
+              <b>Attack Speed:</b> $0.027$<br>
+            </div>
+            <div class="entry">
+              <h3>Penta</h3>
+              <b>Base HP:</b> $5.55*10^{23}$<br>
+              <b>Base ATK:</b> $5.55*10^{15}$<br>
+              <b>Base DEF:</b> $5.55*10^{15}$<br>
+              <b>Attack Speed:</b> $0.5$<br>
+            </div>
+
+            Currently without unlock condition; after the normal enemies, you unlock the 3 raid enemies;<br>
+            <br>
+            $\text{HP} = \text{base HP} * \text{Enemy HP Reduction Add} / 100 * (1 + 250\% * \text{Decay})^{\text{difficulty}} * \text{towerGrowthReduction}$<br>
+            $\text{ATK} = \text{base ATK} * (1 + 250\% * \text{Decay})^{\text{difficulty}} * \text{towerGrowthReduction}$<br>
+            $\text{DEF} = \text{base DEF} * (1 + 250\% * \text{Decay})^{\text{difficulty}} * \text{towerGrowthReduction}$<br>
+
+            <div class="entry unavailable">
+              <h3>Spiral Tower</h3>
+              <b>Base HP:</b> $10^{36}$<br>
+              <b>Base ATK:</b> $10^{21}$<br>
+              <b>Base Damage Cut Rate:</b> $0.5$<br>
+              <b>Attack Speed:</b> $0.3$<br>
+            </div>
+            <div class="entry unavailable">
+              <h3>Math Tower</h3>
+              <b>Base HP:</b> $3.33*10^{40}$<br>
+              <b>Base ATK:</b> $5*10^{28}$<br>
+              <b>Base Damage Cut Rate:</b> $0.9$<br>
+              <b>Attack Speed:</b> $0.02$<br>
+              <b>Raid Damage Bonus:</b> $600 * timerMultiplier$<br>
+              <b>Restriction:</b> $\text{Max HP}$ and $\text{Attack Speed}$ are reduced by a factor of $\min(1, \text{Math Skill} / 10^7)$<br>
+            </div>
+            <div class="entry unavailable">
+              <h3>Inverse Tower</h3>
+              <b>Base HP:</b> $7*10^{55}$<br>
+              <b>Base ATK:</b> $0$<br>
+              <b>Base Damage Cut Rate:</b> $0.95$<br>
+              <b>Attack Speed:</b> $0.02$<br>
+              <b>Raid Damage Bonus:</b> $1800 * timerMultiplier$<br>
+              <b>Restriction:</b> $\text{ATK}$ and $\text{DEF}$ are swapped<br>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_battle_upgrades" style="display: none">
+            <div class="title">Battle Upgrades</div>
+            Battle Upgrades can be upgraded using $\text{EXP}$. All upgrade costs scale as; $\text{base} * 1.05^{\text{level}}$<br>
+
+            <div class="entry">
+              <b>Upgrade of Parameters</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td> 1</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                      </td></tr>
+                <tr><td> 2</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                     </td></tr>
+                <tr><td> 3</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 1\% * \text{level}$                     </td></tr>
+                <tr><td> 4</td><td>$\text{Regenerate} \mathrel{{*}{=}} 1 + 1\% * \text{level}$              </td></tr>
+                <tr><td> 8</td><td>$\text{Critical Rate}\ \mathrel{{+}{=}}^*\ 0.1\% * \text{level}$         </td></tr>
+                <tr><td> 9</td><td>$\text{Critical Damage} \mathrel{{*}{=}} 1 + 1\% * \text{level}$         </td></tr>
+                <tr><td>11</td><td>$\text{Enemy HP Reduction Add} \mathrel{{-}{=}} 0.1 * \text{level}$      </td></tr>
+                <tr><td>12</td><td>$\text{Regenerate while resting} \mathrel{{*}{=}} 1 + 1\% * \text{level}$</td></tr>
+                <tr><td>13</td><td>$\text{Attack Speed} \mathrel{{*}{=}} 1 + 0.1\% * \text{level}$          </td></tr>
+                <tr><td>14</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                      </td></tr>
+                <tr><td>15</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                     </td></tr>
+                <tr><td>16</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 5\% * \text{level}$                     </td></tr>
+                <tr><td>17</td><td>$\text{Regenerate} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>22</td><td>$\text{Critical Rate} \mathrel{{+}{=}}^* 0.2\% * \text{level}$           </td></tr>
+                <tr><td>23</td><td>$\text{Critical Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$         </td></tr>
+                <tr><td>24</td><td>$\text{Attack Speed} \mathrel{{*}{=}} 1 + 0.5\% * \text{level}$          </td></tr>
+                <tr><td>34</td><td>$\text{HP} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                     </td></tr>
+                <tr><td>35</td><td>$\text{ATK} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                    </td></tr>
+                <tr><td>36</td><td>$\text{DEF} \mathrel{{*}{=}} 1 + 10\% * \text{level}$                    </td></tr>
+                <tr><td>41</td><td>$\text{Rare Drop Chance} \mathrel{{*}{=}} 1 + 0.1\% * \text{level}$      </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Upgrade of Rewards</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td> 5</td><td>$\text{HP Reward} \mathrel{{+}{=}} \text{level}$                         </td></tr>
+                <tr><td> 6</td><td>$\text{ATK Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td> 7</td><td>$\text{DEF Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td>10</td><td>$\text{EXP Reward} \mathrel{{+}{=}} \text{level}$                        </td></tr>
+                <tr><td>18</td><td>$\text{HP Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$               </td></tr>
+                <tr><td>19</td><td>$\text{ATK Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>20</td><td>$\text{DEF Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>21</td><td>$\text{EXP Reward} \mathrel{{*}{=}} 1 + 5\% * \text{level}$              </td></tr>
+                <tr><td>30</td><td>Increase the $\text{ATK}$ and $\text{DEF}$ rolls for $\text{PI}$         </td></tr>
+                <tr><td>31</td><td>Increase the $\text{EXP}$ rolls for $\text{Gamma}$                       </td></tr>
+                <tr><td>32</td><td>Increase the $\text{S-Critical Damage}$ rolls for $\text{Napier}$        </td></tr>
+                <tr><td>37</td><td>$\text{HP Reward} \mathrel{{*}{=}} 1 + 10\% * \text{level}$              </td></tr>
+                <tr><td>38</td><td>$\text{ATK Reward} \mathrel{{*}{=}} 1 + 10\% * \text{level}$             </td></tr>
+                <tr><td>39</td><td>$\text{DEF Reward} \mathrel{{*}{=}} 1 + 10\% * \text{level}$             </td></tr>
+                <tr><td>40</td><td>$\text{EXP Reward} \mathrel{{*}{=}} 1 + 10\% * \text{level}$             </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Unlock</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td>26</td><td>Unlock the spiral equation $\text{khuwarizmi}$                           </td></tr>
+                <tr><td>27</td><td>Unlock the spiral equation $\text{omar}$                                 </td></tr>
+                <tr><td>28</td><td>Unlock the spiral equation $\text{bhaskara}$                             </td></tr>
+                <tr><td>29</td><td>Unlock the spiral equation $\text{madhava}$                              </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Others</b><br>
+              <table>
+                <tr><th># </th><th>Effect                                                                   </th></tr>
+                <tr><td>25</td><td>Increase the maximum level of upgrades 1 through 24 by 1                 </td></tr>
+                <tr><td>33</td><td>$\text{Math Skill} +100$                                                 </td></tr>
+                <tr><td>41</td><td>Increase the maximum level of upgrades 30 through 41 by 1                </td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_battle_reward_candidates" style="display: none">
+            <div class="title">Battle Rewards</div>
+
+            The rewards shown are still subject to the special reward improvements.<br>
+            All but the last tile rewards also increase with the $\text{Reward Multiplier};$<br>
+            $\text{Reward Multiplier} = 0.98 + 2 / (1 + 99 / e ^ {1.9956 * \text{difficulty} / 200})$<br>
+            For the sake of late game, you could see this as $690142.52\%$ total reward for the first 2625 stages, and a static $298\%$ per stage afterwards.<br>
+            Because rerolling resets this $\text{Reward Multiplier}$, it is best to continue as long as you kill the enemy in on average $2.98$ hits.<br>
+            This will be the case as long as you can one-hit crit an enemy and have at least a crit rate of $33.557\%$.<br>
+            <b>TODO:</b> add a calculation for the optimal auto-start state based on savefile stats.
+
+            <div class="entry">
+              <h3>Training</h3>
+              10 rewards
+              <table>
+                <tr>                        <th>Reward                            </th><th>Weight</th></tr>
+                <tr class="reward-uncommon"><td>$a + 0.001$                       </td><td>  $11$</td></tr>
+                <tr class="reward-rare">    <td>$b + 0.001$                       </td><td>   $1$</td></tr>
+                <tr class="reward-rare">    <td>$c + 0.001$                       </td><td>   $1$</td></tr>
+                <tr class="reward-rare">    <td>$d + 0.001$                       </td><td>   $1$</td></tr>
+                <tr class="reward-rare">    <td>$e + 0.001$                       </td><td>   $1$</td></tr>
+                <tr class="reward-common">  <td>$\text{ATK} + [1,2]$              </td><td> $400$</td></tr>
+                <tr class="reward-common">  <td>$k + [1,9]$                       </td><td>  $50$</td></tr>
+                <tr class="reward-common">  <td>$\text{HP} + [1,9]$               </td><td>$3000$</td></tr>
+                <tr class="reward-rare">    <td>$\text{Exp} + 1$                  </td><td>   $1$</td></tr>
+                <tr class="reward-rare">    <td>$\text{Regen} + 1$                </td><td>  $10$</td></tr>
+                <tr class="reward-onetime"> <td>$\text{Thales}\ /\ \text{Exp} + 1$</td><td>      </td></tr>
+                <tr>                        <td>                                  </td><td>$3476$</td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <h3>Kappa</h3>
+              10 rewards
+              <table>
+                <tr>                        <th>Reward                             </th><th>Weight</th></tr>
+                <tr class="reward-uncommon"><td>$a + 0.01$                         </td><td>  $10$</td></tr>
+                <tr class="reward-rare">    <td>$b + 0.001$                        </td><td>   $5$</td></tr>
+                <tr class="reward-rare">    <td>$c + 0.001$                        </td><td>   $5$</td></tr>
+                <tr class="reward-rare">    <td>$d + 0.001$                        </td><td>   $5$</td></tr>
+                <tr class="reward-rare">    <td>$e + 0.001$                        </td><td>   $5$</td></tr>
+                <tr class="reward-common">  <td>$k + [1,2]$                        </td><td>$1000$</td></tr>
+                <tr class="reward-rare">    <td>$k\% + 1\%*[1,2]$                  </td><td>   $1$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{ATK} + [1,9]$               </td><td>  $10$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{DEF} + [1,9]$               </td><td>  $30$</td></tr>
+                <tr class="reward-rare">    <td>$\text{Exp} + [1,2]$               </td><td>   $3$</td></tr>
+                <tr class="reward-onetime"> <td>$\text{Hypatia}\ /\ \text{Exp} + 2$</td><td>      </td></tr>
+                <tr>                        <td>                                   </td><td>$1074$</td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <h3>Alpha</h3>
+              15 rewards
+              <table>
+                <tr>                        <th>Reward                                 </th><th>Weight</th></tr>
+                <tr class="reward-rare">    <td>$\text{ATK} + 100$                     </td><td>   $1$</td></tr>
+                <tr class="reward-rare">    <td>$a + 1$                                </td><td>   $1$</td></tr>
+                <tr class="reward-common">  <td>$\text{ATK} + 2*[1,4]$                 </td><td> $100$</td></tr>
+                <tr class="reward-common">  <td>$\text{HP} + 5*[1,4]$                  </td><td>$1000$</td></tr>
+                <tr class="reward-common">  <td>$a + 0.1*[1,9]$                        </td><td>$1000$</td></tr>
+                <tr class="reward-uncommon"><td>$a\% + 0.1\%*[1,19]$                   </td><td>  $50$</td></tr>
+                <tr class="reward-rare">    <td>$\text{HP}\% + 1\%*[1,9]$              </td><td>   $5$</td></tr>
+                <tr class="reward-rare">    <td>$\text{ATK}\% + 1\%*[1,9]$             </td><td>   $5$</td></tr>
+                <tr class="reward-rare">    <td>$\text{Exp} + [1,9]$                   </td><td>   $5$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{ATK} + 3*[4,8]$                 </td><td>  $30$</td></tr>
+                <tr class="reward-onetime"> <td>$\text{Archimedes}\ /\ \text{Exp} + 10$</td><td>      </td></tr>
+                <tr>                        <td>                                       </td><td>$2197$</td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <h3>Beta</h3>
+              20 rewards
+              <table>
+                <tr>                        <th>Reward                                 </th><th> Weight</th></tr>
+                <tr class="reward-rare">    <td>$a + 0.1*[1,10]$                       </td><td>    $5$</td></tr>
+                <tr class="reward-rare">    <td>$c + 0.01*[1,4]$                       </td><td>    $1$</td></tr>
+                <tr class="reward-rare">    <td>$d + 0.01*[1,4]$                       </td><td>    $1$</td></tr>
+                <tr class="reward-rare">    <td>$e + 0.01*[1,4]$                       </td><td>    $1$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{DEF} + 50*[1,4]$                </td><td>   $50$</td></tr>
+                <tr class="reward-rare">    <td>$b + 0.2*[1,4]$                        </td><td>    $5$</td></tr>
+                <tr class="reward-common">  <td>$k + 10*[1,4]$                         </td><td> $1000$</td></tr>
+                <tr class="reward-common">  <td>$\text{DEF} + 5*[1,4]$                 </td><td> $2000$</td></tr>
+                <tr class="reward-common">  <td>$\text{HP} + 20*[1,4]$                 </td><td>$10000$</td></tr>
+                <tr class="reward-common">  <td>$b + 0.01*[1,19]$                      </td><td> $2000$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{DEF}\% + 1\%*[1,4]$             </td><td>   $50$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{HP}\% + 1\%*[1,4]$              </td><td>   $50$</td></tr>
+                <tr class="reward-rare">    <td>$b\% + 1\%*[1,19]$                     </td><td>    $5$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{ATK} + 100*[1,4]$               </td><td>   $50$</td></tr>
+                <tr class="reward-common">  <td>$\text{ATK} + 20*[1,4]$                </td><td> $1000$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{Exp} + [1,29]$                  </td><td>   $30$</td></tr>
+                <tr class="reward-onetime"> <td>$\text{Pythagoras}\ /\ \text{Exp} + 30$</td><td>       </td></tr>
+                <tr>                        <td>                                       </td><td>$16248$</td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <h3>Pi</h3>
+              10 rewards
+              <table>
+                <tr>                       <th>Reward                                               </th><th> Weight</th></tr>
+                <tr class="reward-common"> <td>$c + 0.1*[1,9]$                                      </td><td>$10000$</td></tr>
+                <tr class="reward-common"> <td>$c\% + 0.1\%*[1,4]$                                  </td><td>$10000$</td></tr>
+                <tr class="reward-common"> <td>$\text{HP} + 1000*[1,9]$                             </td><td>$10000$</td></tr>
+                <tr class="reward-common"> <td>$\text{DEF} + 500*[1,9 + \text{atk_and_def_from_pi}]$</td><td>$10000$</td></tr>
+                <tr class="reward-common"> <td>$\text{ATK} + 500*[1,9 + \text{atk_and_def_from_pi}]$</td><td>$10000$</td></tr>
+                <tr class="reward-common"> <td>$\text{HP}\% + 1\%*[1,4]$                            </td><td>$10000$</td></tr>
+                <tr class="reward-common"> <td>$\text{DEF}\% + 1\%*[1,4]$                           </td><td>$10000$</td></tr>
+                <tr class="reward-common"> <td>$\text{ATK}\% + 1\%*[1,4]$                           </td><td>$10000$</td></tr>
+                <tr class="reward-onetime"><td>$\text{Euclides}\ /\ \text{Exp} + 100$               </td><td>       </td></tr>
+                <tr>                       <td>                                                     </td><td>$80000$</td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <h3>Gamma</h3>
+              10 rewards
+              <table>
+                <tr>                        <th>Reward                                       </th><th>Weight</th></tr>
+                <tr class="reward-rare">    <td>$\gamma\% + 0.1\%*[1,2]$                     </td><td>   $1$</td></tr>
+                <tr class="reward-rare">    <td>$\delta\% + 0.1\%*[1,2]$                     </td><td>   $1$</td></tr>
+                <tr class="reward-rare">    <td>$\Omega\% + 0.1\%*[1,2]$                     </td><td>   $1$</td></tr>
+                <tr class="reward-common">  <td>$\gamma + 0.1*[1,9]$                         </td><td>$3000$</td></tr>
+                <tr class="reward-common">  <td>$\delta + 0.1*[1,9]$                         </td><td>$3000$</td></tr>
+                <tr class="reward-common">  <td>$\Omega + 0.1*[1,9]$                         </td><td>$3000$</td></tr>
+                <tr class="reward-rare">    <td>$\text{Attack Speed} + 0.25\%$               </td><td>  $10$</td></tr>
+                <tr class="reward-common">  <td>$d + 0.1*[1,9]$                              </td><td>$1000$</td></tr>
+                <tr class="reward-common">  <td>$d\% + 0.1\%*[1,4]$                          </td><td>$1000$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{Exp} + [1,49+5*\text{exp_from_gamma}]$</td><td>  $20$</td></tr>
+                <tr class="reward-onetime"> <td>$\text{Eratos}\ /\ \text{Exp} + 50$          </td><td>       </td></tr>
+                <tr>                        <td>                                             </td><td>$11033$</td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <h3>Napier</h3>
+              15 rewards
+              <table>
+                <tr>                        <th>Reward                                                          </th><th> Weight</th></tr>
+                <tr class="reward-common">  <td>$\text{Crit Damage} + 0.1\%*[1,49]$                             </td><td> $1000$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{Crit Damage} + 3\%$                                      </td><td>   $10$</td></tr>
+                <tr class="reward-rare">    <td>$\text{S-Crit Damage} + 1\%*[1,3+\text{s_critical_from_napier}]$</td><td>   $10$</td></tr>
+                <tr class="reward-common">  <td>$e + 0.1*[5,49]$                                                </td><td> $1000$</td></tr>
+                <tr class="reward-common">  <td>$e + 0.1*[3,19]$                                                </td><td> $1000$</td></tr>
+                <tr class="reward-common">  <td>$e\% + 0.1\%*[1,4]$                                             </td><td> $1000$</td></tr>
+                <tr class="reward-common">  <td>$\text{HP} + 10000*[1,9]$                                       </td><td>$10000$</td></tr>
+                <tr class="reward-common">  <td>$\text{DEF} + 5000*[1,9]$                                       </td><td>$10000$</td></tr>
+                <tr class="reward-common">  <td>$\text{ATK} + 5000*[1,9]$                                       </td><td>$10000$</td></tr>
+                <tr class="reward-onetime"> <td>$\text{Aryabhata}\ /\ \text{Exp} + 100$                         </td><td>       </td></tr>
+                <tr>                        <td>                                                                </td><td>$34020$</td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <h3>Penta</h3>
+              5 rewards
+              <table>
+                <tr>                        <th>Reward                                   </th><th>Weight</th></tr>
+                <tr class="reward-common">  <td>$\text{S-Crit Damage} + 10\%*[1,9]$      </td><td>$1000$</td></tr>
+                <tr class="reward-common">  <td>$\text{Crit Damage} + 2\%*[1,9]$         </td><td>$1000$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{S-Crit Damage} + 100\%*[10,29]$   </td><td>  $50$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{Crit Damage} + 20\%*[10,29]$      </td><td>  $50$</td></tr>
+                <tr class="reward-rare">    <td>$\text{Rare Chance} + 0.01\%*[1,9]$      </td><td>  $20$</td></tr>
+                <tr class="reward-common">  <td>$\text{Math Skill} + 1$                  </td><td>$1000$</td></tr>
+                <tr class="reward-rare">    <td>$\text{Math Skill} + [10,29]$            </td><td>  $10$</td></tr>
+                <tr class="reward-onetime"> <td>$\text{Brahmagupta}\ /\ \text{Exp} + 100$</td><td>      </td></tr>
+                <tr>                        <td>                                         </td><td>$3130$</td></tr>
+              </table>
+            </div>
+            <div class="entry unavailable">
+              <h3>Spiral Tower</h3>
+              20 rewards
+              <table>
+                <tr>                       <th>Reward                  </th><th>Weight</th></tr>
+                <tr class="reward-common"> <td>$\text{Inspiration} + 1$</td><td>$1000$</td></tr>
+                <tr class="reward-common"> <td>$\text{Exp} + 10*[1,9]$ </td><td>$1000$</td></tr>
+                <tr class="reward-onetime"><td>$$\begin{cases}
+                  \text{Random Theory Soul} + 2 + \log_{10}(\text{difficulty}), & \text{if difficulty is a multiple of 10}\\
+                  \text{Exp} + 50*[1,9]$, & \text{otherwise}
+                \end{cases}$$</td><td></td></tr>
+                <tr>                       <td>                        </td><td>$2000$</td></tr>
+              </table>
+            </div>
+            <div class="entry unavailable">
+              <h3>Math Tower</h3>
+              <table>
+                <tr>                        <th>Reward                          </th></tr>
+                <tr class="reward-uncommon"><td>$\text{ATK}_2 + 1\%$           </td></tr>
+                <tr class="reward-uncommon"><td>$\text{ATK}_2 + 1.5\%$           </td></tr>
+                <tr class="reward-uncommon"><td>$\text{DEF}_2 + 2\%$           </td></tr>
+                <tr class="reward-uncommon"><td>$\text{HP}_2 + 2.5\%$            </td></tr>
+                <tr class="reward-rare">    <td>$\text{The Soul of Fourier} + 1$</td></tr>
+                <tr>                        <td>                                </td></tr>
+              </table>
+            </div>
+            <div class="entry unavailable">
+              <h3>Inverse Tower</h3>
+              <table>
+                <tr>                        <th>Reward                                                    </th></tr>
+                <tr class="reward-uncommon"><td>$$\begin{cases}
+                  \text{Crit Rate} + 0.005, & \text{Crit Rate from battle rewards} \lt 10\%\\
+                  \text{Critical Damage} + 15, & \text{otherwise}
+                \end{cases}$$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{EXP} + 20000$                                      </td></tr>
+                <tr class="reward-uncommon"><td>$$\begin{cases}
+                  \text{S-Crit Rate} + 0.05, & \text{S-Crit Rate from battle rewards} \lt 5\%\\
+                  \text{S-Critical Damage} + 10, & \text{otherwise}
+                \end{cases}$$</td></tr>
+                <tr class="reward-uncommon"><td>$\text{Math Skill} + 1000$                                </td></tr>
+                <tr class="reward-rare">    <td>$\text{The Soul of Laplace} + 1$                          </td></tr>
+                <tr>                        <td>                                                          </td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_spiral_equations" style="display: none">
+            <div class="title">Spiral Equations</div>
+            Spiral Equations are unlocked at tornado tier 4. Upon unlocking, all enemies will display a onetime reward as their last reward, taking the place of the standard exp reward. You can select up to two equations at the start to level. You gain the ability to select an additional equation from the 'kanji' spiral design passive.<br>
+            <br>
+            While an equation is selected, it will build up exp based on your spiral equation speed. Once the exp has crossed the 'cost' of the next level, the equation will level up.
+
+            <div class="entry">
+              <h3>I: Thales</h3>
+              <b>Unlock:</b> Training<br>
+              <b>Cost:</b> $10 * 1.03^{\text{level}}$<br>
+              <b>Reward:</b> $\text{HP} \mathrel{{*}{=}} 1 + 1\% * \text{level} + 0.1\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3>II: Hypatia</h3>
+              <b>Unlock:</b> Kappa<br>
+              <b>Cost:</b> $30 * 1.03^{\text{level}}$<br>
+              <b>Reward:</b> $\text{DEF} \mathrel{{*}{=}} 1 + 1\% * \text{level} + 0.1\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3>III: Archimedes</h3>
+              <b>Unlock:</b> Alpha<br>
+              <b>Cost:</b> $60 * 1.03^{\text{level}}$<br>
+              <b>Reward:</b> $\text{ATK} \mathrel{{*}{=}} 1 + 1\% * \text{level} + 0.1\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3>IV: Pythagoras</h3>
+              <b>Unlock:</b> Beta<br>
+              <b>Cost:</b> $120 * 1.03^{\text{level}}$<br>
+              <b>Reward:</b> $\text{Critical Damage} \mathrel{{*}{=}} 1 + 1\% * \text{level} + 0.1\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3>V: Euclides</h3>
+              <b>Unlock:</b> Pi<br>
+              <b>Cost:</b> $150 * 1.03^{\text{level}}$<br>
+              <b>Reward:</b> $\text{Critical Rate} \mathrel{{*}{=}} 1 + 0.1\% * \text{level} + 0.01\% * [\text{level}-50]$
+            </div>
+            <div class="entry">
+              <h3>VI: Eratos</h3>
+              <b>Unlock:</b> Gamma<br>
+              <b>Cost:</b> $180 * 1.06^{\text{level}}$<br>
+              <b>Reward:</b> $\text{Attack Speed} \mathrel{{*}{=}} 1 + 1\% * \log_{10}(\text{level} + 1)$
+            </div>
+            <div class="entry">
+              <h3>VII: Aryabhata</h3>
+              <b>Unlock:</b> Napier<br>
+              <b>Cost:</b> $210 * 1.07^{\text{level}}$<br>
+              <b>Reward:</b> $\text{Super Critical Rate} \mathrel{{+}{=}} 1\% * \log_{10}(\text{level} + 1)$
+            </div>
+            <div class="entry">
+              <h3>VIII: Brahmagupta</h3>
+              <b>Unlock:</b> Penta<br>
+              <b>Cost:</b> $240 * 1.1^{\text{level}}$<br>
+              <b>Reward:</b> $\text{Equation Speed} \mathrel{{*}{=}} 1 + 1\% * \text{level} + 0.1\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3>IX: Khuwarizmi</h3>
+              <b>Unlock:</b> Battle upgrade 26<br>
+              <b>Cost:</b> $100 * 1.05^{\text{level}}$<br>
+              <b>Reward:</b> $\text{HP Reward} \mathrel{{*}{=}} 1 + 1\% * \text{level} + 0.1\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3>X: Omar</h3>
+              <b>Unlock:</b> Battle upgrade 27<br>
+              <b>Cost:</b> $100 * 1.05^{\text{level}}$<br>
+              <b>Reward:</b> $\text{ATK Reward} \mathrel{{*}{=}} 1 + 1\% * \text{level} + 0.1\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3>XI: Bhaskara</h3>
+              <b>Unlock:</b> Battle upgrade 28<br>
+              <b>Cost:</b> $100 * 1.05^{\text{level}}$<br>
+              <b>Reward:</b> $\text{DEF Reward} \mathrel{{*}{=}} 1 + 1\% * \text{level} + 0.1\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3>XII: Madhava</h3>
+              <b>Unlock:</b> Battle upgrade 29<br>
+              <b>Cost:</b> $500 * 1.1^{\text{level}}$<br>
+              <b>Reward:</b> $\text{EXP Reward} \mathrel{{*}{=}} 1 + 0.05\% * \text{level} + 0.005\% * [\text{level}-1000]$
+            </div>
+            <div class="entry">
+              <h3 class="unavailable">XIII: Bartolomeo</h3>
+            </div>
+            <div class="entry">
+              <h3 class="unavailable">XIV: Cardano</h3>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_challenges" style="display: none">
+            <div class="title">Challenges</div>
+
+            First group:
+
+            <div class="challenge">
+              I: Basic Challenge<br>
+              Goal: $9.99 * 10^{14} * 10^{\text{level}}$<br>
+              Max level: 10<br>
+              First Clear Reward: Nothing<br>
+              Complete Bonus: Get Spiral Design "Pi"<br>
+              Reward: $\Delta r \mathrel{{*}{=}} 1 + 0.5 * \text{level}$
+            </div>
+            <div class="challenge">
+              II: Drunk Challenge<br>
+              Goal: $9.99 * 10^{20} * (10^3)^{\text{level}}$<br>
+              Every second, $\omega$ gets set to a random number;<br>
+              Level 1: [0.1, 5)<br>
+              Level 2: [0.05, 3)<br>
+              Level 3: [0.03, 2)<br>
+              Level 4: [0.02, 1)<br>
+              Level 5: [0.01, 0.5)<br>
+              Level +: [0.001, 0.1)<br>
+              You fail if $r$ reaches 0 after 10 seconds<br>
+              Max level: 5<br>
+              Complete Bonus: Get Spiral Design "Diamond"<br>
+              Reward: $omegaExponent \mathrel{{+}{=}} 0.1 * \text{level}$<br>
+
+              <br/>
+              <a href="javascript:void(0)" class="spoiler">Click to reveal a tip</a>
+              <span>On level 4 and above, it's not worth doing $\omega$ prestige, since $\omega \lt 1$</span>
+            </div>
+            <div class="challenge unavailable">
+              Drain Challenge<br>
+              Goal: $t \geq 600$<br>
+              Start with $r = 10^6$<br>
+              Adds a variable $t$ that represents your time in the challenge in seconds<br>
+              $r \mathrel{{-}{=}} 10^4 * 10^{\text{level}} * (1 - 0.001 * t)$<br>
+              You fail if $r$ reaches 0 after 10 seconds<br>
+              You cannot prestige<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Reward: $tornado\_cost\_reduction \mathrel{{-}{=}} 0.1 * \text{level}$
+            </div>
+            <div class="challenge">
+              III : Flower Challenge<br>
+              Goal: $9.99 * 10^{14} * (10^3)^{\text{level}}$<br>
+              Adds a variable $t$ that represents your time in the challenge in seconds<br>
+              After 10 seconds; $\Delta r \mathrel{{+}{=}} \sin(3t) * 0.1 * t * (1.01 + 0.01 * \text{level}) ^ t$<br>
+              You fail if $r$ reaches 0 after 10 seconds<br>
+              You cannot prestige<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Complete Bonus: Get Spiral Design "Rainbow"<br>
+              Reward: $prestige\_level\_limit \mathrel{{+}{=}} \text{level}$<br>
+
+              <br/>
+              <em>Try to finish this as soon as you unlock it!</em><br/><br/>
+
+              <a href="javascript:void(0)" class="spoiler">Click to reveal a tip</a>
+              <span>Look closely to the spiral - when the spiral starts moving further from the center, activate line multiplier. When the line starts moving towards the center, deactivate line multiplier.</span>
+            </div>
+            <div class="challenge">
+              IV: Slow Spiral Challenge<br>
+              Goal: $9.99 * 10^{26}$<br>
+              $\omega \mathrel{{*}{=}} 0.01 * 0.1^{\text{level}}$<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Complete Bonus: Get Spiral Design "kanji"<br>
+              Reward: $\omega \mathrel{{*}{=}} 1 + 0.1 * \text{level}$<br><br/>
+
+              <a href="javascript:void(0)" class="spoiler">Click to reveal a tip</a>
+              <span>Don't $\omega$ prestige - this slows you down since $\omega \lt 1$</span>
+            </div>
+            <div class="challenge unavailable">
+              Gear Challenge<br>
+              Goal: $10^{12}$<br>
+              After 10 seconds; alterates between $\Delta r \mathrel{{*}{=}} 11$ and $\Delta r \mathrel{{*}{=}} -9$ every second. <br>
+              You fail if $r$ reaches 0<br>
+              You cannot prestige<br>
+              Max level: 5
+            </div>
+            <div class="challenge">
+              V: Gluttony Challenge<br>
+              Goal: Reach a specific difficulty;<br>
+              Level 1: Reach Training difficulty 200<br>
+              Level 2: Reach Kappa difficulty 250<br>
+              Level 3: Reach Alpha difficulty 300<br>
+              Level 4: Reach Beta difficulty 350<br>
+              Level 5: Reach Gamma difficulty 400<br>
+              Doesn't reset on prestige<br>
+              Max level: 5<br>
+              Complete Bonus: Get +1 Multiattack<br>
+              Reward: $\text{ATK}, \text{HP}, \text{DEF} \mathrel{{*}{=}} 1 + 0.2 * \text{level}$
+            </div>
+            <div class="challenge">
+              VI: Straight Line Challenge<br>
+              Goal: $9.99 * 10^{29} * (10^3)^{\text{level}}$<br>
+              $\omega \mathrel{{*}{=}} 0$<br>
+              $k \mathrel{{+}{=}} 1$<br>
+              $k \mathrel{{*}{=}} 100$<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Complete Bonus: Get Spiral Design "Rahmen"<br>
+              Reward: $k \mathrel{{*}{=}} 1 + \text{level}$
+            </div>
+            <div class="challenge">
+              VII: Poor Math Challenge<br>
+              Goal: $9.99 * 10^{35} * (10^3)^{\text{level}}$<br>
+              $A_1 = a + b + c + d + e + f + g$<br>
+              Max level: 5<br>
+              First Clear Reward: Skip one $\omega$ Prestige Progress<br>
+              Reward: $\Delta r \mathrel{{*}{=}} \text{Some horrendous formula}$
+            </div>
+            <div class="challenge">
+              VIII: No Rebirth Challenge<br>
+              Goal: $9.99 * 10^{38} * (10^3)^{\text{level}}$<br>
+              You cannot prestige<br>
+              Max level: 5<br>
+              Complete Bonus: Get Spiral Design "Qinghai wave"<br>
+              Reward: $automation\_interval \mathrel{{*}{=}} 0.5^{\text{level}}$
+            </div>
+            <div class="challenge">
+              IX: Sinkhole Challenge<br>
+              Goal: $10^{64} * (10^3)^{\text{level}}$<br>
+              Adds a variable $t$ that increases every second, but gets reset to 0 when $r \lt 10^{12}$<br>
+              If $r \gt 10^{12}$; $\Delta r \mathrel{{*}{=}} (0.9 - 0.05 * level)^{\log{r} - 12} * (1 + 0.01 * t)^{-1}$<br>
+              Max level: 5<br>
+              Complete Bonus: Get Spiral Design "Cloisonne"<br>
+              Reward: $\Delta r \mathrel{{*}{=}} 1 + \ln(t / 13 + 1) / \ln(10 - \text{level})$
+            </div>
+            <div class="challenge">
+              X: Sphere Challenge<br>
+              Goal: $10^{74} * (10^3)^{\text{level}}$<br>
+              $\Delta z$<br>
+              Max level: 5<br>
+              First Clear Reward: $z\_reactor\_exp \mathrel{{*}{=}} 2$<br>
+              Complete Bonus: Get Spiral Design "Lam&eacute;"<br>
+              Reward: $z\_reactor\_cap \mathrel{{*}{=}} 1 + 0.05 * \text{level}$
+            </div>
+            <div class="challenge">
+              IX: Fury Challenge<br>
+              Goal: Reach difficulty 500 with amplified stats;<br>
+              $\text{enemy atk} = \text{base} * (1 + 0.5 * \text{decay}) ^ {\text{difficulty}}$<br>
+              $\text{enemy atkSpeed} = \text{base} * (1 + 0.015 * \text{difficulty})$, capped at $* 7.5$<br>
+              Level 1: Training<br>
+              Level 2: Kappa<br>
+              Level 3: Alpha<br>
+              Level 4: Beta<br>
+              Level 5: Gamma<br>
+              Level 6: Napier<br>
+              Doesn't reset on prestige<br>
+              Max level: 6<br>
+              Complete Bonus: Get +2 Multiattack<br>
+              Reward: $enemy\_growth\_reduction \mathrel{{*}{=}} 0.95^{\text{level}}$
+            </div>
+
+            Second group:
+
+            <div class="challenge unavailable">
+              I: Lava Challenge<br>
+              Goal: $10^{86} * (10^3)^{\text{level}}$<br>
+              Adds a variable $t$ that represents your time in the challenge in seconds<br>
+              $\text{radius} = t * (1.05 + 0.01 * \text{level})^t$<br>
+              You fail if $r \lt \text{radius}$ after 10 seconds<br>
+              You cannot prestige<br>
+              Max level: 5
+            </div>
+            <div class="challenge unavailable">
+              Go Back To Challenge
+            </div>
+
+          </div>
+          <div class="explanation" id="explanation_spiral_designs" style="display: none">
+            <div class="title">Spiral Designs</div>
+            Spiral Designs change the way your spiral looks and provide useful effects.<br>
+            If you own the design, you get its passive effect; if you use the design, you get its active effect.<br>
+            <div class="entry">
+              <b>One star designs:</b><br>
+              <table>
+                <tr><th>Spiral Design</td><th>Passive Effect    </td><th>Active Effect      </td></tr>
+                <tr><td>Simple Blue  </td><td>$a +10\%$         </td><td>-                  </td></tr>
+                <tr><td>Simple Yellow</td><td>$b +10\%$         </td><td>-                  </td></tr>
+                <tr><td>Simple Red   </td><td>$c +10\%$         </td><td>-                  </td></tr>
+                <tr><td>Simple Violet</td><td>$d +10\%$         </td><td>-                  </td></tr>
+                <tr><td>Simple White </td><td>$e +10\%$         </td><td>-                  </td></tr>
+                <tr><td>Blue & Green </td><td>$HP +10\%$        </td><td>$HP +50\%$         </td></tr>
+                <tr><td>Yellow & Red </td><td>$ATK +10\%$       </td><td>$ATK +50\%$        </td></tr>
+                <tr><td>Red & Blue   </td><td>$DEF +10\%$       </td><td>$DEF +50\%$        </td></tr>
+                <tr><td>Violet & Pink</td><td>$Crit Rate +1\%$  </td><td>$Crit Rate +5\%$   </td></tr>
+                <tr><td>White & Cyan </td><td>$Crit Damage +5\%$</td><td>$Crit Damage +20\%$</td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Two star designs:</b><br>
+              <table>
+                <tr><th>Spiral Design              </td><th>Passive Effect                  </td><th>Active Effect                                 </td></tr>
+                <tr><td>White Circles              </td><td>$Regenerate while Resting +50\%$</td><td>$Regenerate while Resting +200\%$             </td></tr>
+                <tr><td>Green & Pink Circles       </td><td>$DEF +5\%$                      </td><td>$DEF +30\%$ | $Regenerate while Resting +50\%$</td></tr>
+                <tr><td>Cyan & Red Circles         </td><td>$ATK +5\%$                      </td><td>$ATK +30\%$ | $Regenerate while Resting +50\%$</td></tr>
+                <tr><td>Blue Dottered Line         </td><td>$Line Number Multiplier +25\%$  </td><td>$Line Number Multiplier +100\%$               </td></tr>
+                <tr><td>White Dottered Line        </td><td>$a +5\%$ | $b +5\%$ | $c +5\%$  </td><td>$Line Number Multiplier +10\%$                </td></tr>
+                <tr><td>Orange & Blue Dottered Line</td><td>$d +5\%$ | $e +5\%$ | $f +5\%$  </td><td>$Line Number Multiplier +10\%$                </td></tr>
+                <tr><td>Cyan & Pink Stripe         </td><td>$v +2$                          </td><td>$v +5$                                        </td></tr>
+                <tr><td>Blue & Violet Stripe       </td><td>$ATK Reward +2$                 </td><td>$ATK Reward +5$                               </td></tr>
+                <tr><td>Green & Orange Stripe      </td><td>$DEF Reward +2$                 </td><td>$DEF Reward +5$                               </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>Three star designs:</b><br>
+              <table>
+                <tr><th>Spiral Design          </td><th>Passive Effect                     </td><th>Active Effect                         </th></tr>
+                <tr><td>Green Winding          </td><td>$Exp Reward +1$                    </td><td>$Exp Reward + 3$                      </td></tr>
+                <tr><td>White & Red Winding    </td><td>$Exp Reward +3\%$                   </td><td>$Exp Reward +10\%$                     </td></tr>
+                <tr><td>Orange & Purple Winding</td><td>$ATK +30\%$ | $DEF +30\%$ | $HP +30\%$</td><td>$ATK +100\%$ | $DEF +100\%$ | $HP +100\%$</td></tr>
+                <tr><td>$\pi$                  </td><td>$\Omega +20\%$                     </td><td>$\Omega +50\%$                        </td></tr>
+                <tr><td>Diamond                </td><td>$Battle Upgrade Cost -5\%$         </td><td>$Exp Reward +5\%$                     </td></tr>
+                <tr><td>Rainbow                </td><td>$Spiral Equation Speed +50\%$      </td><td>$Spiral Equation Speed +100\%$        </td></tr>
+                <tr><td>Kanji                  </td><td>$Spiral Equation Slot +1$          </td><td>$\delta +100\%$                       </td></tr>
+                <tr><td>Rahmen                 </td><td>$\gamma +20\%$                     </td><td>$γ +50\%$                             </td></tr>
+                <tr><td>Laser                  </td><td>$Z-Reactor Exp +20\%$              </td><td>$Z-Reactor Exp +50\%$                 </td></tr>
+                <tr><td>Qinghai Wave           </td><td>$\alpha +0.01$                     </td><td>$\alpha +0.025$                       </td></tr>
+                <tr><td>Cloisonne              </td><td>$\beta +0.01$                      </td><td>$\beta +0.025$                        </td></tr>
+                <tr><td>Lam&eacute;            </td><td>$Math Skill +200$                  </td><td>$Math Skill +1000$                    </td></tr>
+              </table>
+            </div>
+            <div class="entry">
+              <b>DLC designs:</b><br>
+              <table>
+                <tr><th>Spiral Design   </td><th>Passive Effect       </td><th>Active Effect         </th></tr>
+                <tr><td>Bubble          </td><td>$Rare Drop Rate +5\%$</td><td>$Rare Drop Rate +20\%$</td></tr>
+                <tr><td>Snake           </td><td>$S-Crit Rate +3\%$   </td><td>$S-Crit Rate +10\%$   </td></tr>
+                <tr><td>Arrow           </td><td>$Attack Speed +5\%$  </td><td>$Attack Speed +20\%$  </td></tr>
+                <tr><td>Space           </td><td>$\omega +10\%$       </td><td>$\omega + 10\%$       </td></tr>
+                <tr class="unavailable"><td>Water           </td><td>-                    </td><td>-                     </td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_z_reactors" style="display: none">
+            <div class="title">Z Reactors</div>
+            Z Reactors are initially unlocked at T10, with additional reactors unlocked at T23 and T26.<br>
+            Each reactor has a capacity you can "fill" with $\Delta z$.<br>
+            The amount of $\Delta z$ in a reactor determines the active effect, and also builds up Reactor Exp. When a reactor gets enough Reactor Exp, it levels up and provides a stronger passive effect.<br>
+            This passive effect does not go away when you take away the $\Delta z$.
+            <div class="entry">
+              <b>Reactor - R</b><br>
+              <b>z Cost:</b> $100 * 1.5^{\text{level}}$<br>
+              <b>Capacity:</b> $100 * \text{level}$<br>
+              <b>Exp Cost:</b> $100 * 1.5^{\text{level}}$<br>
+              <b>Active Effect:</b> $\Delta r \mathrel{{*}{=}} 1 + 1\% * \text{value}$<br>
+              <b>Passive Effect:</b> $\Delta r \mathrel{{*}{=}} 1 + 0.5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - L</b><br>
+              <b>z Cost:</b> $1000 * 1.5^{\text{level}}$<br>
+              <b>Capacity:</b> $500 * \text{level}$<br>
+              <b>Exp Cost:</b> $2000 * 1.6^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{Line Number Multiplier} \mathrel{{*}{=}} 1 + 1\% * \text{value}^{\color{red}{1.8}} / 25000$<br>
+              <b>Passive Effect:</b> $\text{Line Number Multiplier} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - E</b><br>
+              <b>z Cost:</b> $3000 * 1.5^{\text{level}}$<br>
+              <b>Capacity:</b> $1000 * \text{level}$<br>
+              <b>Exp Cost:</b> $5000 * 1.7^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{Spiral Equation Speed} \mathrel{{*}{=}} 1 + 1\% * \text{value}^{1.5} / 20000$<br>
+              <b>Passive Effect:</b> $\text{Spiral Equation Speed} \mathrel{{*}{=}} 1 + 2.5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - S</b><br>
+              <b>z Cost:</b> $7500 * 1.5^{\text{level}}$<br>
+              <b>Capacity:</b> $5000 * \text{level}$<br>
+              <b>Exp Cost:</b> $10000 * 1.8^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{HP}, \text{ATK}, \text{DEF} \mathrel{{*}{=}} 1 + 1\% * \text{value}^3 / 10^{-14}$<br>
+              <b>Passive Effect:</b> $\text{HP}, \text{ATK}, \text{DEF} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - CR</b><br>
+              <b>Unlocked at T23</b><br>
+              <b>z Cost:</b> $10^{10} * 1.75^{\text{level}}$<br>
+              <b>Capacity:</b> $10^{9} * \text{level}$<br>
+              <b>Exp Cost:</b> $10^{10} * 1.9^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{Critical Rate} \mathrel{{+}{=}} 1\% * \text{"SigmaSum"}$<br>
+              <b>Passive Effect:</b> $\text{Critical Rate} \mathrel{{+}{=}} 0.005\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Reactor - CRX</b><br>
+              <b>Unlocked at T26</b><br>
+              <b>z Cost:</b> $10^{16} * 2^{\text{level}}$<br>
+              <b>Capacity:</b> $10^{15} * \text{level}$<br>
+              <b>Exp Cost:</b> $7.5^{16} * 2^{\text{level}}$<br>
+              <b>Active Effect:</b> $\text{S-Critical Rate} \mathrel{{+}{=}} 1\% * \lfloor \text{value} / (2*10^{16}) \rfloor$<br>
+              <b>Passive Effect:</b> $\text{S-Critical Rate} \mathrel{{+}{=}} 0.005\% * \text{level}$
+            </div>
+          </div>
+          <div class="explanation unavailable" id="explanation_theorems" style="display: none">
+            <div class="title">Theorems</div>
+            Every theorem costs one of their respective Souls, obtained from Tower enemies.
+
+            <div class="entry">
+              <b>Formula:</b> $a^2 + b^2 = c^2$<br>
+              <b>Name:</b> Pythagorean theorem<br>
+              <b>Time:</b> $10*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{HP}_2 \mathrel{{*}{=}} 1 + 1\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $\displaystyle \sum_{k=0}^n k^2 = \frac{1}{6}n(n+1)(2n+1)$<br>
+              <b>Name:</b> Square sum formula<br>
+              <b>Time:</b> $30*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{ATK}_2 \mathrel{{*}{=}} 1 + 1\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $F = G \frac{Mm}{r^2}$<br>
+              <b>Name:</b> Universal Gravitation<br>
+              <b>Time:</b> $50*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{DEF}_2 \mathrel{{*}{=}} 1 + 1\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $i^2 = -1$<br>
+              <b>Name:</b> Complex Number<br>
+              <b>Time:</b> $100*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Raid Boss Time} \mathrel{{*}{=}} 1 + 25\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $\displaystyle  \int_{-\infty}^{\infty} \exp{(-x^2)} dx = \sqrt{\pi}$<br>
+              <b>Name:</b> Gausian Integral<br>
+              <b>Time:</b> $150*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Tower Enemy Growth} \mathrel{{*}{=}} \max(0.01, 0.99^{\text{level}}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $n! = \displaystyle \int_0^{\infty} t^n e^{-t}dt$<br>
+              <b>Name:</b> Gamma Function<br>
+              <b>Time:</b> $200*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Reward Inspiration} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $e^{\pi i} = -1$<br>
+              <b>Name:</b> Euler's identity<br>
+              <b>Time:</b> $300*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Inspiration Cost} \mathrel{{*}{=}} \max(0.01, 0.99^{\text{level}}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $\phi = 2\cos{36}^{\circ}$<br>
+              <b>Name:</b> Fibonacci Series<br>
+              <b>Time:</b> $500*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $100*1.05^{\text{level}}$ inspiration<br>
+              $\text{Study Progress} \mathrel{{*}{=}} 1 + 5\% * \text{level}$<br>
+              $\text{Tower Damage} \mathrel{{*}{=}} 1 + 5\% * \text{level}$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $F(s) = \displaystyle \int_0^{\infty} f(t) e^{-st}dt$<br>
+              <b>Name:</b> Laplace transform<br>
+              <b>Time:</b> $1000*1.5^{\text{level}}$<br>
+              <b>Cost:</b> $1000*1.1^{\text{level}}$ inspiration<br>
+              Unlocks $\text{Tower Damage} \mathrel{{*}{=}} \min(50, 1 + 1\% * \text{Math Skill} / 10^6)$
+            </div>
+            <div class="entry">
+              <b>Formula:</b> $f(t) = \frac{1}{\sqrt{2\pi}} \displaystyle \int_{-\infty}^{\infty} F(\omega)e^{j\omega t} d\omega$<br>
+              <b>Name:</b> Fourier Inverse Transform<br>
+              <b>Cost:</b> $2^{\text{level}}$ The Soul of Fourier<br>
+              <b>Time:</b> $1000*1.5^{\text{level}}$<br>
+              Unlocks $\text{Tower Damage} \mathrel{{*}{=}} \min(50, 1 + 1\% * \text{Enemies Defeated} / 10^6)$
+            </div>
+          </div>
+          <div class="explanation" id="explanation_story" style="display: none">
+            <div class="title">Story</div>
+
+            <div class="entry">
+              <b>Start of the game:</b><br>
+              <i>So dark. And you feel nothing.</i><br>
+              <br>
+              <i>"Welcome to the world of Idle Spiral"</i><br>
+              <i>You hear someone's beautiful voice. You try to respond, but your voice won't come out.</i><br>
+              <br>
+              <i>"I'm sure you have no idea what's going on right now, so let me explain to you what's going on in this world.</i><br>
+              <i>Believe it or not, in this world, you can only go around in circles.</i><br>
+              <i>your value is measured by your distance "r" from the origin."</i><br>
+              <br>
+              <i>"In the previous world, you may have been valued</i><br>
+              <i>for your wealth or your looks. But in this world, neither will help you.</i><br>
+              <i>Please do not be depressed when you hear this.</i><br>
+              <i>Any effort will lead to "r"."</i><br>
+              <br>
+              <i>I am in a very distant place, but due to circumstances,</i><br>
+              <i>I cannot move from here.</i><br>
+              <i>But if you can increase "r", we might be able to meet.</i><br>
+              <i>It may be a very, very long way, but I will be here waiting for you.</i><br>
+              <br>
+              <i>You had no idea who or what she was talking about.</i><br>
+              <i>But no matter how you moved your body,</i><br>
+              <i>all you could do was spin around in circles.</i><br>
+              <i>You decided to leave the origin.</i><br>
+            </div>
+            <div class="entry">
+              <b>First $\omega$ prestige:</b><br>
+              <i>This world, as the beautiful voice said, seems to be all about r.</i><br>
+              <i>In order to increase the amount of r, you have to consume r.</i><br>
+              <i>In the world I was in before, in order to increase money, I had to invest it.</i><br>
+              <i>In order to create time, you had to spend time.</i><br>
+              <i>Is it a common rule in all worlds that you have to lose something to gain something?</i><br>
+              <i>If that's the case, maybe if you start over from the beginning, you will get something better.</i><br>
+              <i>You decide to go back to your starting point.</i><br>
+            </div>
+            <div class="entry">
+              <b>Second $\omega$ prestige:</b><br>
+              <i>Somehow, I think I've figured out how to survive in this world. I've also come to understand that the spiral can be a powerful weapon if used properly.</i><br>
+              <br>
+              <i>I felt that if I could use the spiral better, I would be able to realize a more powerful version of myself. And I would be able to go farther.</i><br>
+              <i>Next time, I'll try to go around while also practicing.</i><br>
+            </div>
+            <div class="entry">
+              <b>Third $\omega$ prestige:</b><br>
+              <i>You are starting to have a little fun.</i><br>
+              <i>Apparently, in this world, the faster you go around in circles, the farther you can get from the origin.</i><br>
+              <i>Maybe it's like centrifugal force, you thought.</i><br>
+              <i>You had a feeling that if you tried again, you could get around faster.</i><br>
+              <i>If you repeated this, you would be able to see the main figure of that beautiful voice.</i><br>
+              <i>You decided to go back to the beginning and try to go around at a faster speed.</i><br>
+            </div>
+            <div class="entry">
+              <b>First $P$ prestige:</b><br>
+              <i>You have yet to meet the owner of that beautiful voice.</i><br>
+              <i>Feeling the limitations, you decided to start all over again, abandoning the rotation speed that you had gained so quickly.</i><br>
+              <i>But this time, you feel like you can do better.</i><br>
+              <i>Yes, it's like being reborn as a baby with the mature knowledge.</i><br>
+              <i>If you had been reborn in the previous world, what kind of life would you have tried to lead?</i><br>
+              <i>It might be a good idea to study the spiral equation a bit.</i><br>
+              <i>With these thoughts in mind, you return to your starting point.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T1:</b><br>
+              <i>You hear that beautiful voice again.</i><br>
+              <i>"I feel you have come into your own in this world.</i><br>
+              <i>And yet, the courage to start from the beginning again is something that no one can imitate.</i><br>
+              <i>You have thrown away everything you have accumulated and started over again.</i><br>
+              <i>However, the road to me still seems endlessly long.</i><br>
+              <i>But I seem to be even further away.</i><br>
+              <i>To move further away from the origin, you need to jump into another dimension, the Z-dimension.</i><br>
+              <i>You have already taken the first step in the prestige you just had.</i><br>
+              <i>Please open your eyes."</i><br>
+              <i>You foresaw the beginning of a new journey.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>First Equation:</b><br>
+              <i>I hear the voice of a great mathematician.</i><br>
+              <i>"Mathematics reveals its secrets only to those who approach it with pure love, for its own beauty.."</i><br>
+              <br>
+              <i>You feel a great surge of energy.</i><br>
+              <i>Now it is time to dive into the new world of mathematics.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>First Transformation of the World:</b><br>
+              <i>It's been a while since I've heard that beautiful voice.</i><br>
+              <i>"You have gone on for a long time to get to where I am.</i><br>
+              <i>I'm very happy for your efforts, but I'm very sorry that I couldn't meet you.</i><br>
+              <i>I thought that the world you are in and the world I am in are the same, but unfortunately they are similar but different.</i><br>
+              <i>You are valued more than anyone else in that world, so please forget about me and live happily ever after."</i><br>
+              <i>I made it to the border of this world, but I couldn't meet the owner of that beautiful voice.</i><br>
+              <i>I thought that you have become like a god in this world, and that you can even change the rules of the world.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T2:</b><br>
+              <i>I heard a beautiful voice.</i><br>
+              <i>"You are starting over again, aren't you?</i><br>
+              <i>Not everyone can imitate you.</i><br>
+              <i>You will gain another new power.</i><br>
+              <i>Keep going at this rate."</i><br>
+              <i>The Unlock Auto $\omega$ Prestige has been unlocked.</i><br>
+              <i>I remembered that it is a pain to rearrange the chess pieces when playing again.</i><br>
+              <i>Come to think of it, who did I play chess with in my previous life?</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T3:</b><br>
+              <i>I heard a beautiful voice.</i><br>
+              <i>"You are starting over again, aren't you?</i><br>
+              <i>It's not something anyone can imitate."</i><br>
+              <i>The ordeal of drunkenness seems to have been unlocked.</i><br>
+              <i>When I couldn't take the first step, alcohol gave me courage.</i><br>
+              <i>Although that step was not always the right one.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T4:</b><br>
+              <i>"I heard a beautiful voice.</i><br>
+              <i>"You are definitely getting closer to me.</i><br>
+              <i>But I am losing the strength to say something in my voice.</i><br>
+              <i>If I could see you a little bit..."</i><br>
+              <i>It seems we need to hurry.</i><br>
+              <i>You have decided to make a fresh start."</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T5:</b><br>
+              <i>I can't hear the beautiful voice.</i><br>
+              <i>The Flower Challenge seems to have been unlocked.</i><br>
+              <i>Speaking of flowers, I think there were many light pink flowers where I grew up.</i><br>
+              <i>I realized that although I had the knowledge, only the memory of my previous life was completely lost.</i><br>
+              <i>I can't believe I'm realizing this now.</i><br>
+              <i>Just why do I feel so sad when I remember those flowers?</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T6:</b><br>
+              <i>I heard a beautiful voice.</i><br>
+              <i>"There is no time, my dear. I will teach you my secrets.</i><br>
+              <i>You will be able to perform more incarnations than ever before.</i><br>
+              <i>You will be able to do more reincarnations than you have ever done before. Use its power correctly."</i><br>
+              <i>Auto Prestige is unlocked.</i><br>
+              <i>You have to start over from scratch, even though you have to move on.</i><br>
+              <i>You are getting in over your head.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T7:</b><br>
+              <i>I can't hear the beautiful voice.</i><br>
+              <i>The Slow Spiral Challenge has been unlocked. I have to stop and think slowly.</i><br>
+              <i>What I have to do now...</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T8:</b><br>
+              <i>I can't hear the beautiful voice.</i><br>
+              <i>Another strong enemy appears.</i><br>
+              <i>I feel as if my heart will never stop shaking,</i><br>
+              <i>but against my will, the spiral progresses steadily.</i><br>
+              <i>The New Enemy Pi has been unlocked.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T9:</b><br>
+              <i>I can't hear the beautiful voice.</i><br>
+              <i>The Gluttony Challenge has been unlocked.</i><br>
+              <i>I remembered the sight of a sumptuous meal lined up in front of me.</i><br>
+              <i>Whenever I was feeling down, my parents would prepare a delicious meal for me.</i><br>
+              <i>But that day was the only day I didn't have any energy.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T10:</b><br>
+              <i>I heard a beautiful voice.</i><br>
+              <i>"Can you hear me...?</i><br>
+              <i>I have lost the ability to even feel your presence.</i><br>
+              <i>I know it's a world like this, but please live happily without me."</i><br>
+              <i>I felt the presence of the beautiful voice had disappeared.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T11:</b><br>
+              <i>I don't hear any beautiful voices.</i><br>
+              <i>Straight Line Challenge has been unlocked.</i><br>
+              <i>Straight...going straight is difficult.</i><br>
+              <i>In life, we want to move forward, but we go in circles and take detours.</i><br>
+              <i>We go around in circles and end up back at the same place again.</i><br>
+              <i>Even if we think so, maybe we are advancing a little.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T12:</b><br>
+              <i>There is no beautiful voice to be heard.</i><br>
+              <i>There is an enemy that I just can't match.</i><br>
+              <i>I feel like I had this feeling in my previous life.</i><br>
+              <i>Are the memories of my previous life slowly returning?</i><br>
+              <i>Gamma has been unlocked.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T13:</b><br>
+              <i>New Sigma to $A_i$ has been unlocked.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T14:</b><br>
+              <i>Poor Math Challenge has been unlocked.</i><br>
+              <i>To compete in this world, I must be strong in math.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T15:</b><br>
+              <i>No Rebirth Challenge has been unlocked.</i><br>
+              <i>The whole time I've been here, I feel like I can start over as many times as I want in life.</i><br>
+              <i>This challenge has a name that doesn't seem like it can be redone.</i><br>
+              <i>It's been a long time since I've feared...</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T16:</b><br>
+              <i>I feel the soul of a beautiful voice.</i><br>
+              <i>And yet, there is a ridiculously strong enemy in front of you.</i><br>
+              <i>We must defeat it and meet the beautiful voice.</i><br>
+              <i>Napierhas been unlocked.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Defeat Napier</b><br>
+              <i>We defeated Napier and met a beautiful voice.</i><br>
+              <i>She had become a soul, a glowing sphere.</i><br>
+              <i>I had never met her before, but somehow I knew it was a beautiful voice.</i><br>
+              <i>And it felt so nostalgic.</i><br>
+              <i>I want to hear that voice again.</i><br>
+              <i>You decided to go on a further journey, believing that you could revive the soul of the beautiful voice.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T17:</b><br>
+              <i>I have heard that beautiful voice in a previous life.</i><br>
+              <i>I haven't heard that voice for a long time, but just remembering it gives me strength.</i><br>
+              <i>Critical rate and critical damage increased.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T18:</b><br>
+              <i>There was a childhood friend who had been with me since I was little.</i><br>
+              <i>Since I can no longer see her, there is a gaping hole in my heart.</i><br>
+              <i>Now may be the time to fill the hole.</i><br>
+              <i>Sinkhole Challenge  has been unlocked.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T19:</b><br>
+              <i>My childhood friend and I played every day in the park.</i><br>
+              <i>Playing with her was always fun and her laughter was so beautiful.</i><br>
+              <i>Unlock new z upgrade</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T20:</b><br>
+              <i>She was a strong chess player.</i><br>
+              <i>I have never won.</i><br>
+              <i>Her particular favorite piece was the pawn.</i><br>
+              <i>That cute round shaped pawn was the deciding factor in the game.</i><br>
+              <i>Unlock Sphere Challenge.</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T21:</b><br>
+              <i>People are emotionally disturbed by change.</i><br>
+              <i>They forget how far they have come in the past 10 years and are happy or saddened by the amount of change between the state they were in a few minutes ago and the state they are in now.</i><br>
+              <i>In order to determine what is important to you and not to regret it, you may need to think of things in integral terms.</i><br>
+              <i>Add Integral part to $A_i$</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T22:</b><br>
+              <i>She loved nature, especially flowers.</i><br>
+              <i>We used to play in the park looking for flowers.</i><br>
+              <i>But nature is not only beautiful, it is also an object of fear.</i><br>
+              <i>No matter how strong we become, we can never win against nature.</i><br>
+              <i>Unlock new battle upgrades</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T23:</b><br>
+              <i>Is that beautiful voice still that childhood friend?</i><br>
+              <i>If she is in this world, am I also dead?</i><br>
+              <i>Just like her.</i><br>
+              <i>Unlock new Z reactor</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T24:</b><br>
+              <i>It is often said that with time we can forget, but I disagree.</i><br>
+              <i>She came to this world and temporarily lost her memory, but in the end, I don't think she could forget.</i><br>
+              <i>She was swallowed up by the maelstrom.</i><br>
+              <i>I feel indignant at my own helplessness.</i><br>
+              <i>Unlock Fury Challenge</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T25:</b><br>
+              <i>Yes, it is. I hated swirls and spirals.</i><br>
+              <i>That's what kidnapped her.</i><br>
+              <i>Is this a curse placed on me?</i><br>
+              <i>Unlock new Enemy Pentangle</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T26:</b><br>
+              <i>We must help the beautiful voice.</i><br>
+              <i>Then I want to apologize to her.</i><br>
+              <i>Unlock new Z reactor</i><br>
+            </div>
+            <div class="entry">
+              <b>Reach T27:</b><br>
+              <i>I had to move forward or I would go crazy.</i><br>
+              <i>As soon as I thought that, I realized that I didn't know  "forward" definition of this world.</i><br>
+              <i>Maybe it doesn't matter if it's forward or not.</i><br>
+              <i>It's important to keep going.</i><br>
+              <i>Unlock new battle upgrades</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T28:</b><br>
+              <i>I had gained so much power that I could do anything in this world.</i><br>
+              <i>A little stronger, and I might be able to save my beautiful voice.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T29:</b><br>
+              <i>I am already strong enough.</i><br>
+              <i>I have decided to give strength to the soul of my beautiful voice.</i><br>
+              <i>The soul seemed to regain its strength little by little.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T30:</b><br>
+              <i>I remembered what I was going to do just before I came to this world.</i><br>
+              <i>I was tired of blaming myself and was about to die.</i><br>
+              <i>The soul of the beautiful voice is about to regain its strength, though it is about to disappear.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T31:</b><br>
+              <i>"Can you hear me?" I was trying to help you, but you helped me the other way around."</i><br>
+              <i>It's been a long time since I heard a beautiful voice.</i><br>
+              <i>I am not a tearful person in this world, but I was about to cry.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T32:</b><br>
+              <i>"As you may have already noticed, I am your childhood friend.</i><br>
+              <i>I think I died when I was with you, and I have been giving you a hard time for a long time.</i><br>
+              <i>You have blamed yourself since then and I am very sorry."</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T33:</b><br>
+              <i>"I am the one who called you into this world.</i><br>
+              <i>I was able to call you to this world because you were about to give up living in your previous world and I strongly wished to help you.</i><br>
+              <i>I wish three things for you.</i><br>
+              <i>The first is a wish that when you return to your former world, you will live properly.</i><br>
+              <i>The second is my wish that you remember to keep going anyway, just like you did when you were little.</i><br>
+              <i>I am sure that you have made it so far in this world that you have already regained this feeling."</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T34:</b><br>
+              <i>Third, I want you to know that I am grateful to you.</i><br>
+              <i>This world is created by my thoughts.</i><br>
+              <i>The spiral of this world are not the whirlpools that killed me.</i><br>
+              <i>Do you not remember?</i><br>
+              <i>The Spiranthes that you and I went to the park and found.</i><br>
+              <i>It is my best flower, blooming like a spiral and teaching me about the wonder and beauty of nature.</i><br>
+              <i>I was so happy to be friends with you.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T35:</b><br>
+              <i>You will regain your old self in this world.</i></br>
+              <i>Not all.</i></br>
+              <i>You who have suffered are surely an important part of you.</i></br>
+              <i>I am so glad that I was able to share these thoughts with you, and now I am going to disappear.</i></br>
+              <i>Thank you so much.</i><br>
+            </div>
+            <div class="entry unavailable">
+              <b>Reach T36:</b><br>
+              <i>She was gone.</i></br>
+              <i>I miss her very much, but thanks to her beautiful voice, I feel somewhat better.</i></br>
+              <i>I am truly grateful to her.</i></br>
+              <i>I wanted to be stronger in this world she had created for me.</i></br>
+              <i>For the day we return to the world before.</i><br>
+            </div>
+
+          </div>
+          <div class="explanation" id="explanation_changelog" style="display: none">
+            <div class="title">Changelog</div>
+            Explanation changelog
+          </div>
+          <div class="explanation" id="explanation_meta_changelog" style="display: none">
+            <div class="title">Meta changelog</div>
+            Some day I'll care enough to write this, or I'll start tracking things after reaching some point of completion.
+            <h4>v0.2209121606</h4>
+            Complete rework of internal calculations to reduce clutter.
+            <h4>v0.2209082352</h4>
+            Added achievements.
+            <h4>v0.2209082119</h4>
+            Added page parameter interaction to allow for linking to specific explanations.
+            <h4>v0.2206142003</h4>
+            Initial version
+          </div>
+          <div class="explanation" id="explanation_bugs" style="display: none">
+            <div class="title">Bugs</div>
+            <div class="entry">
+              <b>Enemy Growth Reduction:</b><br>
+              Instead of using the 50000 threshold and enemy growth reduction from other sources like the fury challenge; the decay used to scale enemy stats incorrectly uses just the 5000 threshold math skill formula.<br>
+              <i>Fixed in next update</i>
+            </div>
+            <div class="entry">
+              <b>Rare Chance:</b><br>
+              The rare chance diminishment function has incorrect bounds, making your chance jump at the second threshold.<br>
+              <i>Fixed in next update</i>
+            </div>
+            <div class="entry">
+              <b>Offline bonus:</b><br>
+              The offline progress calculation for the reactors incorrectly uses a single timestep instead of the offline duration; effectively giving you no progress.<br>
+              The offline bonus for the spiral equations displays the incorrect names; the bonus does correctly apply to the selected equations.<br>
+              <i>Fixed in next update</i>
+            </div>
+            <div class="entry">
+              <b>logk:</b><br>
+              The logk r upgrade shows an effect of $a + \log_{10}(k^{\text{level}})\%$, but in actuality, this is $a + 10*\log_{10}(k^{\text{level}})\%$.
+            </div>
+            <div class="entry">
+              <b>Block:</b><br>
+              The unused block mechanic still gives the ally spiral a 0.01% chance to ignore damage.
+            </div>
+            <div class="entry">
+              <b>UI:</b><br>
+              The center of the spiral on the main screen blocks interaction, blocking the 6th and 10th upgrades a bit.<br>
+              At some resolutions, the sides of the screen that include menu buttons becomes blocked.<br>
+              Number representations are incredibly inconsistent.
+            </div>
+            <div class="entry">
+              <b>Notation:</b><br>
+              Letter notation accidentally merged two orders of magnitude at "UQig, DQig", meaning everything after is off by one order of magnitude.<br>
+              <i>Fixed in next update</i>
+            </div>
+            <div class="entry">
+              <b>Battle Upgrades:</b><br>
+              The Max Upgrade option for Battle Upgrades doesn't take cost reduction into account; causing it to occasionally take exp without leveling up.
+            </div>
+            <div class="entry">
+              <b>Fury Challenge:</b><br>
+              The Fury Challenge no longer resets progress when started, making it trivial to cheese.
+            </div>
+            <div class="entry">
+              <b>Achievements:</b><br>
+              Getting the $k$ upgrade to level 10000 costs more $r$ than the game can handle, making the achievement for it impossible.<br>
+              The cumulative upgrade achievements are impossible.
+            </div>
+            <div class="entry">
+              <b>Line number multiplier:</b><br>
+              Activating the line number multiplier then switching to Battle Spiral screen causes the multiplier to deplete at half speed.
+            </div>
+            <div class="entry unavailable">
+              <b>Raid Enemies:</b><br>
+              The Spiral Tower enemy's exp tiles lose their reward exp effect after the first board.<br>
+              The Math Tower and Inverse Tower exclusive Souls are available in the Spiral Tower.<br>
+              The Math Tower enemy doesn't gain difficulty levels when defeated.<br>
+              The Inverse Tower enemy's s-critical rate reward tile doesn't render text.<br>
+              The Math Tower and Inverse Tower exclusive Souls are swapped.
+            </div>
+            <div class="title">Bugs I fixed</div>
+            <div class="entry">
+              <ul>
+                <li style="color: blue">Attack progress is updated, resetting when you attack. This locks your attack speed at a certain ticks per attack.</li>
+                <li style="color: blue">Battle Spiral Reward tables have a memory leak related to the text objects.</li>
+                <li style="color: blue">The offline progress calculation for the reactors incorrectly uses a single timestep instead of the offline duration.</li>
+                <li style="color: yellow">Enemy Growth Reduction displays a number scaled based on a threshold of 50000 math skill, but actually uses a number scaled based on a threshold of 5000 math skill.</li>
+                <li style="color: yellow">Fury Challenge reward only applies to the displayed Enemy Growth Reduction, not to the number actually used.</li>
+                <li style="color: green">Battle Upgrade 18 (HP Reward +5%) incorrectly gives +3% per level.</li>
+                <li style="color: green">Battle Upgrade 30 (+300 ATK and DEF from PI) actually gives +500.</li>
+                <li style="color: green">Battle Upgrade 32 (+0.01 Super Critical Damage from Napier) applies to both S-Crit rewards, making it twice as strong.</li>
+                <li style="color: green">Battle Upgrade 40 (EXP Reward +10%) incorrectly gives +5% per level.</li>
+                <li style="color: green">A duplicate special achievement shifts all the titles and unlock texts, making them appear incorrect.</li>
+                <li style="color: green">Letter notation has a formatting error at "UQig, DQig", making all numbers after incorrect.</li>
+                <li style="color: green">The offline bonus for the spiral equations displays the incorrect names due to using wrong indexes.</li>
+                <li style="color: green">The offline bonus for the reactors displays the incorrect names due to using wrong indexes.</li>
+                <li style="color: green">The Laser design passive effect incorrectly gives an additive bonus instead of a multiplicative one.</li>
+                <li style="color: green">The Rahmen design passive effect incorrectly gives an additive bonus instead of a multiplicative one.</li>
+                <li style="color: yellow">The Rare Chance diminishment has incorrect bounds at the second threshold, making the result jump.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_faq" style="display: none">
+            <div class="title">Frequently Asked Questions</div>
+            <div class="entry">
+              <b>Q:</b> What's the purpose of the game?<br>
+              <i>A:</i> Make number go up.
+            </div>
+            <div class="entry">
+              <b>Q:</b> What is this weird name in the battle spiral?<br>
+              <i>A:</i> Once you unlock the Spiral Equations at T4, every enemy replaces their final reward with a onetime reward that unlocks a new Spiral Equation. After you have gotten the onetime reward, you can reroll to get the Exp reward back.
+            </div>
+            <div class="entry">
+              <b>Q:</b> Help I'm stuck at this challenge!<br>
+              <i>A:</i> That's not really a question. You don't have to do a challenge the moment you unlock it. You can do it later when you are more powerful.
+            </div>
+            <div class="entry">
+              <b>Q:</b> When should I do [insert challenge here]?<br>
+              <i>A:</i> In general, you should just try a challenge every so often to see if you can complete them in a few minutes. The exception to this is the Flower Challenge, which you should complete 5/5 the moment you unlock it.
+            </div>
+            <div class="entry">
+              <b>Q:</b> Why did upgrading $\beta$ decrease my $\Delta r$?<br>
+              <i>A:</i> $\alpha$ and $\beta$ contribute to $\Delta r$ following $\frac{2\alpha^{\beta+1}}{\beta+1}$.<br>
+              $\left.\frac{\partial}{\partial \beta} \frac{2\alpha^{\beta+1}}{\beta+1} \right\vert_{\beta = 1} = \alpha^2\ln(\alpha)-\frac{\alpha^2}{2}$<br>
+              This means that at $\beta = 1$, upgrading it will increase $\Delta r$ if $\alpha \gt \sqrt{e} \approx 1.65$.<br>
+              It is possible to increase $\Delta r$ earlier by taking multiple upgrades of $\beta$ into account, but 1.65 is a simple threshold.
+            </div>
+            <div class="entry">
+              <b>Q:</b> What is the "line number multiplier"?<br>
+              <i>A:</i> Next to your $\Delta r$, there is a button that increases the amount of lines you see, usually at x5. This always provides a multiplier to $\Delta r$ of $1 + ((\text{lines} - 1) * 0.1) * \text{Line Number Multiplier}$.
+            </div>
+            <div class="entry">
+              <b>Q:</b> What's with the light grey boxes?<br>
+              <b>A:</b> Anything that's grey is partially implemented but not accessible content.
+            </div>
+            <div class="entry">
+              <b>Q:</b> Are you the dev?<br>
+              <i>A:</i> No, but I'm occasionally helping out.
+            </div>
+          </div>
+
+          <div class="explanation" id="explanation_delta_r" style="display: none">
+            <div class="title">$\Delta r$</div>
+            $\Delta r$ is the amount $r$ increases per second, making it the most important number in the game.<br>
+
+            <table>
+              <tr><th> Source                      </th><th> Effect                                             </th></tr>
+              <tr><td> Base Equation               </td><td> m * sigmaA * omega ^ omegaExponent + k </td></tr>
+              <tr><td> Line Number Multiplier      </td><td> *= (1 + (lines - 1) * 0.1 * line_number_multiplier))           </td></tr>
+              <tr><td> Basic Challenge Reward      </td><td> *= (1 + 0.5 * level)                   </td></tr>
+              <tr><td> Poor Math Challenge Reward  </td><td> *= (a * b * c [* d [* e [* f [* g]]]])^(1/11) based on level             </td></tr>
+              <tr><td> Sinkhold Challenge Reward   </td><td> *= (1 + log(time since omega prestige / 13 + 1) / log(10 - level))                   </td></tr>
+              <tr><td> R Reactor Active Effect     </td><td> *= (1 + 0.01 * value)                   </td></tr>
+              <tr><td> R Reactor Passive Effect    </td><td> *= (1 + 0.005 * level)                   </td></tr>
+              <tr><td> Tornado Tier Factor         </td><td> *= (1 + 0.5 * tornado tier)                   </td></tr>
+              <tr><td> Tornado Playtime Factor     </td><td> *= (1 + playtime in hours * 1.0 * 0.01 + [playtime in hours - 100.0] * 1.0 * 0.005 + [playtime in hours - 1100.0] * 1.0 * 0.001)                   </td></tr>
+              <tr><td> Tornado Max P Factor        </td><td> *= (1 + 0.1 * log_10(Max P + 1))                   </td></tr>
+              <tr><td> r upgrade rAll Passive      </td><td> *= (1 + sum of r upgrade levels / 10000)                   </td></tr>
+              <tr><td> r upgrade rAll Active       </td><td> *= (1 + 0.1 * level)                   </td></tr>
+              <tr><td> z upgrade z_multiplier      </td><td> *= (1 + (1 + 0.1 * level) * log_10(z + 1) / 5)                   </td></tr>
+            </table>
+
+          </div>
+          <div class="explanation" id="explanation_sigmaA" style="display: none">
+            Explanation sigmaA
+          </div>
+          <div class="explanation" id="explanation_omega" style="display: none">
+            Explanation omega
+          </div>
+          <div class="explanation" id="explanation_k" style="display: none">
+            Explanation k
+          </div>
+          <div class="explanation" id="explanation_integral" style="display: none">
+            Explanation integral
+          </div>
+          <div class="explanation" id="explanation_u" style="display: none">
+            Explanation u
+          </div>
+          <div class="explanation" id="explanation_v" style="display: none">
+            Explanation v
+          </div>
+          <div class="explanation" id="explanation_n" style="display: none">
+            Explanation n
+          </div>
+          <div class="explanation" id="explanation_m" style="display: none">
+            Explanation m
+          </div>
+          <div class="explanation" id="explanation_alpha" style="display: none">
+            Explanation alpha
+          </div>
+          <div class="explanation" id="explanation_beta" style="display: none">
+            Explanation beta
+          </div>
+          <div class="explanation" id="explanation_largeA" style="display: none">
+            Explanation largeA
+          </div>
+          <div class="explanation" id="explanation_a" style="display: none">
+            Explanation a
+          </div>
+          <div class="explanation" id="explanation_b" style="display: none">
+            Explanation b
+          </div>
+          <div class="explanation" id="explanation_c" style="display: none">
+            Explanation c
+          </div>
+          <div class="explanation" id="explanation_d" style="display: none">
+            Explanation d
+          </div>
+          <div class="explanation" id="explanation_e" style="display: none">
+            Explanation e
+          </div>
+          <div class="explanation" id="explanation_f" style="display: none">
+            Explanation f
+          </div>
+          <div class="explanation" id="explanation_g" style="display: none">
+            Explanation g
+          </div>
+
+
+          <div class="explanation" id="explanation_delta_z" style="display: none">
+            Explanation delta z
+          </div>
+          <div class="explanation" id="explanation_gamma" style="display: none">
+            <div class="title">&gamma;</div>
+            &gamma; (gamma) is one of the components of &Delta;z.<br>
+
+            <table>
+              <tr><th> Source                       </th><th> Effect                  </th></tr>
+              <tr><td> Base value                   </td><td> 0.1                     </td></tr>
+              <tr><td> z upgrade &gamma;            </td><td> + 0.1 * level           </td></tr>
+              <tr><td> Battle reward &gamma;        </td><td> + raw                   </td></tr>
+              <tr><td> Battle reward &gamma;%       </td><td> * (1 + raw)             </td></tr>
+              <tr><td> Spiral Design rahmen passive </td><td> * 1.2 if you own rahmen </td></tr>
+              <tr><td> Spiral Design rahmen active  </td><td> * 1.5 if you use rahmne </td></tr>
+            </table>
+          </div>
+          <div class="explanation" id="explanation_Omega" style="display: none">
+            Explanation Omega
+          </div>
+          <div class="explanation" id="explanation_delta" style="display: none">
+            Explanation delta
+          </div>
+
+
+          <div class="explanation" id="explanation_hp" style="display: none">
+            Explanation hp
+          </div>
+          <div class="explanation" id="explanation_atk" style="display: none">
+            Explanation atk
+          </div>
+          <div class="explanation" id="explanation_def" style="display: none">
+            Explanation def
+          </div>
+          <div class="explanation" id="explanation_attack_speed" style="display: none">
+            <div class="title">Attack Speed</div>
+            <p>
+              Your battle spiral attacks at a rate of $2 / \text{attack speed}$ seconds, which gets displayed as the Time to Attack.<br/>
+              This $\text{attack speed}$ is the product of the following factors:
+
+              <table>
+                <tr><th> Source                      </th><th> Effect                                             </th></tr>
+                <tr><td> Battle reward               </td><td> $$\begin{cases}
+                  1 + \text{battle reward}, & \text{if battle reward} \lt 4 \\
+                  \sqrt[3]{17.5 * \text{battle reward} + 55},& \text{otherwise}
+                \end{cases}$$</td></tr>
+                <tr><td> Battle upgrade 13           </td><td> $* (1 + 0.1\% * \text{level})$                     </td></tr>
+                <tr><td> Battle upgrade 24           </td><td> $* (1 + 0.5\% * \text{level})$                     </td></tr>
+                <tr><td> Spiral equation eratos      </td><td> $* (1 + 1\% * \log_{10}(\text{level} + 1))$        </td></tr>
+                <tr><td> Spiral design arrow active  </td><td> $* (1 + 20\% \text{ if you use the arrow design})$ </td></tr>
+                <tr><td> Spiral design arrow passive </td><td> $* (1 + 5\% \text{ if you own the arrow design})$  </td></tr>
+              </table>
+
+              The attack speed percentage you see on the battle spiral screen only incorporates the battle reward and battle upgrade effects.
+            </p>
+          </div>
+          <div class="explanation" id="explanation_critical" style="display: none">
+            <div class="title">Critical Rate</div>
+            <table>
+              <tr><th> Source                                      </th><th> Effect                                      </th></tr>
+              <tr><td> Base value                                  </td><td> 5%                                          </td></tr>
+              <tr><td> Battle Reward                               </td><td> + battle reward (currently unobtainable)    </td></tr>
+              <tr><td> Spiral Design gradation_violet_pink active  </td><td> * 1.05 if you use gradation_violet_pink     </td></tr>
+              <tr><td> Spiral Design gradation_violet_pink passive </td><td> * 1.01 if you own gradation_violet_pink     </td></tr>
+              <tr><td> Spiral Equation euclides                    </td><td> * (1 + 0.1% * level + 0.01% * [level - 50]) </td></tr>
+              <tr><td> Tornado Tier 17                             </td><td> + 10% after Tornado Tier 17                 </td></tr>
+              <tr><td> Battle Upgrade Critical +0.1%               </td><td> + 0.1% * level                              </td></tr>
+              <tr><td> Battle Upgrade Critical +0.2%               </td><td> + 0.2% * level                              </td></tr>
+              <tr><td> Reactor CR active                           </td><td> + 1% * SigmaSum(|value / 1e9|)              </td></tr>
+              <tr><td> Reactor CR passive                          </td><td> + 0.005% * level                            </td></tr>
+            </table>
+            <script>
+              addUpdateFunction(function() {
+                // TODO
+              });
+            </script>
+          </div>
+          <div class="explanation" id="explanation_criticalDamage" style="display: none">
+            <div class="title">Critical Damage</div>
+            Explanation criticalDamage
+          </div>
+          <div class="explanation" id="explanation_super_critical" style="display: none">
+            <div class="title">Super Critical Rate</div>
+            Explanation super_critical
+          </div>
+          <div class="explanation" id="explanation_super_critical_damage" style="display: none">
+            <div class="title">Super Critical Damage</div>
+            Explanation super_critical_damage
+          </div>
+          <div class="explanation" id="explanation_rare_chance" style="display: none">
+            <div class="title">Rare Drop Rate</div>
+            Explanation rare_chance
+          </div>
+          <div class="explanation" id="explanation_math_skill" style="display: none">
+            <div class="title">Math Skill</div>
+            <p>$\text{Math Skill}$ contributes to the $\text{Enemy Growth Reduction}$ following the formula;</p>
+            <div class="formula" style="height: 75px">
+              <div class="explainable explain_enemy_growth_reduction">$\text{Enemy Growth Reduction}$</div>
+              <div>&nbsp;$\mathrel{{*}{=}}$&nbsp;</div>
+              <div>$$\begin{cases}
+                1 - 0.5 * \text{Math Skill} / 50000,& \text{if } \text{Math Skill} \lt 50000 \\
+                1 - (0.9 - 1 / 1.000018326 ^ {\text{Math Skill}}),& \text{otherwise}
+              \end{cases}$$</div>
+            </div>
+
+            <p>This $\text{Enemy Growth Reduction}$ is currently only displayed, the actual $\text{Decay}$ used to determine enemy stats follows the formula;</p>
+            <div class="formula" style="height: 50px">
+              <div>
+                $$\begin{cases}
+                  1 - 0.5 * \text{Math Skill} / 5000,& \text{if } \text{Math Skill} \lt 5000 \\
+                  1 - (0.9 - 1 / 1.000183 ^ {\text{Math Skill}}),& \text{otherwise}
+                \end{cases}$$
+              </div>
+            </div>
+          </div>
+          <div class="explanation" id="explanation_enemy_growth_reduction" style="display: none">
+            <div class="title">Enemy Growth Reduction</div>
+            Explanation enemy_growth_reduction
+          </div>
+          <div class="explanation" id="explanation_inspiration" style="display: none">
+            <div class="title">Inspiration</div>
+            Explanation inspiration
+          </div>
+          <div class="explanation" id="explanation_dev" style="display: none">
+            <div class="title">Dev</div>
+            Stuff you should not look too much into.
+            <div class="entry">
+              <b>Raw savefile:</b><br>
+              <textarea id="savefile-input" style="width: 730px; height: 200px" readonly="readonly"></textarea>
+            </div>
+            <div class="entry">
+              <b>Decrypted savefile:</b><br>
+              <textarea id="savefile-decrypted-0" style="width: 730px; height: 200px" readonly="readonly"></textarea>
+              <textarea id="savefile-decrypted-1" style="width: 730px; height: 200px" readonly="readonly"></textarea>
+              <textarea id="savefile-decrypted-2" style="width: 730px; height: 200px" readonly="readonly"></textarea>
+            </div>
+            <div class="entry">
+              <b>Formatted savefile:</b><br>
+              <textarea id="savefile-decrypted-full" style="width: 730px; height: 200px" readonly="readonly"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="" id="battle-spiral-stats" style="position: absolute; left: 1200px; width: 300px">
+          <div class="effect explainable explain_hp" style="height: 20px">
+            <div>HP</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_hp">0</div>
+          </div>
+          <div class="effect explainable explain_atk" style="height: 20px">
+            <div>ATK</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_atk">0</div>
+          </div>
+          <div class="effect explainable explain_def" style="height: 20px">
+            <div>DEF</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_def">0</div>
+          </div>
+          <div class="effect explainable explain_attack_speed" style="height: 20px">
+            <div>Attack Speed</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_attack_speed">0</div>
+          </div>
+          <div class="effect explainable explain_attack_speed" style="height: 20px">
+            <div>- Pure Attack Speed</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display battle_reward_attackSpeed">0</div>
+          </div>
+          <div class="effect explainable explain_attack_speed" style="height: 20px">
+            <div>- Time to Attack</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div id="custom_update_time_to_attack">0</div>
+            <script>
+              addUpdateFunction(function() {
+                $("#custom_update_time_to_attack").text(2/evaluate("attack_speed"));
+              });
+            </script>
+          </div>
+          <div class="effect explainable explain_critical" style="height: 20px">
+            <div>Crit Rate</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_critical">0</div>
+          </div>
+          <div class="effect explainable explain_criticalDamage" style="height: 20px">
+            <div>Crit Damage</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_criticalDamage">0</div>
+          </div>
+          <div class="effect explainable explain_super_critical" style="height: 20px">
+            <div>S-Crit Rate</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_super_critical">0</div>
+          </div>
+          <div class="effect explainable explain_super_critical_damage" style="height: 20px">
+            <div>S-Crit Damage</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_super_critical_damage">0</div>
+          </div>
+          <div class="effect explainable explain_rare_chance" style="height: 20px">
+            <div>Rare Drop Rate</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_rare_drop">0</div>
+          </div>
+          <div class="effect explainable explain_rare_chance" style="height: 20px">
+            <div>- Pure Rare Drop</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display battle_reward_rare_chance">0</div>
+          </div>
+          <div class="effect explainable explain_math_skill" style="height: 20px">
+            <div>Math Skill</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_math_skill">0</div>
+          </div>
+          <div class="effect explainable explain_enemy_growth_reduction" style="height: 20px">
+            <div>Enemy Growth Reduction</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_enemy_growth_reduction">0</div>
+          </div>
+          <div class="effect explainable explain_enemy_growth_reduction" style="height: 20px">
+            <div>- Actual Decay</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div id="custom_update_decay">0</div>
+            <script>
+              addUpdateFunction(function() {
+                $("#custom_update_decay").text(decay(dto.battle_rewards[34]));
+              });
+            </script>
+          </div>
+          <div class="effect explainable explain_inspiration" style="height: 20px">
+            <div>Inspiration</div>
+            <div>&nbsp;=&nbsp;</div>
+            <div class="update_display display_inspiration">0</div>
+          </div>
+        </div>
+
+      </div>
+
+    </body>
+</html>
