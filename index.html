@@ -11,20 +11,43 @@
                     x.style.display = "none";
                 }
             }
+            function setTier(value) {
+                switch (value) {
+                    case "1":
+                        document.getElementById("tier-slider-value").innerHTML = "Tier 1";
+                        break;
+                    case "2":
+                        document.getElementById("tier-slider-value").innerHTML = "Tier 2";
+                        break;
+                    case "3":
+                        document.getElementById("tier-slider-value").innerHTML = "Tier 3";
+                        break;
+                    default:
+                        document.getElementById("tier-slider-value").innerHTML = "Working on it";
+                        break;
+                }
+            }
         </script>
     </head>
-    <body>
+    <body><div id="content-container" style="min-width: 1280px; max-width: 1920px; margin: auto">
         <div style="text-align: center;">
             <span style="font-size: 60px;">UNDER CONSTRUCTION</span>
         </div>
+        <div id="slider-container" style="width: 500px; margin:auto">
+        <input type="range" min="1" max="4" value="1" style="width: 100%" oninput="setTier(this.value)" id="stage-slider"></div>
+        <br/>
+        <span id="tier-slider-value">Tier 1</span>
+        <div id="current-goal"></div>
 
-        <div id="content" style="size: 100%; margin: 0">
+        <div id="navbar" style="height: 48px">
             <div class="expand nav-button" onclick="expand('explanation-upgrades')">Upgrades</div>
-            <div class="expandable" id="explanation-upgrades">
-                Testing
-            </div>
-
+            <div class="expand nav-button" onclick="expand('explanation-battle')">Battle</div>
         </div>
-    </body>
+        <div class="expandable" id="explanation-upgrades">
+            Upgrades explanation
+        </div>
+        <div class="expandable" id="explanation-battle">
+            Battle explanation
+        </div>
+    </div></body>
 </html>
-    
