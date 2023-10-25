@@ -12,19 +12,25 @@
                 }
             }
             function setTier(value) {
+                document.getElementById("current-goal").innerHTML = "";
+                document.getElementById("goal-help").innerHTML = "";
                 switch (value) {
                     case "1":
-                        document.getElementById("tier-slider-value").innerHTML = "Tier 1";
+                        document.getElementById("current-goal").innerHTML =
+                        "Tier 0: You have not done an &omega; prestige yet.\nReach &omega; tier 1.";
+                        document.getElementById("goal-help").innerHTML =
+                        "Just exclusively buy the first upgrade until you can see the bar at the bottom fill up decently quick enough.";
+                        document.getElementById("goal-help").style.display = "block"
                         break;
-                    case "2":
-                        document.getElementById("tier-slider-value").innerHTML = "Tier 2";
+                    case "2": document.getElementById("current-goal").innerHTML =
+                        "Tier 1: You have unlocked the battle spiral.\nProgress through the battle spiral until you reach the fourth enemy, then reach tornado tier 4.";
+                        document.getElementById("goal-help").innerHTML =
+                        "Exp is slow at the start, so the best upgrades are upgrade 10 and 6, then 21 and 19, then 25. You can basically ignore the others for now. Once you reached your first tornado tier, you unlock challenges that give good boosts to &Delta;r. You generally want to try available challenges until you can't beat them anymore.";
                         break;
-                    case "3":
-                        document.getElementById("tier-slider-value").innerHTML = "Tier 3";
+                    case "3": document.getElementById("current-goal").innerHTML =
+                        "Tier 2";
                         break;
-                    default:
-                        document.getElementById("tier-slider-value").innerHTML = "Working on it";
-                        break;
+                    default: break;
                 }
             }
         </script>
@@ -33,21 +39,76 @@
         <div style="text-align: center;">
             <span style="font-size: 60px;">UNDER CONSTRUCTION</span>
         </div>
-        <div id="slider-container" style="width: 500px; margin:auto">
-        <input type="range" min="1" max="4" value="1" style="width: 100%" oninput="setTier(this.value)" id="stage-slider"></div>
+        <div id="slider-container" style="width: 500px; height: 10px; margin:auto">
+            <input type="range" min="1" max="4" value="1" style="width: 100%" oninput="setTier(this.value)" id="stage-slider">
+        </div>
         <br/>
-        <span id="tier-slider-value">Tier 1</span>
-        <div id="current-goal"></div>
-
+        <div id="current-goal" onclick="expand('goal-help')" style="width: 100%; height: 50px"></div>
+        <div class="expandable" id="goal-help">
+            Helping people
+        </div>
         <div id="navbar" style="height: 48px">
             <div class="expand nav-button" onclick="expand('explanation-upgrades')">Upgrades</div>
+            <div class="expand nav-button" onclick="expand('explanation-tornado')">Tornado</div>
             <div class="expand nav-button" onclick="expand('explanation-battle')">Battle</div>
+            <div class="expand nav-button" onclick="expand('explanation-challenges')">Challenges</div>
+            <div class="expand nav-button" onclick="expand('explanation-equations')">Equations</div>
+            <div class="expand nav-button" onclick="expand('explanation-reactors')">Reactors</div>
+            <div class="expand nav-button" onclick="expand('explanation-theories')">Theories</div>
+            <div class="expand nav-button" onclick="expand('explanation-misc')">Misc</div>
         </div>
+
         <div class="expandable" id="explanation-upgrades">
             Upgrades explanation
         </div>
-        <div class="expandable" id="explanation-battle">
-            Battle explanation
+        
+        <div class="expandable" id="explanation-tornado">
+            Tornado explanation
         </div>
-    </div></body>
+        
+        <div class="expandable" id="explanation-battle">
+            <div id="battle-navbar">
+                <div class="expand nav-button" onclick="expand('explanation-upgrades')">Upgrades</div>
+            </div>
+        </div>
+
+        <div class="expandable" id="explanation-challenges">
+            Challenges explanation
+        </div>
+
+        <div class="expandable" id="explanation-equations">
+            Equations explanation
+            thales,
+            Hypatia,
+            archimedes,
+            pythagoras,
+            euclides,
+            eratos,
+            Aryabhata,
+            brahmagupta,
+            khuwarizmi,
+            omar,
+            bhaskara,
+            madhava,
+            Alhazen,
+            Pascal,
+            Riemann,
+            Kurt
+        </div>
+
+        <div class="expandable" id="explanation-reactors">
+            Reactors explanation
+        </div>
+        
+        <div class="expandable" id="explanation-theories">
+            Theories explanation
+        </div>
+        
+        <div class="expandable" id="explanation-misc">
+            Miscellaneous explanations
+        </div>
+
+    </div><script>
+        setTier("1");
+    </script></body>
 </html>
