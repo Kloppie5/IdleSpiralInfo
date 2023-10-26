@@ -8,6 +8,10 @@ div {
   outline: 1px solid #FFFFFF;
 }
 
+.secret {
+  display: none;
+}
+
 .expand {
   background-color: #C0C0C0;
   color: #000000;
