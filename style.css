@@ -16,6 +16,10 @@ div {
 }
 
 .expand {
+  background-color: #808080;
+  color: #000000;
+}
+.expand .selected {
   background-color: #C0C0C0;
   color: #000000;
 }
@@ -40,4 +44,12 @@ div {
 }
 .reward-onetime {
   color: #AA5599;
+}
+
+table.multiplier-breakdown tr td {
+  border-right: 1px solid white;
+}
+
+table.multiplier-breakdown tr td:last-of-type {
+  border: none;
 }

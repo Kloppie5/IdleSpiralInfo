@@ -5,10 +5,10 @@
         <script>
             function expand(id) {
                 var x = document.getElementById(id);
-                if (x.style.display === "none") {
-                    x.style.display = "block";
-                } else {
+                if (x.style.display == "block") {
                     x.style.display = "none";
+                } else {
+                    x.style.display = "block";
                 }
             }
             function setTier(value) {
@@ -112,10 +112,40 @@
         
         <div class="expandable" id="explanation-battle">
             <div id="battle-navbar" style="height: 48px">
+                <div class="expand nav-button" onclick="expand('explanation-battle-stats')">Stats</div>
                 <div class="expand nav-button" onclick="expand('explanation-battle-upgrades')">Upgrades</div>
                 <div class="expand nav-button" onclick="expand('explanation-battle-rewards')">Rewards</div>
             </div>
-            <div class="expandable" id="explanation-battle-uprades">
+            <div class="expandable" id="explanation-battle-stats">
+                <br/>
+                Your attack time is '2 / attack speed' seconds.<br/>
+                <br/>
+                Attack Speed:
+                <table class="multiplier-breakdown">
+                    <tr><td>Default               </td><td>1</td></tr>
+                    <tr><td>Battle Milestone 10000</td><td>* 1.05 if 'Battle Milestone 10000'</td></tr>
+                    <tr><td>Battle Reward         </td><td>* 1 + 'battle reward' if 'battle reward' < 4</td></tr>
+                    <tr><td>                      </td><td>* Root3(17.5 * 'battle reward' + 55) if 'battle reward' >= 4</td></tr>
+                    <tr><td>Battle Upgrade 13     </td><td>* 1 + 0.001 * 'upgrade level'</td></tr>
+                    <tr><td>Battle Upgrade 24     </td><td>* 1 + 0.005 * 'upgrade level'</td></tr>
+                    <tr><td>Battle Upgrade 48     </td><td>* 1 + 0.005 * 'upgrade level'</td></tr>
+                    <tr><td>Arrow DLC active      </td><td>* 1.2 * 'ActiveMultiplier' if isSelected(Arrow)</td></tr>
+                    <tr><td>Arrow DLC passive     </td><td>* 1.1 * 'PassiveMultiplier' if isPossessed(Arrow)</td></tr>
+                    <tr><td>Spiral Equation VI    </td><td>* 1 + Log10('spiral level' + 1)</td></tr>
+                    <tr><td>Theory 3              </td><td>* 1 + 0.005 * 'theory level' if 'theory level' <= 250</td></tr>
+                    <tr><td>                      </td><td>* 2.25 + 0.005 * ln(1 + 0.2 * ('theory level' - 250)) if 'theory level' > 250</td></tr>
+                    <tr><td>Attack Speed 2        </td><td>* 1 + 'attack speed 2' if 'attack speed 2' <= 1</td></tr>
+                    <tr><td>                      </td><td>* 2 + ln(1 + 1.02 * ('attack speed 2' - 1)) if 'attack speed 2' > 1</td></tr>
+                </table>
+                <br/>
+                Attack Speed 2:
+                <table class="multiplier-breakdown">
+                    <tr><td>Loot                   </td><td>'loot' if 'loot' <= 1</td></tr>
+                    <tr><td>                       </td><td>Root2('loot') if 'loot' > 1</td></tr>
+                    <tr><td>Tornado Tier           </td><td>* 1.05 if `tornado tier` >= 42</td></tr>
+                </table>
+            </div>
+            <div class="expandable" id="explanation-battle-upgrades">
                 Battle upgrades explanation
             </div>
             <div class="expandable" id="explanation-battle-rewards">
